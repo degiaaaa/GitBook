@@ -1,5 +1,6 @@
 book_filename: "gitbook-demo"
 rmd_files: ["index.Rmd",
+            "00_Introduction.Rmd",
             "prerequisites.Rmd",
             "get_your_gitbook.Rmd",
             "editing_the_book.Rmd",

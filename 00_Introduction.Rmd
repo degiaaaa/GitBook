@@ -1,0 +1,50 @@
+# A single Perceptron
+In this chapter i will teach you how to code a single Perceptron in Python with more or the less only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interprete Vectors as one dimensional matrixes!). At the most of the times its just translating math formulars into python code without changing its structure.  
+First of all we are starting with the needed parameters, that are explained later:
+
+Number of runs over the training data := `train_n`   
+Lerarning rate := $\alpha =$ `alpha`    
+Bias value := $\beta :=$ `biasVal`     
+and the activation function:  
+$$ 
+step_0(s)= 
+\begin{cases}
+    1,& s	\geq 0\\
+    0,& s < 0
+\end{cases}
+$$
+or as python code:
+```{python}
+def step(s):
+    if( s >= 0 ):
+        return(1)
+    else:
+        return(0)
+```
+This should be the easiest activation function to start with.  
+
+The traings dataset is the following:
+$$
+\left[
+\begin{array}{cc|c}
+x_i,_1 & x_i,_2 & y_i \\
+\end{array}
+\right]
+$$
+$$
+\left[
+\begin{array}{cc|c}
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 1 \\
+\end{array}
+\right]
+$$
+If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron. The provided traings dataset contains the `X_train` matrix and the `Y_train` matrix.
+
+
+
+
+
+
