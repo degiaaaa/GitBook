@@ -115,7 +115,7 @@ $$
 $$
 and $Y_i,_0$ is the approximated output of the $i$-th scenario. Now we can look at the NN and compare the formular with it:  
 ![Made with the awesome chart website lucidecharts](./img/NN_01_v2.png){ width=50% }<br> 
-Yes it is the same, its the weighted sum of the inputs and evaluated with it the activationfunction to calculate the output of the scenario $i$.  
+ZZYes it is the same, its the weighted sum of the inputs and evaluated with it the activationfunction to calculate the output of the scenario $i$.  
 
 ## Forward pass
 Now we create the so called `forward()` function in python:
