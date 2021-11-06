@@ -6,21 +6,13 @@ Number of runs over the training data := `train_n`
 Learning rate := $\alpha =$ `alpha`  
 and the activation function:  
 $$ 
-step_0(s)= 
+step(s)= 
 \begin{cases}
     1,& s	\geq 0\\
     0,& s < 0
 \end{cases}
 $$
-or as python code:
-```{python}
-def step(s):
-    if( s >= 0 ):
-        return(1)
-    else:
-        return(0)
-```
-This should be the easiest activation function to start with.  
+This function is named the heavyside-function and should be the easiest activation function to start with.  
 
 The traings dataset is the following:
 $$
@@ -78,24 +70,234 @@ Now that we have all the needed parameters and settings, i can give you a quick 
 In a NN we are having two basic parts, the forward pass and backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer to get the output. In the backward pass we are analysing the error to adjust the weights accordingly. This is it! This is all a NN will do. Now that you know, see you. I explained everything to you. Have a good life...  
 Ahh no no ok we have a look deeper into it :)  
 
-Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have:
+Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have with the dimensions included for one scenario out of the traingdata the folowing:
 $$
-  W \cdot x = y
+  step(W^{(1,3)} \cdot x^{(3,1)}) = y^{(1,1)}
 $$
-To prepare you for multiple layers i will rewrote this equation to the following:
+That is the normal approach to iterate over all scenarios in the trainingdata...  
+But i think its not the right way to describe it because it gets very confusing to interpret it for all scenarios.  
+  
+My next approach is to consider all scenarios in the trainingdata in one formular. If your data isnt that huge, its a much faster approach aswell. First of all we need to interpret the new dimensions of $W$ and $X$.  
+We have $X$ as:
 $$
-  W_{i} \cdot x_{i} = y_{i}
+  X = \left[
+  \begin{array}{ccc}
+  1 & 0 & 0 \\
+  1 & 0 & 1 \\
+  1 & 1 & 0 \\
+  1 & 1 & 1 \\
+  \end{array}
+  \right]
 $$
-with $x_{i}$ as the inputs, $y_{i}$ as the outputs and $W_{i}$ as the weights of the layer $i$.  
+each row describes the inputs for each neuron in the scenario $i$.  
+For the weights $W$ we have for example:
+$$
+  W =\left[
+  \begin{array}{c}
+  0.1 \\ 
+  0.2 \\ 
+  0.3 \\
+  \end{array}
+  \right]
+$$
+The new formular looks like this:
+$$
+  step(X \cdot W) = Y
+$$
+For example if you take a look at the $i$-th row or scenario of $X$ you will see the following:
+$$
+  Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0])
+$$
+and $Y_i,_0$ is the approximated output of the $i$-th scenario. Now we can look at the NN and compare the formular with it:  
+![Made with the awesome chart website lucidecharts](./img/NN_01_v2.png){ width=50% }
+Yes it is the same, its the weighted sum of the inputs and evaluated with it the activationfunction to calculate the output of the scenario $i$.  
+
+## Forward pass
+Now we create the so called `forward()` function in python:
+```{python}
+def forward(X, W):
+  return( step(X @ W) )
+```
+(Numpy provides us with the `@` symbol to make a matrix multiplication and the `.T` to transpose)
+
+Because we want to put one dimensional matrixes into the `step()` function we need to use numpy for the if-else statement:
+```{python}
+def step(s):
+  return( np.where(s >= 0, 1, 0) )
+```
+
+Here an small example for the forward pass:
+```{python}
+X = np.array([
+  [1,0,0],
+  [1,0,1],
+  [1,1,0],
+  [1,1,1],
+])
+W = np.array([
+  [0.1], 
+  [0.2], 
+  [0.3]
+])
+forward(X, W)
+```
+And these are all the generated outputs of our NN over all scenarios. Now we need to calculate the error and adjust the weights accordingly.
+
+## backward pass
+To adjust the weights we need the Delta-Rule:
+$$
+  W(t+1) = W(t) + \Delta W(t)
+$$
+with
+$$
+  \Delta W(t) = \alpha \cdot X^{T} \cdot (Y - \hat{Y})
+$$
+and $\hat{Y}$ is the output of the NN. 
+```{python}
+def backward(W, X, Y, alpha, Y_approx):
+    return(W + alpha * X.T @ (Y - Y_approx))
+```
+with the result of the forward pass and example data we have the following:
+```{python}
+Y = np.array([
+  [0],
+  [1],
+  [1],
+  [1]
+])
+alpha = 1
+W = backward(W, X, Y, alpha, Y_approx)
+```
+and this is the new weight.
+
+## Single Perceptron
+Now we want to do the same process multiple times, to train the NN:
+```{python}
+X = np.array([
+  [1,0,0],
+  [1,0,1],
+  [1,1,0],
+  [1,1,1],
+])
+Y = np.array([
+  [0],
+  [1],
+  [1],
+  [1]
+])
+W = np.array([
+  [0.1], 
+  [0.2], 
+  [0.3]
+])
+alpha = 1
+
+errors = []
+for i in range(20):
+  Y_approx = forward(X, W)
+  errors.append(Y - Y_approx)
+  W = backward(W, X, Y, alpha, Y_approx)
+```
+The KNN is trained now. Now we want to look at the error. We want to measure the mean-square-error with the folowwing formular:
+$$
+  Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
+$$
+or as python code:
+```{python}
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
+```
+
+Now we need to calculate the mean-square-error for each element in the list `errors` which is made with `map`:
+```{python}
+mean_square_errors = np.array(list(map(mean_square_error, errors)))
+```
+To plot, im using the following function:
+```{python}
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(-0.01,max(errors)*1.2)
+  pyplot.show()
+  
+  
+plot_error(mean_square_errors, "Mean-Square-Errors of a single Perceptron")
+```
+
+If you survived until now, you have learned how you can programm a single Perceptron!
+
+## Appendix (full code)
+```{python}
+import numpy as np
+import random as ra
+import pandas as pd
+import matplotlib.pyplot as pyplot
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+
+X = np.array([
+  [1,0,0],
+  [1,0,1],
+  [1,1,0],
+  [1,1,1],
+])
+Y = np.array([
+  [0],
+  [1],
+  [1],
+  [1]
+])
+W = np.array([
+  [0.1], 
+  [0.2], 
+  [0.3]
+])
+alpha = 1
 
 
+def step(s):
+  return( np.where(s >= 0, 1, 0) )
 
 
+def forward(X, W):
+  return( step(X @ W) )
+
+def backward(W, X, Y, alpha, Y_approx):
+    return(W + alpha * X.T @ (Y - Y_approx))
+  
+  
+errors = []
+for i in range(20):
+  Y_approx = forward(X, W)
+  errors.append(Y - Y_approx)
+  W = backward(W, X, Y, alpha, Y_approx)
+  
+  
+  
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
 
 
+mean_square_errors = np.array(list(map(mean_square_error, errors)))
 
 
-
-
-
-
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(-0.01,max(errors)*1.2)
+  pyplot.show()
+  
+  
+plot_error(mean_square_errors, "Mean-Square-Errors of a single Perceptron")
+```

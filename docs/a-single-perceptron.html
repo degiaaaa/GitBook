@@ -221,7 +221,7 @@ First of all we are starting with the needed parameters, that are explained late
 Learning rate := <span class="math inline">\(\alpha =\)</span> <code>alpha</code><br />
 and the activation function:<br />
 <span class="math display">\[ 
-step_0(s)= 
+step(s)= 
 \begin{cases}
     1,&amp; s   \geq 0\\
     0,&amp; s &lt; 0
@@ -233,7 +233,7 @@ or as python code:</p>
 <span id="cb2-3"><a href="a-single-perceptron.html#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="dv">1</span>)</span>
 <span id="cb2-4"><a href="a-single-perceptron.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb2-5"><a href="a-single-perceptron.html#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="dv">0</span>)</span></code></pre></div>
-<p>This should be the easiest activation function to start with.</p>
+<p>This function is named the heavyside-function and should be the easiest activation function to start with.</p>
 <p>The traings dataset is the following:
 <span class="math display">\[
 \left[
@@ -285,14 +285,60 @@ x_i,_0 &amp; x_i,_1 &amp; x_i,_2 &amp; y_i \\
 <h2><span class="header-section-number">2.1</span> Neural Network Basics</h2>
 <p>In a NN we are having two basic parts, the forward pass and backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer to get the output. In the backward pass we are analysing the error to adjust the weights accordingly. This is it! This is all a NN will do. Now that you know, see you. I explained everything to you. Have a good life…<br />
 Ahh no no ok we have a look deeper into it :)</p>
-<p>Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have:
+<p>Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have with the dimensions included for one scenario out of the traingdata the folowing:
 <span class="math display">\[
-  W \cdot x = y
+  step(W^{(1,3)} \cdot x^{(3,1)}) = y^{(1,1)}
 \]</span>
-To prepare you for multiple layers i will rewrote this equation to the following:
+That is the normal approach to iterate over all scenarios in the trainingdata…<br />
+But i think its not the right way to describe it because it gets very confusing to interpret it for all scenarios.</p>
+<p>My next approach is to consider all scenarios in the trainingdata in one formular. If your data isnt that huge, its a much faster approach aswell. First of all we need to interpret the new dimensions of <span class="math inline">\(W\)</span> and <span class="math inline">\(X\)</span>.<br />
+We have <span class="math inline">\(X\)</span> as:
 <span class="math display">\[
-  W_{i},_{i+1} \cdot x_{i} = y_{i}
-\]</span></p>
+  X = \left[
+  \begin{array}{ccc}
+  1 &amp; 0 &amp; 0 \\
+  1 &amp; 0 &amp; 1 \\
+  1 &amp; 1 &amp; 0 \\
+  1 &amp; 1 &amp; 1 \\
+  \end{array}
+  \right]
+\]</span>
+each row describes the inputs for each neuron.<br />
+For the weights <span class="math inline">\(W\)</span> we have for example:
+<span class="math display">\[
+  W =\left[
+  \begin{array}{c}
+  0.1 \\ 
+  0.2 \\ 
+  0.3 \\
+  \end{array}
+  \right]
+\]</span>
+The new formular looks like this:
+<span class="math display">\[
+  step(X \cdot W) = Y
+\]</span>
+For example if you take a look at the first row or rather scenario of <span class="math inline">\(X\)</span> you will see the folowing:
+<span class="math display">\[
+  Y_0 = step([X_0,_0 \cdot W_0,_0 + X_0,_1 \cdot W_1,_0 + X_0,_2 \cdot W_2,_0])
+\]</span>
+and <span class="math inline">\(Y_0\)</span> is the approximated output of the first scenario. Now we can look at the NN in one scenario and can check if it is what we want to do:<br />
+<img src="img/NN_01.png" style="width:50.0%" alt="Made with the awesome chart website lucidecharts" /></p>
+<p>with <span class="math inline">\(x_{i}\)</span> as the inputs, <span class="math inline">\(y_{i}\)</span> as the outputs and <span class="math inline">\(W_{i}\)</span> as the weights of the layer <span class="math inline">\(i\)</span>.</p>
+<p>Now we create the so called <code>forward()</code> function in python:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="a-single-perceptron.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(W, x):</span>
+<span id="cb4-2"><a href="a-single-perceptron.html#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>( step(W <span class="op">@</span> x) )</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="a-single-perceptron.html#cb5-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> np.array([</span>
+<span id="cb5-2"><a href="a-single-perceptron.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb5-3"><a href="a-single-perceptron.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>],</span>
+<span id="cb5-4"><a href="a-single-perceptron.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>],</span>
+<span id="cb5-5"><a href="a-single-perceptron.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>],</span>
+<span id="cb5-6"><a href="a-single-perceptron.html#cb5-6" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb5-7"><a href="a-single-perceptron.html#cb5-7" aria-hidden="true" tabindex="-1"></a>W_0 <span class="op">=</span> np.array([</span>
+<span id="cb5-8"><a href="a-single-perceptron.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.1</span>], </span>
+<span id="cb5-9"><a href="a-single-perceptron.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.2</span>], </span>
+<span id="cb5-10"><a href="a-single-perceptron.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.3</span>]</span>
+<span id="cb5-11"><a href="a-single-perceptron.html#cb5-11" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div>
 
 </div>
 </div>
