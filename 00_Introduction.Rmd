@@ -3,8 +3,7 @@ In this chapter i will teach you how to code a single Perceptron in Python with 
 First of all we are starting with the needed parameters, that are explained later:
 
 Number of runs over the training data := `train_n`   
-Lerarning rate := $\alpha =$ `alpha`    
-Bias value := $\beta :=$ `biasVal`     
+Learning rate := $\alpha =$ `alpha`  
 and the activation function:  
 $$ 
 step_0(s)= 
@@ -41,7 +40,59 @@ $$
 \end{array}
 \right]
 $$
-If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron. The provided traings dataset contains the `X_train` matrix and the `Y_train` matrix.
+The provided traings dataset contains the `X_train` matrix with two inputs each scenario and the `Y_train` matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.  
+For a wider use we will now change the `X_train` matrix a little bit by adding a column with ones on the left side of it. Now you will not understand but later you will. In short, its a dummy value to make it possible to shift the NN, so it can be better fitted. The new traings dataset looks like this:
+$$
+\left[
+\begin{array}{ccc|c}
+x_i,_0 & x_i,_1 & x_i,_2 & y_i \\
+\end{array}
+\right]
+$$
+$$
+\left[
+\begin{array}{ccc|c}
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\end{array}
+\right]
+$$
+
+The needed python imports and default options are the following:
+```{python}
+import numpy as np
+import random as ra
+import pandas as pd
+import matplotlib.pyplot as pyplot
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+```
+( Do you see more imports than only the numpy package? [Yes](https://www.youtube.com/watch?v=dQw4w9WgXcQ) or No )
+
+Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.
+
+## Neural Network Basics
+In a NN we are having two basic parts, the forward pass and backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer to get the output. In the backward pass we are analysing the error to adjust the weights accordingly. This is it! This is all a NN will do. Now that you know, see you. I explained everything to you. Have a good life...  
+Ahh no no ok we have a look deeper into it :)  
+
+Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have:
+$$
+  W \cdot x = y
+$$
+To prepare you for multiple layers i will rewrote this equation to the following:
+$$
+  W_{i} \cdot x_{i} = y_{i}
+$$
+with $x_{i}$ as the inputs, $y_{i}$ as the outputs and $W_{i}$ as the weights of the layer $i$.  
+
+
+
+
+
+
 
 
 

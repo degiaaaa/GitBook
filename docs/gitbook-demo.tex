@@ -5,7 +5,7 @@
 \documentclass[
 ]{book}
 \title{My First Steps in Neuronal Networks}
-\author{Axel Roth (Student)}
+\author{Axel Roth}
 \date{2021-11-06}
 
 \usepackage{amsmath,amssymb}
@@ -41,7 +41,7 @@
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
   pdftitle={My First Steps in Neuronal Networks},
-  pdfauthor={Axel Roth (Student)},
+  pdfauthor={Axel Roth},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
@@ -168,8 +168,7 @@ In this chapter i will teach you how to code a single Perceptron in Python with 
 First of all we are starting with the needed parameters, that are explained later:
 
 Number of runs over the training data := \texttt{train\_n}\\
-Lerarning rate := \(\alpha =\) \texttt{alpha}\\
-Bias value := \(\beta :=\) \texttt{biasVal}\\
+Learning rate := \(\alpha =\) \texttt{alpha}\\
 and the activation function:\\
 \[ 
 step_0(s)= 
@@ -210,7 +209,58 @@ x_i,_1 & x_i,_2 & y_i \\
 \end{array}
 \right]
 \]
-If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron. The provided traings dataset contains the \(X_train\) matrix and the \(Y_train\) matrix.
+The provided traings dataset contains the \texttt{X\_train} matrix with two inputs each scenario and the \texttt{Y\_train} matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.\\
+For a wider use we will now change the \texttt{X\_train} matrix a little bit by adding a column with ones on the left side of it. Now you will not understand but later you will. In short, its a dummy value to make it possible to shift the NN, so it can be better fitted. The new traings dataset looks like this:
+\[
+\left[
+\begin{array}{ccc|c}
+x_i,_0 & x_i,_1 & x_i,_2 & y_i \\
+\end{array}
+\right]
+\]
+\[
+\left[
+\begin{array}{ccc|c}
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\end{array}
+\right]
+\]
+
+The needed python imports and default options are the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ random }\ImportTok{as}\NormalTok{ ra}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_rows\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+( Do you see more imports than only the numpy package? \href{https://www.youtube.com/watch?v=dQw4w9WgXcQ}{Yes} or No )
+
+Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.
+
+\hypertarget{neural-network-basics}{%
+\section{Neural Network Basics}\label{neural-network-basics}}
+
+In a NN we are having two basic parts, the forward pass and backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer to get the output. In the backward pass we are analysing the error to adjust the weights accordingly. This is it! This is all a NN will do. Now that you know, see you. I explained everything to you. Have a good life\ldots{}\\
+Ahh no no ok we have a look deeper into it :)
+
+Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have:
+\[
+  W \cdot x = y
+\]
+To prepare you for multiple layers i will rewrote this equation to the following:
+\[
+  W_{i},_{i+1} \cdot x_{i} = y_{i}
+\]
 
 \hypertarget{prerequisites}{%
 \chapter{Prerequisites}\label{prerequisites}}
