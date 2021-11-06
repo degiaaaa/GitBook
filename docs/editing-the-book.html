@@ -168,6 +168,10 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html"><i class="fa fa-check"></i><b>2</b> A single Perceptron</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.4" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#single-perceptron"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
+<li class="chapter" data-level="2.5" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>3</b> Prerequisites</a></li>
 <li class="chapter" data-level="4" data-path="getgitbook.html"><a href="getgitbook.html"><i class="fa fa-check"></i><b>4</b> Get your GitBook</a></li>
@@ -228,8 +232,8 @@ print("This is an R-command!")
 <p>To create a new chapter, you must follow two steps: 1) Create the file, and 2) Include it in the list of chapters.</p>
 <p>First, to create the file for a new chapter in Rstudio, click <code>File &gt; New File &gt; Text file</code>. At the top of the file, write your chapter heading, as explained above. Then, click <code>File &gt; Save</code>. Save the file as <code>.Rmd</code>, without spaces in the file name, e.g.: <code>editing_the_book.Rmd</code>.</p>
 <p>Second, to include it in the list of chapters, open the file <code>_bookdown.yml</code> (click it in the Files explorer in the bottom right of Rstudio). This file has a list of <code>.Rmd</code> files to be included in the book. In this example, the list looks like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="editing-the-book.html#cb8-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">&quot;_bookdown.yml&quot;</span>)</span>
-<span id="cb8-2"><a href="editing-the-book.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(tmp[<span class="fu">grep</span>(<span class="st">&quot;^rmd_files&quot;</span>, tmp)<span class="sc">:</span><span class="fu">grep</span>(<span class="st">&quot;references</span><span class="sc">\\</span><span class="st">.Rmd&quot;</span>, tmp)], <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="editing-the-book.html#cb16-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">&quot;_bookdown.yml&quot;</span>)</span>
+<span id="cb16-2"><a href="editing-the-book.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(tmp[<span class="fu">grep</span>(<span class="st">&quot;^rmd_files&quot;</span>, tmp)<span class="sc">:</span><span class="fu">grep</span>(<span class="st">&quot;references</span><span class="sc">\\</span><span class="st">.Rmd&quot;</span>, tmp)], <span class="at">sep =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <p>rmd_files: [“index.Rmd,”
 “00_Introduction.Rmd,”
 “prerequisites.Rmd,”

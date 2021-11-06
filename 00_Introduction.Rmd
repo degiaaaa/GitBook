@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # A single Perceptron
 In this chapter i will teach you how to code a single Perceptron in Python with more or the less only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interprete Vectors as one dimensional matrixes!). At the most of the times its just translating math formulars into python code without changing its structure.  
 First of all we are starting with the needed parameters, that are explained later:
@@ -139,7 +144,8 @@ W = np.array([
   [0.2], 
   [0.3]
 ])
-forward(X, W)
+Y_approx = forward(X, W)
+print(Y_approx)
 ```
 And these are all the generated outputs of our NN over all scenarios. Now we need to calculate the error and adjust the weights accordingly.
 
@@ -198,7 +204,7 @@ for i in range(20):
   errors.append(Y - Y_approx)
   W = backward(W, X, Y, alpha, Y_approx)
 ```
-The KNN is trained now. Now we want to look at the error. We want to measure the mean-square-error with the folowwing formular:
+The KNN is trained now. Now we want to look at the error. We want to measure the mean-square-error with the following formula:
 $$
   Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 $$
@@ -232,7 +238,7 @@ plot_error(mean_square_errors, "Mean-Square-Errors of a single Perceptron")
 If you survived until now, you have learned how you can programm a single Perceptron!
 
 ## Appendix (full code)
-```{python}
+```{python, eval=FALSE}
 import numpy as np
 import random as ra
 import pandas as pd
@@ -296,6 +302,7 @@ def plot_error(errors, title):
   pyplot.ylabel("Mean Square Error", fontsize = 16)
   pyplot.title(title)
   pyplot.ylim(-0.01,max(errors)*1.2)
+  pyplot.xticks(x)
   pyplot.show()
   
   

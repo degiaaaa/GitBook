@@ -168,6 +168,10 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html"><i class="fa fa-check"></i><b>2</b> A single Perceptron</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.4" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#single-perceptron"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
+<li class="chapter" data-level="2.5" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>3</b> Prerequisites</a></li>
 <li class="chapter" data-level="4" data-path="getgitbook.html"><a href="getgitbook.html"><i class="fa fa-check"></i><b>4</b> Get your GitBook</a></li>
@@ -261,10 +265,10 @@ div.csl-indent {
 </ul></li>
 </ol>
 <p>Run the following code to install the required packages:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="prerequisites.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bookdown&quot;</span>)</span>
-<span id="cb6-2"><a href="prerequisites.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tinytex&quot;</span>)</span>
-<span id="cb6-3"><a href="prerequisites.html#cb6-3" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span>
-<span id="cb6-4"><a href="prerequisites.html#cb6-4" aria-hidden="true" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">config</span>(<span class="at">global =</span> <span class="cn">TRUE</span>, <span class="at">user.name =</span> <span class="st">&quot;your.name&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;your.email&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="prerequisites.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bookdown&quot;</span>)</span>
+<span id="cb14-2"><a href="prerequisites.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tinytex&quot;</span>)</span>
+<span id="cb14-3"><a href="prerequisites.html#cb14-3" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span>
+<span id="cb14-4"><a href="prerequisites.html#cb14-4" aria-hidden="true" tabindex="-1"></a>git2r<span class="sc">::</span><span class="fu">config</span>(<span class="at">global =</span> <span class="cn">TRUE</span>, <span class="at">user.name =</span> <span class="st">&quot;your.name&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;your.email&quot;</span>)</span></code></pre></div>
 <p>That’s it! Everything should be installed and connected now.</p>
 
 </div>

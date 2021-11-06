@@ -177,18 +177,6 @@ step(s)=
     0,& s < 0
 \end{cases}
 \]
-or as python code:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ step(s):}
-    \ControlFlowTok{if}\NormalTok{( s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{ ):}
-        \ControlFlowTok{return}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-    \ControlFlowTok{else}\NormalTok{:}
-        \ControlFlowTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 This function is named the heavyside-function and should be the easiest activation function to start with.
 
 The traings dataset is the following:
@@ -272,7 +260,7 @@ We have \(X\) as:
   \end{array}
   \right]
 \]
-each row describes the inputs for each neuron.\\
+each row describes the inputs for each neuron in the scenario \(i\).\\
 For the weights \(W\) we have for example:
 \[
   W =\left[
@@ -287,394 +275,258 @@ The new formular looks like this:
 \[
   step(X \cdot W) = Y
 \]
-For example if you take a look at the first row or rather scenario of \(X\) you will see the folowing:
+For example if you take a look at the \(i\)-th row or scenario of \(X\) you will see the following:
 \[
-  Y_0 = step([X_0,_0 \cdot W_0,_0 + X_0,_1 \cdot W_1,_0 + X_0,_2 \cdot W_2,_0])
+  Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0])
 \]
-and \(Y_0\) is the approximated output of the first scenario. Now we can look at the NN in one scenario and can check if it is what we want to do:\\
-\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01.png}
+and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now we can look at the NN and compare the formular with it:\\
+\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01_v2.png}
+Yes it is the same, its the weighted sum of the inputs and evaluated with it the activationfunction to calculate the output of the scenario \(i\).
 
-with \(x_{i}\) as the inputs, \(y_{i}\) as the outputs and \(W_{i}\) as the weights of the layer \(i\).
+\hypertarget{forward-pass}{%
+\section{Forward pass}\label{forward-pass}}
 
 Now we create the so called \texttt{forward()} function in python:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{def}\NormalTok{ forward(W, x):}
-    \ControlFlowTok{return}\NormalTok{( step(W }\OperatorTok{@}\NormalTok{ x) )}
+\KeywordTok{def}\NormalTok{ forward(X, W):}
+  \ControlFlowTok{return}\NormalTok{( step(X }\OperatorTok{@}\NormalTok{ W) )}
 \end{Highlighting}
 \end{Shaded}
 
+(Numpy provides us with the \texttt{@} symbol to make a matrix multiplication and the \texttt{.T} to transpose)
+
+Because we want to put one dimensional matrixes into the \texttt{step()} function we need to use numpy for the if-else statement:
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{X\_train }\OperatorTok{=}\NormalTok{ np.array([}
+\KeywordTok{def}\NormalTok{ step(s):}
+  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+Here an small example for the forward pass:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
 \NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
 \NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
 \NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
 \NormalTok{])}
-\NormalTok{W\_0 }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
 \NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
 \NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
 \NormalTok{])}
+\NormalTok{Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
+\BuiltInTok{print}\NormalTok{(Y\_approx)}
 \end{Highlighting}
 \end{Shaded}
-
-\hypertarget{prerequisites}{%
-\chapter{Prerequisites}\label{prerequisites}}
-
-This GitBook is created in Rstudio, using the \texttt{bookdown} package. To get your system set up correctly, you have to install several software packages, and register on GitHub. You only have to perform these steps once, and the entire process should take approximately 1 hour if you start from scratch. In case some software is already installed on your system, you can skip related steps. Follow these steps in order:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Install R from \href{https://cloud.r-project.org/}{cloud.r-project.org}
-\item
-  Install Rstudio Desktop (Free) from \href{https://rstudio.com/products/rstudio/download/\#download}{rstudio.com}
-\item
-  Install Git from \href{https://git-scm.com/downloads}{git-scm.com}. Use the default, recommended settings. It is especially important to leave these settings selected:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Git from the command line and also from third party software\\
-  \item
-    Use the OpenSSL library\\
-  \item
-    Checkout Windows-style, commit Unix-style line endings\\
-  \item
-    Enable Git Credential Manager\\
-  \item
-    If you run into any trouble, a more comprehensive tutorial on installing Git is available at \href{https://happygitwithr.com/install-git.html}{happygitwithr.com}.
-  \end{itemize}
-\item
-  Register on GitHub
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Go to \url{https://github.com/} and click ``Sign up''. Choose an ``Individual'', ``Free'' plan.
-  \item
-    Request a \href{https://help.github.com/en/articles/applying-for-an-educator-or-researcher-discount}{free academic upgrade}. This allows you to create \emph{private repositories}, which are only visible to you and selected collaborators, and can be made public when your work is published.
-  \end{itemize}
-\item
-  Connect Rstudio to Git and Github (for more support, see \href{https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN}{this Rstudio article}, and \href{https://www.r-bloggers.com/rstudio-and-github/}{this blog post})
-
-  \begin{enumerate}
-  \def\labelenumii{\alph{enumii}.}
-  \tightlist
-  \item
-    Open Rstudio, open the Tools menu, click \emph{Global Options}, and click \emph{Git/SVN}
-  \item
-    Verify that \emph{Enable version control interface for RStudio projects} is selected
-  \item
-    Verify that \emph{Git executable:} shows the location of git.exe. If it is missing, manually fix the location of the file.
-  \item
-    Click \emph{Create RSA Key}. Do not enter a passphrase. Press \emph{Create}. A window with some information will open, which you can close.
-  \item
-    Click \emph{View public key}, and copy the entire text to the clipboard.
-  \item
-    Close Rstudio (it might offer to restart by itself; this is fine)
-  \item
-    Go to \url{https://github.com}
-  \item
-    Click your user icon, click \emph{Settings}, and then select the \emph{SSH and GPG keys} tab.
-  \item
-    Click \emph{New SSH key}. Give it an arbitrary name (e.g., your computer ID), and paste the public key from your clipboard into the box labeled ``\emph{Key}''.
-  \item
-    Open Rstudio again (unless it restarted by itself)
-  \end{enumerate}
-\item
-  Install all required packages by running the following code in the Rstudio console. Be prepared for three contingencies:
-
-  \begin{itemize}
-  \tightlist
-  \item
-    If you receive any error saying \emph{There is no package called XYZ}, then run the code \texttt{install.packages("XYZ")}\\
-  \item
-    If you are prompted to update packages, just press \texttt{3:\ None}. Updating packages this way in an interactive session sometimes leads to errors, if the packages are loaded.\\
-  \item
-    If you see a pop-up dialog asking \emph{Do you want to install from sources the package which needs compilation?}, click \emph{No}. If this leads to errors, then please follow \emph{Step 3} from \href{https://cjvanlissa.github.io/worcs/articles/setup.html}{this online guide}, and run \texttt{install.packages("devtools")}. This will take a long time, but will allow you to install packages from source.
-  \end{itemize}
-\end{enumerate}
-
-Run the following code to install the required packages:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{install.packages}\NormalTok{(}\StringTok{"bookdown"}\NormalTok{)}
-\FunctionTok{install.packages}\NormalTok{(}\StringTok{"tinytex"}\NormalTok{)}
-\NormalTok{tinytex}\SpecialCharTok{::}\FunctionTok{install\_tinytex}\NormalTok{()}
-\NormalTok{git2r}\SpecialCharTok{::}\FunctionTok{config}\NormalTok{(}\AttributeTok{global =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{user.name =} \StringTok{"your.name"}\NormalTok{, }\AttributeTok{user.email =} \StringTok{"your.email"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-That's it! Everything should be installed and connected now.
-
-\hypertarget{getgitbook}{%
-\chapter{Get your GitBook}\label{getgitbook}}
-
-To get your GitBook, you should follow these steps:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Go to \url{https://github.com/cjvanlissa/gitbook-demo}
-\item
-  In the top right of the page, click \texttt{Fork}.\\
-  This will copy my \texttt{gitbook-demo} repository to your GitHub account.\\
-  \includegraphics{./img/settings.png}
-\item
-  My repository is now copied to your account. It is a template repository, which means that you can create a \emph{new repository} based on this one.
-\item
-  Create a new repository for your own GitBook. Create one for a course you've been wanting to update. In the top-right corner of the GitHub website, click the + icon, and select ``New repository'':\\
-  \includegraphics{./img/new_repo.png}
-\item
-  In the dialog, select the \texttt{gitbook-demo} as ``Repository template'', and give the repository an appropriate name for your course. Then, press \texttt{Create\ repository}:\\
-  \includegraphics{./img/from_template.png}
-\item
-  Now, go back to Rstudio on your computer. In Rstudio, click \texttt{File\ \textgreater{}\ New\ Project}. A dialog will open. If you set up Rstudio with Git correctly, the dialog should have an option to create a new project from Version control. Click it:\\
-  \includegraphics{./img/new_project.png}
-\item
-  In the next dialog window, you should copy the URL of the GitHub repository you created in \emph{Step 5}, like so:\\
-  \includegraphics{./img/new_git_project.png}
-\item
-  Now, in Rstudio, you can open files for editing and create new files (explained in the next Chapter). Open files by clicking them in the Files editor (usually in the bottom right of Rstudio):\\
-  \includegraphics{./img/files_editor.png}
-\item
-  After you make a change, it will show up in the Git tab (usually in the top right of Rstudio). You must Commit the change locally, and then Push the change to GitHub to update your repo. To Commit, select the file and click the Commit button. Write a short message to describe the changes you made, then click the Commit button again. Now, press Push to send your commits to GitHub.\\
-  \includegraphics{./img/commit_push.png}
-\item
-  To render your book as a GitBook, you must ``Build'' it. In the top-right panel of Rstudio, you see a ``Build'' tab. In this tab, simply click the ``Build Book'' button to build your book. You should see a lot of rendering messages, until a window pops up with your brand new GitBook. If you get errors at this stage, you probably made a mistake in preparing your system (see the previous Chapter).\\
-  \includegraphics{./img/build_book.png}
-\item
-  Building the book generated a lot of new files in the \texttt{./docs} directory. This directory contains the website files for your GitBook. Open the Git tab again, verify that the \texttt{./docs} directory is listed, and Commit and Push all of these new files as described in \emph{Step 9}.
-\item
-  There is only one last remaining task: To publish your GitBook on GitHub pages. Once you do this, any change to the \texttt{./docs} folder that you push to GitHub will lead to an immediate update of your GitBook website. Go back to the GitHub page for your Repository. Click on the \texttt{Settings} tab on the top right of the page:\\
-  \includegraphics{./img/settings.png}
-\item
-  On the Settings page, scroll all the way down until you reach a section called \texttt{GitHub\ Pages}. There, under the ``Source'' heading, click the word \texttt{None}, and select \texttt{master\ branch\ /docs\ folder}. When you select it, the page will update, and if you scroll back down to the \texttt{GitHub\ Pages} section, you will see the URL where your GitBook is published. The first time, it will take a few minutes for your GitBook to come online. When you publish updates to the GitBook however (simply by following \emph{Step 11} again), the update will be near-instantaneous. The Pages section should now look like this (and that is hopefully the link where you found this book):\\
-  \includegraphics{./img/pages_published.png}
-\end{enumerate}
-
-\hypertarget{editing-the-book}{%
-\chapter{Editing the book}\label{editing-the-book}}
-
-The contents of the book are written in \textbf{RMarkdown}. You can use any formatting code that Pandoc's Markdown supports, e.g., a math equation \(a^2 + b^2 = c^2\). Moreover, you can include chunks of R-code, like this:
-
-The results of these chunks can be rendered to the GitBook:
 
 \begin{verbatim}
-## [1] "This is an R-command!"
+## [[1]
+##  [1]
+##  [1]
+##  [1]]
 \end{verbatim}
 
-To edit the book, you can change the text in the \texttt{.Rmd} files. Each Rmd file should contain \textbf{one and only one} chapter. A chapter is defined by the first-level heading \texttt{\#}, e.g., \texttt{\#\ Editing\ the\ book}.
+And these are all the generated outputs of our NN over all scenarios. Now we need to calculate the error and adjust the weights accordingly.
 
-Any sub-headings within the chapter are indicated with several \texttt{\#} signs, e.g., \texttt{\#\#} (level 2) and \texttt{\#\#\#} (level 3).
+\hypertarget{backward-pass}{%
+\section{backward pass}\label{backward-pass}}
 
-\hypertarget{creating-new-chapters}{%
-\section{Creating new chapters}\label{creating-new-chapters}}
-
-To create a new chapter, you must follow two steps: 1) Create the file, and 2) Include it in the list of chapters.
-
-First, to create the file for a new chapter in Rstudio, click \texttt{File\ \textgreater{}\ New\ File\ \textgreater{}\ Text\ file}. At the top of the file, write your chapter heading, as explained above. Then, click \texttt{File\ \textgreater{}\ Save}. Save the file as \texttt{.Rmd}, without spaces in the file name, e.g.: \texttt{editing\_the\_book.Rmd}.
-
-Second, to include it in the list of chapters, open the file \texttt{\_bookdown.yml} (click it in the Files explorer in the bottom right of Rstudio). This file has a list of \texttt{.Rmd} files to be included in the book. In this example, the list looks like this:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{tmp }\OtherTok{\textless{}{-}} \FunctionTok{readLines}\NormalTok{(}\StringTok{"\_bookdown.yml"}\NormalTok{)}
-\FunctionTok{cat}\NormalTok{(tmp[}\FunctionTok{grep}\NormalTok{(}\StringTok{"\^{}rmd\_files"}\NormalTok{, tmp)}\SpecialCharTok{:}\FunctionTok{grep}\NormalTok{(}\StringTok{"references}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.Rmd"}\NormalTok{, tmp)], }\AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-rmd\_files: {[}``index.Rmd'',
-``00\_Introduction.Rmd'',
-``prerequisites.Rmd'',
-``get\_your\_gitbook.Rmd'',
-``editing\_the\_book.Rmd'',
-``figures\_tables.Rmd'',
-``examples.Rmd'',
-``open\_educational.Rmd'',
-``use\_in\_course.Rmd'',
-``licenses.Rmd'',
-``references.Rmd''{]}
-
-Insert the file name of your new chapter in the desired position in this list.
-
-\hypertarget{linking-across-chapters}{%
-\section{Linking across chapters}\label{linking-across-chapters}}
-
-You can label chapter and section titles using \texttt{\{\#label\}} after them. The labels can be used as cross-references. For example, we can link to Chapter \ref{figtab}. If you do not manually label chapters, there will be automatic labels anyway, e.g., Chapter \ref{examples}.
-
-\hypertarget{advanced-editing}{%
-\section{Advanced editing}\label{advanced-editing}}
-
-The convenient \href{https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf}{Rmarkdown Cheat Sheet} by Rstudio covers most of the knowledge required for advanced Rmarkdown editing. You can print it out and stick it to your wall!
-
-\hypertarget{figtab}{%
-\chapter{Figures and tables}\label{figtab}}
-
-Figures and tables with captions will be placed in \texttt{figure} and \texttt{table} environments, respectively.
+To adjust the weights we need the Delta-Rule:
+\[
+  W(t+1) = W(t) + \Delta W(t)
+\]
+with
+\[
+  \Delta W(t) = \alpha \cdot X^{T} \cdot (Y - \hat{Y})
+\]
+and \(\hat{Y}\) is the output of the NN.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{par}\NormalTok{(}\AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\FunctionTok{plot}\NormalTok{(pressure, }\AttributeTok{type =} \StringTok{\textquotesingle{}b\textquotesingle{}}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\KeywordTok{def}\NormalTok{ backward(W, X, Y, alpha, Y\_approx):}
+    \ControlFlowTok{return}\NormalTok{(W }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ X.T }\OperatorTok{@}\NormalTok{ (Y }\OperatorTok{{-}}\NormalTok{ Y\_approx))}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{gitbook-demo_files/figure-latex/nice-fig-1} 
-
-}
-
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
-
-Reference a figure by its code chunk label with the \texttt{fig:} prefix, e.g., see Figure \ref{fig:nice-fig}. Similarly, you can reference tables generated from \texttt{knitr::kable()}, e.g., see Table \ref{tab:nice-tab}.
+with the result of the forward pass and example data we have the following:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(}
-  \FunctionTok{head}\NormalTok{(iris, }\DecValTok{20}\NormalTok{), }\AttributeTok{caption =} \StringTok{\textquotesingle{}Here is a nice table!\textquotesingle{}}\NormalTok{,}
-  \AttributeTok{booktabs =} \ConstantTok{TRUE}
-\NormalTok{)}
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
+and this is the new weight.
 
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rrrrl}
-\toprule
-Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
-\midrule
-5.1 & 3.5 & 1.4 & 0.2 & setosa\\
-4.9 & 3.0 & 1.4 & 0.2 & setosa\\
-4.7 & 3.2 & 1.3 & 0.2 & setosa\\
-4.6 & 3.1 & 1.5 & 0.2 & setosa\\
-5.0 & 3.6 & 1.4 & 0.2 & setosa\\
-\addlinespace
-5.4 & 3.9 & 1.7 & 0.4 & setosa\\
-4.6 & 3.4 & 1.4 & 0.3 & setosa\\
-5.0 & 3.4 & 1.5 & 0.2 & setosa\\
-4.4 & 2.9 & 1.4 & 0.2 & setosa\\
-4.9 & 3.1 & 1.5 & 0.1 & setosa\\
-\addlinespace
-5.4 & 3.7 & 1.5 & 0.2 & setosa\\
-4.8 & 3.4 & 1.6 & 0.2 & setosa\\
-4.8 & 3.0 & 1.4 & 0.1 & setosa\\
-4.3 & 3.0 & 1.1 & 0.1 & setosa\\
-5.8 & 4.0 & 1.2 & 0.2 & setosa\\
-\addlinespace
-5.7 & 4.4 & 1.5 & 0.4 & setosa\\
-5.4 & 3.9 & 1.3 & 0.4 & setosa\\
-5.1 & 3.5 & 1.4 & 0.3 & setosa\\
-5.7 & 3.8 & 1.7 & 0.3 & setosa\\
-5.1 & 3.8 & 1.5 & 0.3 & setosa\\
-\bottomrule
-\end{tabular}
-\end{table}
+\hypertarget{single-perceptron}{%
+\section{Single Perceptron}\label{single-perceptron}}
 
-You can write citations, too. For example, we are using the \textbf{bookdown} package \citep{R-bookdown} in this sample book, which was built on top of R Markdown and \textbf{knitr} \citep{xie2015}.
+Now we want to do the same process multiple times, to train the NN:
 
-\hypertarget{examples}{%
-\chapter{Examples}\label{examples}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{])}
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
 
-Here are some examples of other GitBooks for courses; if you want to have your GitBook added to the list, please send a \href{https://github.com/cjvanlissa/gitbook-demo/pulls}{Pull Request} (here's \href{https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request}{how to send a pull request}).
+\NormalTok{errors }\OperatorTok{=}\NormalTok{ []}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{20}\NormalTok{):}
+\NormalTok{  Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
+\NormalTok{  errors.append(Y }\OperatorTok{{-}}\NormalTok{ Y\_approx)}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
+\end{Highlighting}
+\end{Shaded}
 
-\hypertarget{statistics-with-r-h.-quene}{%
-\section{Statistics with R (H. Quene)}\label{statistics-with-r-h.-quene}}
+The KNN is trained now. Now we want to look at the error. We want to measure the mean-square-error with the following formula:
+\[
+  Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
+\]
+or as python code:
 
-\url{https://hugoquene.github.io/emlar2020}
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
 
-A GitBook for a tutorial on \emph{Statistics with R (Basics)}, held as part of the workshop on Experimental Methods in Language Acquisition Research (EMLAR, \url{https://emlar.wp.hum.uu.nl/}), Utrecht, on 17 April 2020. This compact introduction helps you with your first steps into R.
+Now we need to calculate the mean-square-error for each element in the list \texttt{errors} which is made with \texttt{map}:
 
-\hypertarget{theory-construction-and-statistical-modeling-c.-j.-van-lissa}{%
-\section{Theory Construction and Statistical Modeling (C. J. van Lissa)}\label{theory-construction-and-statistical-modeling-c.-j.-van-lissa}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mean\_square\_errors }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors)))}
+\end{Highlighting}
+\end{Shaded}
 
-\url{http://cjvanlissa.github.io/TCSM}
+To plot, im using the following function:
 
-A GitBook for the course \emph{``Theory Construction and Statistical Modeling''}, with some interesting code, for example: Blocks of answers to the tutorial questions that can be collapsed and expanded.
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\OperatorTok{{-}}\FloatTok{0.01}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{  pyplot.show()}
+  
+  
+\NormalTok{plot\_error(mean\_square\_errors, }\StringTok{"Mean{-}Square{-}Errors of a single Perceptron"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\hypertarget{doing-meta-analysis-in-r-c.-j.-van-lissa}{%
-\section{Doing Meta-Analysis in R (C. J. van Lissa)}\label{doing-meta-analysis-in-r-c.-j.-van-lissa}}
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-11-1.pdf}
 
-\url{http://cjvanlissa.github.io/Doing-Meta-Analysis-in-R}
+If you survived until now, you have learned how you can programm a single Perceptron!
 
-A GitBook on doing meta-analysis in R, based on the book `Doing Meta-Analysis in R', by Mathias Harrer, Pim Cuijpers, \& David Ebert, and adapted to focus on the \href{https://cran.r-project.org/web/packages/metafor/index.html}{metafor} package, and exploring heterogeneity using \href{https://cran.r-project.org/web/packages/metaforest/index.html}{metaforest}. The original can be found here: \url{https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/}
+\hypertarget{appendix-full-code}{%
+\section{Appendix (full code)}\label{appendix-full-code}}
 
-\hypertarget{muxe9todos-quantitativos-em-psicologia-com-r-l.-anunciauxe7uxe3o}{%
-\section{Métodos quantitativos em Psicologia com R (L. Anunciação)}\label{muxe9todos-quantitativos-em-psicologia-com-r-l.-anunciauxe7uxe3o}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ random }\ImportTok{as}\NormalTok{ ra}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_rows\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
 
-\url{https://anovabr.github.io/mqt/}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{])}
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
 
-This book provides a short and to-the-point exposition on the essentials of statistics, and was written for undergraduate students at the Pontifical Catholic University of Rio de Janeiro (PUC-Rio). To a lesser degree, the mathematical modeling of statistical questions will be addressed. This book might be relevant for Portuguese-speaking students who enroll for laboratory-based statistics and anyone who wants to learn R.
 
-\hypertarget{open-educational-resources}{%
-\chapter{Open Educational Resources}\label{open-educational-resources}}
+\KeywordTok{def}\NormalTok{ step(s):}
+  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
 
-UNESCO defines Open Educational Resources as \href{https://en.unesco.org/themes/building-knowledge-societies/oer}{\emph{teaching, learning and research materials in any medium -- digital or otherwise -- that reside in the public domain or have been released under an open license that permits no-cost access, use, adaptation and redistribution by others with no or limited restrictions.}}
 
-Open Educational resources can help lighten the workload on individual teachers, who can collaborate with the development of high-quality open access resources, instead of having to develop their own proprietary materials from scratch. Moreover, Open Educational resources are inclusive, lowering the barrier to knowledge acquisition for learners around the world, and enabling lifelong learning for those outside academia.
+\KeywordTok{def}\NormalTok{ forward(X, W):}
+  \ControlFlowTok{return}\NormalTok{( step(X }\OperatorTok{@}\NormalTok{ W) )}
 
-Many universities support Open Educational Resources. Here are just a few (feel free to \href{https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request}{send a pull request} with other relevant resources).
+\KeywordTok{def}\NormalTok{ backward(W, X, Y, alpha, Y\_approx):}
+    \ControlFlowTok{return}\NormalTok{(W }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ X.T }\OperatorTok{@}\NormalTok{ (Y }\OperatorTok{{-}}\NormalTok{ Y\_approx))}
+  
+  
+\NormalTok{errors }\OperatorTok{=}\NormalTok{ []}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{20}\NormalTok{):}
+\NormalTok{  Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
+\NormalTok{  errors.append(Y }\OperatorTok{{-}}\NormalTok{ Y\_approx)}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
+  
+  
+  
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
 
-\begin{itemize}
-\tightlist
-\item
-  \href{https://www.oercommons.org/}{\textbf{OER Commons}}: A freely accessible online library of open educational resources.
-\item
-  \href{https://uu.figshare.com/}{\textbf{Utrecht University Figshare}}: Open learning objects from Utrecht University.
-\item
-  \href{https://ocw.jhsph.edu/}{\textbf{Johns Hopkins University OCW}}: Open public health courses and materials.
-\item
-  \href{https://pitt.libguides.com/openeducation/biglist}{\textbf{University of Pittsburgh OER}}: Big List of Open Educational Resources.
-\item
-  \href{https://www.merlot.org/merlot/}{\textbf{MERLOT}}: Online learning and support materials and content creation tools, led by an international community of educators, learners and researchers.
-\end{itemize}
 
-\hypertarget{compatibility-with-existing-systems}{%
-\chapter{Compatibility with existing systems}\label{compatibility-with-existing-systems}}
+\NormalTok{mean\_square\_errors }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors)))}
 
-Many universities offer digital platforms for learning. You might wish to embed your GitBook within these existing systems. Here are two ways in which you might do that. Currently, this section only discusses BlackBoard, but the same principles should apply to other platforms.
 
-\hypertarget{add-a-hyperlink}{%
-\section{Add a hyperlink}\label{add-a-hyperlink}}
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\OperatorTok{{-}}\FloatTok{0.01}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{  pyplot.xticks(x)}
+\NormalTok{  pyplot.show()}
+  
+  
+\NormalTok{plot\_error(mean\_square\_errors, }\StringTok{"Mean{-}Square{-}Errors of a single Perceptron"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-You can add a link to your GitBook in the BlackBoard course menu by following \href{https://help.blackboard.com/Learn/Instructor/Course_Content/Create_Content/Create_Course_Materials/Link_to_Websites}{this tutorial}.
-
-\hypertarget{embed-the-whole-book}{%
-\section{Embed the whole book}\label{embed-the-whole-book}}
-
-You can add a Blank Page to your BlackBoard course menu, and fill that page with a full-size ``iframe'' - a web page within the web page. \href{https://mycampus.maine.edu/web/uc-faculty-portal/education-technology/-/asset_publisher/vEKuFJYvDY5K/content/inserting-an-iframe-into-blackboard?inheritRedirect=false}{This tutorial} explains how to do it. It is possible that your university is blocking this feature, however.
-
-\hypertarget{license-your-gitbook}{%
-\chapter{License your GitBook}\label{license-your-gitbook}}
-
-In the spirit of Open Science, it is good to think about making your course materials Open Source. That means that other people can use them. In principle, if you publish materials online without license information, you hold the copyright to those materials. If you want them to be Open Source, you must include a license. It is not always obvious what license to choose.
-
-The Creative Commons licenses are typically suitable for course materials. This GitBook, for example, is licensed under CC-BY 4.0. That means you can use and remix it as you like, but you must credit the original source.
-
-If your project is more focused on software or source code, consider using the \href{https://www.gnu.org/licenses/gpl-3.0.en.html}{GNU GPL v3 license} instead.
-
-You can find \href{https://creativecommons.org/share-your-work/licensing-examples}{more information about the Creative Commons Licenses here}. Specific licenses that might be useful are:
-
-\begin{itemize}
-\tightlist
-\item
-  \href{https://creativecommons.org/share-your-work/public-domain/cc0/}{CC0 (``No Rights Reserved'')}, everybody can do what they want with your work.
-\item
-  \href{https://creativecommons.org/licenses/by/4.0/}{CC-BY 4.0 (``Attribution'')}, everybody can do what they want with your work, but they must credit you. Note that this license may not be suitable for software or source code!
-\end{itemize}
-
-For compatibility between CC and GNU licenses, see \href{https://creativecommons.org/faq/\#Can_I_apply_a_Creative_Commons_license_to_software.3F}{this FAQ}.
 
   \bibliography{book.bib,packages.bib}
 
