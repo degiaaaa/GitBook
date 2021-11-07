@@ -6,7 +6,7 @@
 ]{book}
 \title{My First Steps in Neuronal Networks}
 \author{Axel Roth}
-\date{2021-11-06}
+\date{2021-11-07}
 
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
@@ -139,13 +139,13 @@
 \hypertarget{me}{%
 \section{Me}\label{me}}
 
-Hello, my name is Axel Roth and at the moment im studieing math at a master degree. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experiece i gained was around R and all its features. And now the iterresting question\ldots{} Why do i want to write a beginners guide in the field of Neuronal Networks?\\
-Its simple, at the moment i have a lecture in that we learn how to programm a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
+Hello, my name is Axel Roth and at the moment im studding math at a master degree. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experience i gained was around R and all its features. And now the interesting question\ldots{} Why do i want to write a beginners guide in the field of Neuronal Networks?\\
+Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
 
 \hypertarget{the-book}{%
 \section{The Book}\label{the-book}}
 
-This Book will be more or the less the documentation of my lecture ``Finance Project'' in that we learn to programm a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.
+This Book will be more or the less the documentation of my lecture ``Finance Project'' in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.
 
 \hypertarget{how-it-works}{%
 \section{How it works}\label{how-it-works}}
@@ -164,10 +164,10 @@ Additionaly im using a fully portable version of R-Studio, R and python. Its nic
 \hypertarget{a-single-perceptron}{%
 \chapter{A single Perceptron}\label{a-single-perceptron}}
 
-In this chapter i will teach you how to code a single Perceptron in Python with more or the less only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interprete Vectors as one dimensional matrixes!). At the most of the times its just translating math formulars into python code without changing its structure.\\
+In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret Vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.\\
 First of all we are starting with the needed parameters, that are explained later:
 
-Number of runs over the training data := \texttt{train\_n}\\
+Number of runs over the training data := \texttt{n\_train}\\
 Learning rate := \(\alpha =\) \texttt{alpha}\\
 and the activation function:\\
 \[ 
@@ -197,8 +197,8 @@ x_i,_1 & x_i,_2 & y_i \\
 \end{array}
 \right]
 \]
-The provided traings dataset contains the \texttt{X\_train} matrix with two inputs each scenario and the \texttt{Y\_train} matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.\\
-For a wider use we will now change the \texttt{X\_train} matrix a little bit by adding a column with ones on the left side of it. Now you will not understand but later you will. In short, its a dummy value to make it possible to shift the NN, so it can be better fitted. The new traings dataset looks like this:
+The provided training dataset contains the \texttt{X\_train} matrix with two inputs for each scenario and the \texttt{Y\_train} matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.\\
+For a wider use we will now change the \texttt{X\_train} matrix a little bit by adding a column with ones on the left side of it. Its a dummy value to make it possible to shift the NN, so it can be better fitted. The new training dataset looks like this:
 \[
 \left[
 \begin{array}{ccc|c}
@@ -238,17 +238,17 @@ Now that we have all the needed parameters and settings, i can give you a quick 
 \hypertarget{neural-network-basics}{%
 \section{Neural Network Basics}\label{neural-network-basics}}
 
-In a NN we are having two basic parts, the forward pass and backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer to get the output. In the backward pass we are analysing the error to adjust the weights accordingly. This is it! This is all a NN will do. Now that you know, see you. I explained everything to you. Have a good life\ldots{}\\
+In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activationfunction with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
 Ahh no no ok we have a look deeper into it :)
 
-Whats exactly is the forward pass in a single Perceptron? Its just the weighted sum like i said, so you have with the dimensions included for one scenario out of the traingdata the folowing:
+Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have (with the matrix dimensions included) for one scenario out of the training dataset, the following:
 \[
   step(W^{(1,3)} \cdot x^{(3,1)}) = y^{(1,1)}
 \]
-That is the normal approach to iterate over all scenarios in the trainingdata\ldots{}\\
-But i think its not the right way to describe it because it gets very confusing to interpret it for all scenarios.
+That is the normal approach to iterate over all scenarios in the training dataset\ldots{}\\
+But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios.
 
-My next approach is to consider all scenarios in the trainingdata in one formular. If your data isnt that huge, its a much faster approach aswell. First of all we need to interpret the new dimensions of \(W\) and \(X\).\\
+My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all we need to interpret the new dimensions of \(W\) and \(X\).\\
 We have \(X\) as:
 \[
   X = \left[
@@ -279,10 +279,10 @@ For example if you take a look at the \(i\)-th row or scenario of \(X\) you will
 \[
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0])
 \]
-and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now we can look at the NN and compare the formular with it:\\
+and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now we can look at the NN and compare the formula with it:\\
 \includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01_v2.png}
 
-Yes it is the same, its the weighted sum of the inputs and evaluated with it the activationfunction to calculate the output of the scenario \(i\).
+Yes it is the same, its the weighted sum of the inputs and evaluated the activation function with it to calculate the output of the scenario \(i\).
 
 \hypertarget{forward-pass}{%
 \section{Forward pass}\label{forward-pass}}
@@ -298,7 +298,7 @@ Now we create the so called \texttt{forward()} function in python:
 
 (Numpy provides us with the \texttt{@} symbol to make a matrix multiplication and the \texttt{.T} to transpose)
 
-Because we want to put one dimensional matrixes into the \texttt{step()} function we need to use numpy for the if-else statement:
+Because we want to put one dimensional matrices into the \texttt{step()} function we need to use numpy for the if-else statement:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -339,7 +339,7 @@ And these are all the generated outputs of our NN over all scenarios. Now we nee
 \hypertarget{backward-pass}{%
 \section{backward pass}\label{backward-pass}}
 
-To adjust the weights we need the Delta-Rule:
+To adjust the weights in a single Perceptron, we need the Delta-Rule:
 \[
   W(t+1) = W(t) + \Delta W(t)
 \]
@@ -368,8 +368,15 @@ with the result of the forward pass and example data we have the following:
 \NormalTok{])}
 \NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
+\BuiltInTok{print}\NormalTok{(W)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## [[-0.9]
+##  [ 0.2]
+##  [ 0.3]]
+\end{verbatim}
 
 and this is the new weight.
 
@@ -420,7 +427,7 @@ or as python code:
 \end{Highlighting}
 \end{Shaded}
 
-Now we need to calculate the mean-square-error for each element in the list \texttt{errors} which is made with \texttt{map}:
+Now we need to calculate the mean-square-error for each element in the list \texttt{errors} which is made with \texttt{map()}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -428,7 +435,7 @@ Now we need to calculate the mean-square-error for each element in the list \tex
 \end{Highlighting}
 \end{Shaded}
 
-To plot, im using the following function:
+To plot the errors, im using the following function:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -450,7 +457,7 @@ To plot, im using the following function:
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-11-1.pdf}
 
-If you survived until now, you have learned how you can programm a single Perceptron!
+If you survived until now, you have learned how you can program a single Perceptron!
 
 \hypertarget{appendix-full-code}{%
 \section{Appendix (full code)}\label{appendix-full-code}}

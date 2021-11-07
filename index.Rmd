@@ -1,5 +1,5 @@
 --- 
-title: "My First Steps in Neuronal Networks"
+title: "My First Steps in Neuronal Networks (Beginners Guide)"
 author: "Axel Roth"
 date: "`r Sys.Date()`"
 description: This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook.
@@ -15,11 +15,11 @@ biblio-style: apalike
 
 # About
 ## Me
-Hello, my name is Axel Roth and at the moment im studieing math at a master degree. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experiece i gained was around R and all its features. And now the iterresting question... Why do i want to write a beginners guide in the field of Neuronal Networks?  
-Its simple, at the moment i have a lecture in that we learn how to programm a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
+Hello, my name is Axel Roth and at the moment im studding math at a master degree. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experience i gained was around R and all its features. And now the interesting question... Why do i want to write a beginners guide in the field of Neuronal Networks?  
+Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
 
 ## The Book
-This Book will be more or the less the documentation of my lecture "Finance Project" in that we learn to programm a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce.  Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.  
+This Book will be more or the less the documentation of my lecture "Finance Project" in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.  
 
 ## How it works
 Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. Thats why i need to load the python interpreter in the following R-chunk:

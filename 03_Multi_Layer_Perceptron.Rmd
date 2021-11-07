@@ -1,0 +1,17 @@
+```{python, include=FALSE}
+import numpy as np
+import random as ra
+import pandas as pd
+import matplotlib.pyplot as pyplot
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+```
+
+# Multi Layer Perceptrons
+In a multi layer Perceptron you have multiple layers of neurons. Thats why you need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. You can interprete each layer as a single Perceptron. 
+
+
+
+
+

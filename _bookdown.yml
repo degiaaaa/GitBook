@@ -1,6 +1,7 @@
 book_filename: "gitbook-demo"
 rmd_files: ["index.Rmd",
-            "00_Introduction.Rmd"
+            "01_Single_Perceptron.Rmd",
+            "02_Multi_Layer_Perceptron.Rmd"
             # "prerequisites.Rmd",
             # "get_your_gitbook.Rmd",
             # "editing_the_book.Rmd",
