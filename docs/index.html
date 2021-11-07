@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>My First Steps in Neuronal Networks</title>
+  <title>My First Steps in Neuronal Networks (Beginners Guide)</title>
   <meta name="description" content="This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook." />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="My First Steps in Neuronal Networks" />
+  <meta property="og:title" content="My First Steps in Neuronal Networks (Beginners Guide)" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="https://github.com/AxelCode-R/GitBook" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="My First Steps in Neuronal Networks" />
+  <meta name="twitter:title" content="My First Steps in Neuronal Networks (Beginners Guide)" />
   
   <meta name="twitter:description" content="This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook." />
   
@@ -32,7 +32,7 @@
   
   
 
-<link rel="next" href="a-single-perceptron.html"/>
+<link rel="next" href="single-perceptron.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -143,14 +143,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-book"><i class="fa fa-check"></i><b>1.2</b> The Book</a></li>
 <li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-it-works"><i class="fa fa-check"></i><b>1.3</b> How it works</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html"><i class="fa fa-check"></i><b>2</b> A single Perceptron</a>
+<li class="chapter" data-level="2" data-path="single-perceptron.html"><a href="single-perceptron.html"><i class="fa fa-check"></i><b>2</b> Single Perceptron</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
-<li class="chapter" data-level="2.2" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
-<li class="chapter" data-level="2.3" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
-<li class="chapter" data-level="2.4" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#single-perceptron"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="a-single-perceptron.html"><a href="a-single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
+<li class="chapter" data-level="2.1" data-path="single-perceptron.html"><a href="single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a></li>
+<li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -163,7 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">My First Steps in Neuronal Networks</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">My First Steps in Neuronal Networks (Beginners Guide)</a>
           </h1>
         </div>
 
@@ -172,7 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">My First Steps in Neuronal Networks</h1>
+<h1 class="title">My First Steps in Neuronal Networks (Beginners Guide)</h1>
 <p class="author"><em>Axel Roth</em></p>
 <p class="date"><em>2021-11-07</em></p>
 </div>
@@ -202,7 +204,7 @@ Its simple, at the moment i have a lecture in that we learn how to program a Neu
         </div>
       </div>
 
-<a href="a-single-perceptron.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="single-perceptron.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

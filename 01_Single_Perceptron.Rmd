@@ -38,7 +38,7 @@ $$
 \end{array}
 \right]
 $$
-The provided training dataset contains the `X_train` matrix with two inputs for each scenario and the `Y_train` matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.  
+The provided training dataset contains the `X` matrix with two inputs for each scenario and the `Y` matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.  
 
 The needed python imports and default options are the following:
 ```{python}
@@ -55,7 +55,7 @@ pd.set_option('display.width', 1000)
 Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.
 
 ## Neural Network Basics
-In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activationfunction with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life...  
+In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life...  
 Ahh no no ok we have a look deeper into it :)  
 
 Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have (with the matrix dimensions included) for one scenario out of the training dataset, the following:
@@ -126,7 +126,7 @@ W = np.array([
   [0.1], 
   [0.2]
 ])
-beta = 1
+bias = 1
 Y_approx = forward(X, W)
 print(Y_approx)
 ```
@@ -154,7 +154,7 @@ Y = np.array([
   [1],
   [1]
 ])
-alpha = 0.1
+alpha = 0.01
 W = backward(W, X, Y, alpha, Y_approx)
 print(W)
 ```
@@ -179,9 +179,9 @@ W = np.array([
   [0.1], 
   [0.2]
 ])
-alpha = 1
-beta = 1
-train_n = 20
+alpha = 0.01
+bias = 1
+train_n = 100
 
 errors = []
 for i in range(train_n):
@@ -248,9 +248,9 @@ W = np.array([
   [0.1], 
   [0.2]
 ])
-alpha = 0.1
+alpha = 0.01
 bias = 1
-train_n = 20
+train_n = 100
 
 def step(s):
   return( np.where(s >= bias, 1, 0) )

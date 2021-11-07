@@ -4,7 +4,7 @@
 %
 \documentclass[
 ]{book}
-\title{My First Steps in Neuronal Networks}
+\title{My First Steps in Neuronal Networks (Beginners Guide)}
 \author{Axel Roth}
 \date{2021-11-07}
 
@@ -40,7 +40,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={My First Steps in Neuronal Networks},
+  pdftitle={My First Steps in Neuronal Networks (Beginners Guide)},
   pdfauthor={Axel Roth},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
@@ -161,23 +161,24 @@ Im coding this book in the IDE R-Studio with the framework of Bookdown and embed
 
 Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable.
 
-\hypertarget{a-single-perceptron}{%
-\chapter{A single Perceptron}\label{a-single-perceptron}}
+\hypertarget{single-perceptron}{%
+\chapter{Single Perceptron}\label{single-perceptron}}
 
 In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret Vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.\\
 First of all we are starting with the needed parameters, that are explained later:
 
 Number of runs over the training data := \texttt{n\_train}\\
 Learning rate := \(\alpha =\) \texttt{alpha}\\
+Bias value := \(\beta =\) \texttt{bias}
 and the activation function:\\
 \[ 
 step(s)= 
 \begin{cases}
-    1,& s   \geq 0\\
-    0,& s < 0
+    1,& s   \geq \beta\\
+    0,& s < \beta
 \end{cases}
 \]
-This function is named the heavyside-function and should be the easiest activation function to start with.
+This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the \texttt{bias} it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.
 
 The traings dataset is the following:
 \[
@@ -197,25 +198,7 @@ x_i,_1 & x_i,_2 & y_i \\
 \end{array}
 \right]
 \]
-The provided training dataset contains the \texttt{X\_train} matrix with two inputs for each scenario and the \texttt{Y\_train} matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.\\
-For a wider use we will now change the \texttt{X\_train} matrix a little bit by adding a column with ones on the left side of it. Its a dummy value to make it possible to shift the NN, so it can be better fitted. The new training dataset looks like this:
-\[
-\left[
-\begin{array}{ccc|c}
-x_i,_0 & x_i,_1 & x_i,_2 & y_i \\
-\end{array}
-\right]
-\]
-\[
-\left[
-\begin{array}{ccc|c}
-1 & 0 & 0 & 0 \\
-1 & 0 & 1 & 1 \\
-1 & 1 & 0 & 1 \\
-1 & 1 & 1 & 1 \\
-\end{array}
-\right]
-\]
+The provided training dataset contains the \texttt{X} matrix with two inputs for each scenario and the \texttt{Y} matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.
 
 The needed python imports and default options are the following:
 
@@ -238,12 +221,12 @@ Now that we have all the needed parameters and settings, i can give you a quick 
 \hypertarget{neural-network-basics}{%
 \section{Neural Network Basics}\label{neural-network-basics}}
 
-In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activationfunction with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
+In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
 Ahh no no ok we have a look deeper into it :)
 
 Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have (with the matrix dimensions included) for one scenario out of the training dataset, the following:
 \[
-  step(W^{(1,3)} \cdot x^{(3,1)}) = y^{(1,1)}
+  step(W^{(1,2)} \cdot x^{(2,1)}) = y^{(1,1)}
 \]
 That is the normal approach to iterate over all scenarios in the training dataset\ldots{}\\
 But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios.
@@ -252,11 +235,11 @@ My next approach is to consider all scenarios in the training dataset in one for
 We have \(X\) as:
 \[
   X = \left[
-  \begin{array}{ccc}
-  1 & 0 & 0 \\
-  1 & 0 & 1 \\
-  1 & 1 & 0 \\
-  1 & 1 & 1 \\
+  \begin{array}{cc}
+  0 & 0 \\
+  0 & 1 \\
+  1 & 0 \\
+  1 & 1 \\
   \end{array}
   \right]
 \]
@@ -267,7 +250,6 @@ For the weights \(W\) we have for example:
   \begin{array}{c}
   0.1 \\ 
   0.2 \\ 
-  0.3 \\
   \end{array}
   \right]
 \]
@@ -277,10 +259,10 @@ The new formular looks like this:
 \]
 For example if you take a look at the \(i\)-th row or scenario of \(X\) you will see the following:
 \[
-  Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0])
+  Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 ])
 \]
 and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now we can look at the NN and compare the formula with it:\\
-\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01_v2.png}
+\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01_v4.png}
 
 Yes it is the same, its the weighted sum of the inputs and evaluated the activation function with it to calculate the output of the scenario \(i\).
 
@@ -303,7 +285,7 @@ Because we want to put one dimensional matrices into the \texttt{step()} functio
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{def}\NormalTok{ step(s):}
-  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
+  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=}\NormalTok{ bias, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
 \end{Highlighting}
 \end{Shaded}
 
@@ -312,26 +294,26 @@ Here an small example for the forward pass:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
 \NormalTok{])}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
 \NormalTok{])}
+\NormalTok{bias }\OperatorTok{=} \DecValTok{1}
 \NormalTok{Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
 \BuiltInTok{print}\NormalTok{(Y\_approx)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [[1]
-##  [1]
-##  [1]
-##  [1]]
+## [[0]
+##  [0]
+##  [0]
+##  [0]]
 \end{verbatim}
 
 And these are all the generated outputs of our NN over all scenarios. Now we need to calculate the error and adjust the weights accordingly.
@@ -366,32 +348,31 @@ with the result of the forward pass and example data we have the following:
 \NormalTok{  [}\DecValTok{1}\NormalTok{],}
 \NormalTok{  [}\DecValTok{1}\NormalTok{]}
 \NormalTok{])}
-\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
+\NormalTok{alpha }\OperatorTok{=} \FloatTok{0.01}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
 \BuiltInTok{print}\NormalTok{(W)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [[-0.9]
-##  [ 0.2]
-##  [ 0.3]]
+## [[0.12]
+##  [0.22]]
 \end{verbatim}
 
 and this is the new weight.
 
-\hypertarget{single-perceptron}{%
-\section{Single Perceptron}\label{single-perceptron}}
+\hypertarget{single-perceptron-1}{%
+\section{Single Perceptron}\label{single-perceptron-1}}
 
 Now we want to do the same process multiple times, to train the NN:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
 \NormalTok{])}
 \NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\DecValTok{0}\NormalTok{],}
@@ -401,13 +382,14 @@ Now we want to do the same process multiple times, to train the NN:
 \NormalTok{])}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
 \NormalTok{])}
-\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
+\NormalTok{alpha }\OperatorTok{=} \FloatTok{0.01}
+\NormalTok{bias }\OperatorTok{=} \DecValTok{1}
+\NormalTok{train\_n }\OperatorTok{=} \DecValTok{100}
 
 \NormalTok{errors }\OperatorTok{=}\NormalTok{ []}
-\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{20}\NormalTok{):}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(train\_n):}
 \NormalTok{  Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
 \NormalTok{  errors.append(Y }\OperatorTok{{-}}\NormalTok{ Y\_approx)}
 \NormalTok{  W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
@@ -473,10 +455,10 @@ If you survived until now, you have learned how you can program a single Percept
 \NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
 
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
-\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
 \NormalTok{])}
 \NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\DecValTok{0}\NormalTok{],}
@@ -486,14 +468,14 @@ If you survived until now, you have learned how you can program a single Percept
 \NormalTok{])}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.2}\NormalTok{], }
-\NormalTok{  [}\FloatTok{0.3}\NormalTok{]}
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
 \NormalTok{])}
-\NormalTok{alpha }\OperatorTok{=} \DecValTok{1}
-
+\NormalTok{alpha }\OperatorTok{=} \FloatTok{0.01}
+\NormalTok{bias }\OperatorTok{=} \DecValTok{1}
+\NormalTok{train\_n }\OperatorTok{=} \DecValTok{100}
 
 \KeywordTok{def}\NormalTok{ step(s):}
-  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
+  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=}\NormalTok{ bias, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
 
 
 \KeywordTok{def}\NormalTok{ forward(X, W):}
@@ -504,7 +486,7 @@ If you survived until now, you have learned how you can program a single Percept
   
   
 \NormalTok{errors }\OperatorTok{=}\NormalTok{ []}
-\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\DecValTok{20}\NormalTok{):}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(train\_n}\OperatorTok{*}\DecValTok{5}\NormalTok{):}
 \NormalTok{  Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
 \NormalTok{  errors.append(Y }\OperatorTok{{-}}\NormalTok{ Y\_approx)}
 \NormalTok{  W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
@@ -527,7 +509,6 @@ If you survived until now, you have learned how you can program a single Percept
 \NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
 \NormalTok{  pyplot.title(title)}
 \NormalTok{  pyplot.ylim(}\OperatorTok{{-}}\FloatTok{0.01}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.2}\NormalTok{)}
-\NormalTok{  pyplot.xticks(x)}
 \NormalTok{  pyplot.show()}
   
   
@@ -535,6 +516,450 @@ If you survived until now, you have learned how you can program a single Percept
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{adding-trainable-bias}{%
+\chapter{Adding trainable Bias}\label{adding-trainable-bias}}
+
+The single Perceptron, you saw in the previews chapter had the following activation function:
+\[ 
+step(s)= 
+\begin{cases}
+    1,& s   \geq \beta\\
+    0,& s < \beta
+\end{cases}
+\]
+with \(\beta = 1\) and that is just the right \(\beta\) for the given training dataset. But what happens if you shift the training data for example adding \(5\) to the \(X\) matrix? It is still the OR-Gate but now it will never give you the correct answer. That is because you need to select the \(\beta\) accordingly. But this wouldnt be intelligent to search for each dataset the optimal shift by hand. That is why we now generalise the weighted sum step by step. First we generalise the activation function:
+\[ 
+step(s)= 
+\begin{cases}
+    1,& s   \geq 0\\
+    0,& s < 0
+\end{cases}
+\]
+Now we can list it in the weighted sum:
+\[
+  step(X \cdot W - \beta) = Y
+\]
+But now we have the same problem as previews, because we need to specify the \(\beta\) explicit. To add it to the training process we add a column with ones on the right side of \(X\) and add the \(-\beta\) to the last row of \(W\). The output of one scenario is now caluclated as the following:
+\[
+  Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0]) = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 - \beta])
+\]
+Furthermore because the \(W\) is holding the \(\beta\) it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.
+
+As python code we now did the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{])}\OperatorTok{+}\DecValTok{5}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.append(X, np.array([np.ones(}\BuiltInTok{len}\NormalTok{(X))]).T, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.append(W, }\OperatorTok{{-}}\NormalTok{np.array([np.random.random(}\BuiltInTok{len}\NormalTok{(W[}\DecValTok{0}\NormalTok{]))]).T, axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+\CommentTok{\#W = np.append(W, np.array([[{-}5]]), axis=0)}
+\end{Highlighting}
+\end{Shaded}
+
+We added \(+5\) to the \(X\) matrix to simulate the problem of shifted data, added ones on the left side of \(X\) and added negative random numbers between \((0,1)\) to the weights. Yes if you would have a clue, what \(\beta\) would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good \(\beta\) by its self.\\
+The complete code is the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ random }\ImportTok{as}\NormalTok{ ra}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_rows\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.max\_columns\textquotesingle{}}\NormalTok{, }\DecValTok{500}\NormalTok{)}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.width\textquotesingle{}}\NormalTok{, }\DecValTok{1000}\NormalTok{)}
+
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],}
+\NormalTok{]) }\OperatorTok{+} \DecValTok{5}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.append(X, np.array([np.ones(}\BuiltInTok{len}\NormalTok{(X))]).T, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\FloatTok{0.1}\NormalTok{], }
+\NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
+\NormalTok{])}
+\NormalTok{W }\OperatorTok{=}\NormalTok{ np.append(W, }\OperatorTok{{-}}\NormalTok{np.array([np.random.random(}\BuiltInTok{len}\NormalTok{(W[}\DecValTok{0}\NormalTok{]))]).T, axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ np.array([}
+\NormalTok{  [}\DecValTok{0}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{],}
+\NormalTok{  [}\DecValTok{1}\NormalTok{]}
+\NormalTok{])}
+
+\NormalTok{alpha }\OperatorTok{=} \FloatTok{0.01}
+\NormalTok{train\_n }\OperatorTok{=} \DecValTok{100}
+
+\KeywordTok{def}\NormalTok{ step(s):}
+  \ControlFlowTok{return}\NormalTok{( np.where(s }\OperatorTok{\textgreater{}=} \DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{) )}
+
+
+\KeywordTok{def}\NormalTok{ forward(X, W):}
+  \ControlFlowTok{return}\NormalTok{( step(X }\OperatorTok{@}\NormalTok{ W) )}
+
+\KeywordTok{def}\NormalTok{ backward(W, X, Y, alpha, Y\_approx):}
+    \ControlFlowTok{return}\NormalTok{(W }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ X.T }\OperatorTok{@}\NormalTok{ (Y }\OperatorTok{{-}}\NormalTok{ Y\_approx))}
+  
+  
+\NormalTok{errors }\OperatorTok{=}\NormalTok{ []}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(train\_n):}
+\NormalTok{  Y\_approx }\OperatorTok{=}\NormalTok{ forward(X, W)}
+\NormalTok{  errors.append(Y }\OperatorTok{{-}}\NormalTok{ Y\_approx)}
+  \BuiltInTok{print}\NormalTok{(W)}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ backward(W, X, Y, alpha, Y\_approx)}
+  
+  
+  
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[ 0.1       ]
+##  [ 0.2       ]
+##  [-0.22808639]]
+## [[ 0.05      ]
+##  [ 0.15      ]
+##  [-0.23808639]]
+## [[ 0.        ]
+##  [ 0.1       ]
+##  [-0.24808639]]
+## [[-0.05      ]
+##  [ 0.05      ]
+##  [-0.25808639]]
+## [[ 0.12      ]
+##  [ 0.22      ]
+##  [-0.22808639]]
+## [[ 0.07      ]
+##  [ 0.17      ]
+##  [-0.23808639]]
+## [[ 0.02      ]
+##  [ 0.12      ]
+##  [-0.24808639]]
+## [[-0.03      ]
+##  [ 0.07      ]
+##  [-0.25808639]]
+## [[ 0.09      ]
+##  [ 0.18      ]
+##  [-0.23808639]]
+## [[ 0.04      ]
+##  [ 0.13      ]
+##  [-0.24808639]]
+## [[-0.01      ]
+##  [ 0.08      ]
+##  [-0.25808639]]
+## [[-0.06      ]
+##  [ 0.03      ]
+##  [-0.26808639]]
+## [[ 0.11      ]
+##  [ 0.2       ]
+##  [-0.23808639]]
+## [[ 0.06      ]
+##  [ 0.15      ]
+##  [-0.24808639]]
+## [[ 0.01      ]
+##  [ 0.1       ]
+##  [-0.25808639]]
+## [[-0.04      ]
+##  [ 0.05      ]
+##  [-0.26808639]]
+## [[ 0.13      ]
+##  [ 0.22      ]
+##  [-0.23808639]]
+## [[ 0.08      ]
+##  [ 0.17      ]
+##  [-0.24808639]]
+## [[ 0.03      ]
+##  [ 0.12      ]
+##  [-0.25808639]]
+## [[-0.02      ]
+##  [ 0.07      ]
+##  [-0.26808639]]
+## [[ 0.04      ]
+##  [ 0.12      ]
+##  [-0.25808639]]
+## [[-0.01      ]
+##  [ 0.07      ]
+##  [-0.26808639]]
+## [[-0.06      ]
+##  [ 0.02      ]
+##  [-0.27808639]]
+## [[ 0.11      ]
+##  [ 0.19      ]
+##  [-0.24808639]]
+## [[ 0.06      ]
+##  [ 0.14      ]
+##  [-0.25808639]]
+## [[ 0.01      ]
+##  [ 0.09      ]
+##  [-0.26808639]]
+## [[-0.04      ]
+##  [ 0.04      ]
+##  [-0.27808639]]
+## [[ 0.13      ]
+##  [ 0.21      ]
+##  [-0.24808639]]
+## [[ 0.08      ]
+##  [ 0.16      ]
+##  [-0.25808639]]
+## [[ 0.03      ]
+##  [ 0.11      ]
+##  [-0.26808639]]
+## [[-0.02      ]
+##  [ 0.06      ]
+##  [-0.27808639]]
+## [[ 0.15      ]
+##  [ 0.23      ]
+##  [-0.24808639]]
+## [[ 0.1       ]
+##  [ 0.18      ]
+##  [-0.25808639]]
+## [[ 0.05      ]
+##  [ 0.13      ]
+##  [-0.26808639]]
+## [[-1.52655666e-16]
+##  [ 8.00000000e-02]
+##  [-2.78086388e-01]]
+## [[-0.05      ]
+##  [ 0.03      ]
+##  [-0.28808639]]
+## [[ 0.12      ]
+##  [ 0.2       ]
+##  [-0.25808639]]
+## [[ 0.07      ]
+##  [ 0.15      ]
+##  [-0.26808639]]
+## [[ 0.02      ]
+##  [ 0.1       ]
+##  [-0.27808639]]
+## [[-0.03      ]
+##  [ 0.05      ]
+##  [-0.28808639]]
+## [[ 0.14      ]
+##  [ 0.22      ]
+##  [-0.25808639]]
+## [[ 0.09      ]
+##  [ 0.17      ]
+##  [-0.26808639]]
+## [[ 0.04      ]
+##  [ 0.12      ]
+##  [-0.27808639]]
+## [[-0.01      ]
+##  [ 0.07      ]
+##  [-0.28808639]]
+## [[-0.06      ]
+##  [ 0.02      ]
+##  [-0.29808639]]
+## [[ 0.11      ]
+##  [ 0.19      ]
+##  [-0.26808639]]
+## [[ 0.06      ]
+##  [ 0.14      ]
+##  [-0.27808639]]
+## [[ 0.01      ]
+##  [ 0.09      ]
+##  [-0.28808639]]
+## [[-0.04      ]
+##  [ 0.04      ]
+##  [-0.29808639]]
+## [[ 0.13      ]
+##  [ 0.21      ]
+##  [-0.26808639]]
+## [[ 0.08      ]
+##  [ 0.16      ]
+##  [-0.27808639]]
+## [[ 0.03      ]
+##  [ 0.11      ]
+##  [-0.28808639]]
+## [[-0.02      ]
+##  [ 0.06      ]
+##  [-0.29808639]]
+## [[ 0.15      ]
+##  [ 0.23      ]
+##  [-0.26808639]]
+## [[ 0.1       ]
+##  [ 0.18      ]
+##  [-0.27808639]]
+## [[ 0.05      ]
+##  [ 0.13      ]
+##  [-0.28808639]]
+## [[-3.19189120e-16]
+##  [ 8.00000000e-02]
+##  [-2.98086388e-01]]
+## [[-0.05      ]
+##  [ 0.03      ]
+##  [-0.30808639]]
+## [[ 0.12      ]
+##  [ 0.2       ]
+##  [-0.27808639]]
+## [[ 0.07      ]
+##  [ 0.15      ]
+##  [-0.28808639]]
+## [[ 0.02      ]
+##  [ 0.1       ]
+##  [-0.29808639]]
+## [[-0.03      ]
+##  [ 0.05      ]
+##  [-0.30808639]]
+## [[ 0.14      ]
+##  [ 0.22      ]
+##  [-0.27808639]]
+## [[ 0.09      ]
+##  [ 0.17      ]
+##  [-0.28808639]]
+## [[ 0.04      ]
+##  [ 0.12      ]
+##  [-0.29808639]]
+## [[-0.01      ]
+##  [ 0.07      ]
+##  [-0.30808639]]
+## [[ 0.05      ]
+##  [ 0.12      ]
+##  [-0.29808639]]
+## [[-3.88578059e-16]
+##  [ 7.00000000e-02]
+##  [-3.08086388e-01]]
+## [[-0.05      ]
+##  [ 0.02      ]
+##  [-0.31808639]]
+## [[ 0.12      ]
+##  [ 0.19      ]
+##  [-0.28808639]]
+## [[ 0.07      ]
+##  [ 0.14      ]
+##  [-0.29808639]]
+## [[ 0.02      ]
+##  [ 0.09      ]
+##  [-0.30808639]]
+## [[-0.03      ]
+##  [ 0.04      ]
+##  [-0.31808639]]
+## [[ 0.14      ]
+##  [ 0.21      ]
+##  [-0.28808639]]
+## [[ 0.09      ]
+##  [ 0.16      ]
+##  [-0.29808639]]
+## [[ 0.04      ]
+##  [ 0.11      ]
+##  [-0.30808639]]
+## [[-0.01      ]
+##  [ 0.06      ]
+##  [-0.31808639]]
+## [[ 0.16      ]
+##  [ 0.23      ]
+##  [-0.28808639]]
+## [[ 0.11      ]
+##  [ 0.18      ]
+##  [-0.29808639]]
+## [[ 0.06      ]
+##  [ 0.13      ]
+##  [-0.30808639]]
+## [[ 0.01      ]
+##  [ 0.08      ]
+##  [-0.31808639]]
+## [[-0.04      ]
+##  [ 0.03      ]
+##  [-0.32808639]]
+## [[ 0.13      ]
+##  [ 0.2       ]
+##  [-0.29808639]]
+## [[ 0.08      ]
+##  [ 0.15      ]
+##  [-0.30808639]]
+## [[ 0.03      ]
+##  [ 0.1       ]
+##  [-0.31808639]]
+## [[-0.02      ]
+##  [ 0.05      ]
+##  [-0.32808639]]
+## [[ 0.15      ]
+##  [ 0.22      ]
+##  [-0.29808639]]
+## [[ 0.1       ]
+##  [ 0.17      ]
+##  [-0.30808639]]
+## [[ 0.05      ]
+##  [ 0.12      ]
+##  [-0.31808639]]
+## [[-5.41233725e-16]
+##  [ 7.00000000e-02]
+##  [-3.28086388e-01]]
+## [[-0.05      ]
+##  [ 0.02      ]
+##  [-0.33808639]]
+## [[ 0.12      ]
+##  [ 0.19      ]
+##  [-0.30808639]]
+## [[ 0.07      ]
+##  [ 0.14      ]
+##  [-0.31808639]]
+## [[ 0.02      ]
+##  [ 0.09      ]
+##  [-0.32808639]]
+## [[-0.03      ]
+##  [ 0.04      ]
+##  [-0.33808639]]
+## [[ 0.14      ]
+##  [ 0.21      ]
+##  [-0.30808639]]
+## [[ 0.09      ]
+##  [ 0.16      ]
+##  [-0.31808639]]
+## [[ 0.04      ]
+##  [ 0.11      ]
+##  [-0.32808639]]
+## [[-0.01      ]
+##  [ 0.06      ]
+##  [-0.33808639]]
+## [[ 0.16      ]
+##  [ 0.23      ]
+##  [-0.30808639]]
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
+
+
+\NormalTok{mean\_square\_errors }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors)))}
+
+
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\OperatorTok{{-}}\FloatTok{0.01}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.2}\NormalTok{)}
+\NormalTok{  pyplot.show()}
+  
+  
+\NormalTok{plot\_error(mean\_square\_errors, }\StringTok{"Mean{-}Square{-}Errors of a single Perceptron"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-14-3.pdf}
+
+\hypertarget{multi-layer-perceptrons}{%
+\chapter{Multi Layer Perceptrons}\label{multi-layer-perceptrons}}
+
+In a multi layer Perceptron you have multiple layers of neurons. Thats why you need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. You can interprete each layer as a single Perceptron.
 
   \bibliography{book.bib,packages.bib}
 

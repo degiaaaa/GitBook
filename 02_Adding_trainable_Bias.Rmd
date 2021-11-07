@@ -1,5 +1,5 @@
 
-# Adding learnable Bias
+# Adding trainable Bias
 The single Perceptron, you saw in the previews chapter had the following activation function:
 $$ 
 step(s)= 
@@ -43,8 +43,10 @@ W = np.array([
 W = np.append(W, -np.array([np.random.random(len(W[0]))]).T, axis=0)
 #W = np.append(W, np.array([[-5]]), axis=0)
 ```
+We added $+5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good $\beta$ by its self.  
+The complete code is the following:
 
-```{python, eval=FALSE}
+```{python, eval=TRUE}
 import numpy as np
 import random as ra
 import pandas as pd
@@ -58,19 +60,24 @@ X = np.array([
   [0,1],
   [1,0],
   [1,1],
+]) + 5
+X = np.append(X, np.array([np.ones(len(X))]).T, axis=1)
+
+W = np.array([
+  [0.1], 
+  [0.2]
 ])
+W = np.append(W, -np.array([np.random.random(len(W[0]))]).T, axis=0)
+
 Y = np.array([
   [0],
   [1],
   [1],
   [1]
 ])
-W = np.array([
-  [0.1], 
-  [0.2]
-])
-alpha = 0.1
-bias = True
+
+alpha = 0.01
+train_n = 100
 
 def step(s):
   return( np.where(s >= 0, 1, 0) )
@@ -84,9 +91,10 @@ def backward(W, X, Y, alpha, Y_approx):
   
   
 errors = []
-for i in range(500):
+for i in range(train_n):
   Y_approx = forward(X, W)
   errors.append(Y - Y_approx)
+  print(W)
   W = backward(W, X, Y, alpha, Y_approx)
   
   
