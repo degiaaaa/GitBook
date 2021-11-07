@@ -43,12 +43,7 @@ The provided training dataset contains the `X` matrix with two inputs for each s
 The needed python imports and default options are the following:
 ```{python}
 import numpy as np
-import random as ra
-import pandas as pd
 import matplotlib.pyplot as pyplot
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
 ```
 ( Do you see more imports than only the numpy package? [Yes](https://www.youtube.com/watch?v=dQw4w9WgXcQ) or No )
 
@@ -225,12 +220,8 @@ If you survived until now, you have learned how you can program a single Percept
 ## Appendix (complete code)
 ```{python, eval=FALSE}
 import numpy as np
-import random as ra
-import pandas as pd
 import matplotlib.pyplot as pyplot
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
+
 
 X = np.array([
   [0,0],
@@ -260,11 +251,11 @@ def forward(X, W):
   return( step(X @ W) )
 
 def backward(W, X, Y, alpha, Y_approx):
-    return(W + alpha * X.T @ (Y - Y_approx))
+  return(W + alpha * X.T @ (Y - Y_approx))
   
   
 errors = []
-for i in range(train_n*5):
+for i in range(train_n):
   Y_approx = forward(X, W)
   errors.append(Y - Y_approx)
   W = backward(W, X, Y, alpha, Y_approx)

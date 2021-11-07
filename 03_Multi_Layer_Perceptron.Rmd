@@ -9,9 +9,172 @@ pd.set_option('display.width', 1000)
 ```
 
 # Multi Layer Perceptrons
-In a multi layer Perceptron you have multiple layers of neurons. Thats why you need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. You can interprete each layer as a single Perceptron. 
+In a multi layer Perceptron you have multiple layers of neurons. Thats why you need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. What we want to do is the NN of the following picture:    
+![https://app.diagrams.net/](./img/NN_03.png){ width=50% }<br>  
+According to the image, the new $W$ is
+$$
+  W^{\text{layer}}_{\text{input-X, output-Y}}
+$$
+the new $X$ is
+$$
+  X^{\text{layer}}_{\text{scenario, value}}
+$$
+the new $Y$ is
+$$
+  Y^{\text{layer}}_{\text{scenario, value}}
+$$
+If you understood the pattern, you can see that we have to create a list with the same $X$, $Y$ and $W$ of the previews chapter for each layer to get the datastructur for a multi layer Perceptron.  
+Now we will start with a small example for the XOR-Gate dataset with 2+1 input values, 2+1 hidden neurons and 1 output value like in the image above. With random generated weights ($\beta$ is implicit in the weights and gets adjusted anyway) and the XOR-Gate as dataset, we have the following structur:
+```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+
+X = np.array([
+  [0,0],
+  [0,1],
+  [1,0],
+  [1,1],
+]) 
+
+Y = np.array([
+  [0],
+  [1],
+  [1],
+  [0]
+])
+
+n_input = len(X[0]) + 1
+n_output = len(Y[0])
+hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
+
+def generate_weights(n_input, n_output, hidden_layer_neurons):
+  W = []
+  for i in range(len(hidden_layer_neurons)+1):
+    if i == 0: # first layer
+      W.append(np.random.random((n_input, hidden_layer_neurons[i])))
+    elif i == len(hidden_layer_neurons): # last layer
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
+    else: # middle layers
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
+   
+  return(W)
+
+def add_ones_to_input(x):
+  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
+
+X = add_ones_to_input(X)
+
+W = generate_weights(n_input, n_output, hidden_layer_neurons)
+
+print("W[0]: \n", W[0])
+print("W[1]: \n", W[1])
+```
+
+<!-- And we are changing the activation function to the sigmoid function: -->
+<!-- ```{python} -->
+<!-- def sigmoid(s): -->
+<!--   return 1.0 / (1.0 + np.exp(-s)) -->
+<!-- ``` -->
+<!-- and change the activation function in the forward pass: -->
+<!-- ```{python} -->
+<!-- def forward(X, W): -->
+<!--   return( sigmoid(X @ W) ) -->
+<!-- ``` -->
+
+
+Now we can calculate the output value of the NN by evaluating the `forward()` function, adding the ones to the output and evaluating the `forward()` function again. All of this with the according weights:
+```{python}
+def step(s):
+  return( np.where(s >= 0, 1, 0) )
+
+def forward(X, W):
+  return( step(X @ W) )
+
+output = forward( add_ones_to_input(forward(X, W[0])), W[1])
+print("output: \n", output)
+```
 
 
 
 
 
+
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+
+X = np.array([
+  [0,0],
+  [0,1],
+  [1,0],
+  [1,1],
+]) 
+
+Y = np.array([
+  [0],
+  [1],
+  [1],
+  [0]
+])
+
+n_input = len(X[0]) + 1
+n_output = len(Y[0])
+hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
+
+def generate_weights(n_input, n_output, hidden_layer_neurons):
+  W = []
+  for i in range(len(hidden_layer_neurons)+1):
+    if i == 0: # first layer
+      W.append(np.random.random((n_input, hidden_layer_neurons[i])))
+    elif i == len(hidden_layer_neurons): # last layer
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
+    else: # middle layers
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
+   
+  return(W)
+
+def add_ones_to_input(x):
+  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
+
+X = add_ones_to_input(X)
+
+W = generate_weights(n_input, n_output, hidden_layer_neurons)
+
+def step(s):
+  return( np.where(s >= 0, 1, 0) )
+
+def forward(X, W):
+  return( step(X @ W) )
+
+def backward(IN, OUT, Y, grad):
+  if not any(grad):
+    grad = OUT[-1] * (1-OUT[-1]) * (Y-OUT[-1])
+  else:
+    grad = OUT[-1] * (1-OUT[-1]) * (Y-OUT[-1])
+    
+  grad = OUT
+  network["grad_12"] = network["OUT_12"] * (1-network["OUT_12"]) * network["error"]
+  network["grad_01"] = network["OUT_01"] * (1-network["OUT_01"]) * (network["W_12"].T @ network["grad_12"])
+  
+  network["new_W_01"] = network["W_01"] + eta * (network["grad_01"] @ network["IN_01"].T)
+  network["new_W_12"] = network["W_12"] + eta * (network["grad_12"] @ network["IN_12"].T)
+  return(grad)
+
+
+for i in range(500):
+  IN = [None] * len(W)
+  IN[0] = X
+  OUT = [None] * len(W)
+  grad = [None] * len(W)
+  
+  for k in range(len(W)):
+    if not any(OUT):
+      IN[k] = add_ones_to_input(OUT[k-1])
+    OUT[k] = forward(IN[k], W[k])
+    
+  for k in range(-len(W)+1, 1):
+    
+
+```
