@@ -149,9 +149,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
 <li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
 <li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a></li>
+<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
+<li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -260,7 +264,7 @@ For example if you take a look at the <span class="math inline">\(i\)</span>-th 
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 ])
 \]</span>
 and <span class="math inline">\(Y_i,_0\)</span> is the approximated output of the <span class="math inline">\(i\)</span>-th scenario. Now we can look at the NN and compare the formula with it:<br />
-<img src="img/NN_01_v4.png" style="width:50.0%" alt="Made with the awesome chart website lucidecharts" /><br></p>
+<img src="img/NN_01_v4.png" style="width:50.0%" alt="https://app.diagrams.net/" /><br></p>
 <p>Yes it is the same, its the weighted sum of the inputs and evaluated the activation function with it to calculate the output of the scenario <span class="math inline">\(i\)</span>.</p>
 </div>
 <div id="forward-pass" class="section level2" number="2.2">
@@ -373,8 +377,8 @@ or as python code:</p>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
 <p>If you survived until now, you have learned how you can program a single Perceptron!</p>
 </div>
-<div id="appendix-full-code" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Appendix (full code)</h2>
+<div id="appendix-complete-code" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Appendix (complete code)</h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="single-perceptron.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="single-perceptron.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random <span class="im">as</span> ra</span>
 <span id="cb14-3"><a href="single-perceptron.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>

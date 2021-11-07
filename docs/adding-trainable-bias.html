@@ -149,9 +149,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
 <li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
 <li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-full-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (full code)</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a></li>
+<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
+<li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -184,7 +188,10 @@ step(s)=
     0,&amp; s &lt; \beta
 \end{cases}
 \]</span>
-with <span class="math inline">\(\beta = 1\)</span> and that is just the right <span class="math inline">\(\beta\)</span> for the given training dataset. But what happens if you shift the training data for example adding <span class="math inline">\(5\)</span> to the <span class="math inline">\(X\)</span> matrix? It is still the OR-Gate but now it will never give you the correct answer. That is because you need to select the <span class="math inline">\(\beta\)</span> accordingly. But this wouldnt be intelligent to search for each dataset the optimal shift by hand. That is why we now generalise the weighted sum step by step. First we generalise the activation function:
+with <span class="math inline">\(\beta = 1\)</span> and that is just the right <span class="math inline">\(\beta\)</span> for the given training dataset. But what happens if you shift the training data for example adding <span class="math inline">\(5\)</span> to the <span class="math inline">\(X\)</span> matrix? It is still the OR-Gate but now it will never give you the correct answer. That is because you need to select the <span class="math inline">\(\beta\)</span> accordingly. But this wouldnt be intelligent to search for each dataset the optimal shift by hand.</p>
+<div id="generalising-the-bias" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Generalising the Bias</h2>
+<p>That is why we now generalise the weighted sum step by step. First we generalise the activation function:
 <span class="math display">\[ 
 step(s)= 
 \begin{cases}
@@ -201,7 +208,9 @@ But now we have the same problem as previews, because we need to specify the <sp
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0]) = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 - \beta])
 \]</span>
 Furthermore because the <span class="math inline">\(W\)</span> is holding the <span class="math inline">\(\beta\)</span> it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.</p>
-<p>As python code we now did the following:</p>
+<p>Now we have a NN that looks like all the other pictures of a single Perceptron in the internet:<br />
+<img src="img/NN_02.png" style="width:50.0%" alt="https://app.diagrams.net/" /><br></p>
+<p>As python code we did the following:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="adding-trainable-bias.html#cb15-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([</span>
 <span id="cb15-2"><a href="adding-trainable-bias.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">0</span>],</span>
 <span id="cb15-3"><a href="adding-trainable-bias.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">1</span>],</span>
@@ -216,8 +225,11 @@ Furthermore because the <span class="math inline">\(W\)</span> is holding the <s
 <span id="cb15-12"><a href="adding-trainable-bias.html#cb15-12" aria-hidden="true" tabindex="-1"></a>])</span>
 <span id="cb15-13"><a href="adding-trainable-bias.html#cb15-13" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.append(W, <span class="op">-</span>np.array([np.random.random(<span class="bu">len</span>(W[<span class="dv">0</span>]))]).T, axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb15-14"><a href="adding-trainable-bias.html#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co">#W = np.append(W, np.array([[-5]]), axis=0)</span></span></code></pre></div>
-<p>We added <span class="math inline">\(+5\)</span> to the <span class="math inline">\(X\)</span> matrix to simulate the problem of shifted data, added ones on the left side of <span class="math inline">\(X\)</span> and added negative random numbers between <span class="math inline">\((0,1)\)</span> to the weights. Yes if you would have a clue, what <span class="math inline">\(\beta\)</span> would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good <span class="math inline">\(\beta\)</span> by its self.<br />
-The complete code is the following:</p>
+<p>We added <span class="math inline">\(+5\)</span> to the <span class="math inline">\(X\)</span> matrix to simulate the problem of shifted data, added ones on the left side of <span class="math inline">\(X\)</span> and added negative random numbers between <span class="math inline">\((0,1)\)</span> to the weights. Yes if you would have a clue, what <span class="math inline">\(\beta\)</span> would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good <span class="math inline">\(\beta\)</span> by it self.</p>
+</div>
+<div id="appendix-complete-code-1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Appendix (complete code)</h2>
+<p>The complete code is the following:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="adding-trainable-bias.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb16-2"><a href="adding-trainable-bias.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random <span class="im">as</span> ra</span>
 <span id="cb16-3"><a href="adding-trainable-bias.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -265,333 +277,33 @@ The complete code is the following:</p>
 <span id="cb16-45"><a href="adding-trainable-bias.html#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(train_n):</span>
 <span id="cb16-46"><a href="adding-trainable-bias.html#cb16-46" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
 <span id="cb16-47"><a href="adding-trainable-bias.html#cb16-47" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
-<span id="cb16-48"><a href="adding-trainable-bias.html#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(W)</span>
-<span id="cb16-49"><a href="adding-trainable-bias.html#cb16-49" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
+<span id="cb16-48"><a href="adding-trainable-bias.html#cb16-48" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
+<span id="cb16-49"><a href="adding-trainable-bias.html#cb16-49" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb16-50"><a href="adding-trainable-bias.html#cb16-50" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb16-51"><a href="adding-trainable-bias.html#cb16-51" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-52"><a href="adding-trainable-bias.html#cb16-52" aria-hidden="true" tabindex="-1"></a>  </span></code></pre></div>
-<pre><code>## [[ 0.1       ]
-##  [ 0.2       ]
-##  [-0.85455638]]
-## [[ 0.05      ]
-##  [ 0.15      ]
-##  [-0.86455638]]
-## [[ 0.        ]
-##  [ 0.1       ]
-##  [-0.87455638]]
-## [[ 0.17      ]
-##  [ 0.27      ]
-##  [-0.84455638]]
-## [[ 0.12      ]
-##  [ 0.22      ]
-##  [-0.85455638]]
-## [[ 0.07      ]
-##  [ 0.17      ]
-##  [-0.86455638]]
-## [[ 0.02      ]
-##  [ 0.12      ]
-##  [-0.87455638]]
-## [[ 0.19      ]
-##  [ 0.29      ]
-##  [-0.84455638]]
-## [[ 0.14      ]
-##  [ 0.24      ]
-##  [-0.85455638]]
-## [[ 0.09      ]
-##  [ 0.19      ]
-##  [-0.86455638]]
-## [[ 0.04      ]
-##  [ 0.14      ]
-##  [-0.87455638]]
-## [[-0.01      ]
-##  [ 0.09      ]
-##  [-0.88455638]]
-## [[ 0.16      ]
-##  [ 0.26      ]
-##  [-0.85455638]]
-## [[ 0.11      ]
-##  [ 0.21      ]
-##  [-0.86455638]]
-## [[ 0.06      ]
-##  [ 0.16      ]
-##  [-0.87455638]]
-## [[ 0.01      ]
-##  [ 0.11      ]
-##  [-0.88455638]]
-## [[ 0.18      ]
-##  [ 0.28      ]
-##  [-0.85455638]]
-## [[ 0.13      ]
-##  [ 0.23      ]
-##  [-0.86455638]]
-## [[ 0.08      ]
-##  [ 0.18      ]
-##  [-0.87455638]]
-## [[ 0.03      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.09      ]
-##  [ 0.18      ]
-##  [-0.87455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]
-## [[ 0.04      ]
-##  [ 0.13      ]
-##  [-0.88455638]]</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="adding-trainable-bias.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
-<span id="cb18-2"><a href="adding-trainable-bias.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
-<span id="cb18-3"><a href="adding-trainable-bias.html#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="adding-trainable-bias.html#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="adding-trainable-bias.html#cb18-5" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
-<span id="cb18-6"><a href="adding-trainable-bias.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="adding-trainable-bias.html#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="adding-trainable-bias.html#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
-<span id="cb18-9"><a href="adding-trainable-bias.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
-<span id="cb18-10"><a href="adding-trainable-bias.html#cb18-10" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
-<span id="cb18-11"><a href="adding-trainable-bias.html#cb18-11" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
-<span id="cb18-12"><a href="adding-trainable-bias.html#cb18-12" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb18-13"><a href="adding-trainable-bias.html#cb18-13" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb18-14"><a href="adding-trainable-bias.html#cb18-14" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb18-15"><a href="adding-trainable-bias.html#cb18-15" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
-<span id="cb18-16"><a href="adding-trainable-bias.html#cb18-16" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
-<span id="cb18-17"><a href="adding-trainable-bias.html#cb18-17" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
-<span id="cb18-18"><a href="adding-trainable-bias.html#cb18-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-19"><a href="adding-trainable-bias.html#cb18-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-20"><a href="adding-trainable-bias.html#cb18-20" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Mean-Square-Errors of a single Perceptron&quot;</span>)</span></code></pre></div>
+<span id="cb16-52"><a href="adding-trainable-bias.html#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
+<span id="cb16-53"><a href="adding-trainable-bias.html#cb16-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
+<span id="cb16-54"><a href="adding-trainable-bias.html#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-55"><a href="adding-trainable-bias.html#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="adding-trainable-bias.html#cb16-56" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
+<span id="cb16-57"><a href="adding-trainable-bias.html#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="adding-trainable-bias.html#cb16-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-59"><a href="adding-trainable-bias.html#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
+<span id="cb16-60"><a href="adding-trainable-bias.html#cb16-60" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
+<span id="cb16-61"><a href="adding-trainable-bias.html#cb16-61" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
+<span id="cb16-62"><a href="adding-trainable-bias.html#cb16-62" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb16-63"><a href="adding-trainable-bias.html#cb16-63" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-64"><a href="adding-trainable-bias.html#cb16-64" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb16-65"><a href="adding-trainable-bias.html#cb16-65" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb16-66"><a href="adding-trainable-bias.html#cb16-66" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
+<span id="cb16-67"><a href="adding-trainable-bias.html#cb16-67" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
+<span id="cb16-68"><a href="adding-trainable-bias.html#cb16-68" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
+<span id="cb16-69"><a href="adding-trainable-bias.html#cb16-69" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-70"><a href="adding-trainable-bias.html#cb16-70" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-71"><a href="adding-trainable-bias.html#cb16-71" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Mean-Square-Errors of a single Perceptron&quot;</span>)</span></code></pre></div>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-14-3.png" width="576" /></p>
 
+</div>
 </div>
             </section>
 

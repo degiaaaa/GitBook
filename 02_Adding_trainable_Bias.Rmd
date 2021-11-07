@@ -8,7 +8,10 @@ step(s)=
     0,& s < \beta
 \end{cases}
 $$
-with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $5$ to the $X$ matrix? It is still the OR-Gate but now it will never give you the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal shift by hand. That is why we now generalise the weighted sum step by step. First we generalise the activation function:
+with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $5$ to the $X$ matrix? It is still the OR-Gate but now it will never give you the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal shift by hand. 
+
+## Generalising the Bias
+That is why we now generalise the weighted sum step by step. First we generalise the activation function:
 $$ 
 step(s)= 
 \begin{cases}
@@ -24,9 +27,12 @@ But now we have the same problem as previews, because we need to specify the $\b
 $$
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0]) = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 - \beta])
 $$
-Furthermore because the $W$ is holding the $\beta$ it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.  
+Furthermore because the $W$ is holding the $\beta$ it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.   
 
-As python code we now did the following:
+Now we have a NN that looks like all the other pictures of a single Perceptron in the internet:  
+![https://app.diagrams.net/](./img/NN_02.png){ width=50% }<br>   
+
+As python code we did the following:
 ```{python, eval=FALSE}
 X = np.array([
   [0,0],
@@ -43,9 +49,10 @@ W = np.array([
 W = np.append(W, -np.array([np.random.random(len(W[0]))]).T, axis=0)
 #W = np.append(W, np.array([[-5]]), axis=0)
 ```
-We added $+5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good $\beta$ by its self.  
-The complete code is the following:
+We added $+5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good $\beta$ by it self.  
 
+## Appendix (complete code)
+The complete code is the following:
 ```{python, eval=TRUE}
 import numpy as np
 import random as ra
@@ -94,7 +101,6 @@ errors = []
 for i in range(train_n):
   Y_approx = forward(X, W)
   errors.append(Y - Y_approx)
-  print(W)
   W = backward(W, X, Y, alpha, Y_approx)
   
   
