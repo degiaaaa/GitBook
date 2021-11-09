@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ```{python, include=FALSE}
 import numpy as np
 import random as ra
@@ -110,7 +115,7 @@ X = np.array([
   [0,1],
   [1,0],
   [1,1],
-]) 
+])
 
 Y = np.array([
   [0],
@@ -121,7 +126,9 @@ Y = np.array([
 
 n_input = len(X[0]) + 1
 n_output = len(Y[0])
-hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
+hidden_layer_neurons = np.array([9,4]) # the 2 means that there is one hidden layer with 2 neurons
+# example: np.array([6, 2]) would be 2 hidden layers, The first with 6 neurons and the second with 2 (+ there biases)
+
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -132,49 +139,75 @@ def generate_weights(n_input, n_output, hidden_layer_neurons):
       W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
     else: # middle layers
       W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
-   
   return(W)
 
 def add_ones_to_input(x):
   return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
 
-X = add_ones_to_input(X)
-
+#X = add_ones_to_input(X)
 W = generate_weights(n_input, n_output, hidden_layer_neurons)
 
-def step(s):
-  return( np.where(s >= 0, 1, 0) )
+# def step(s):
+#   return( np.where(s >= 0, 1, 0) )
+
+def sigmoid(x):
+  return 1.0 / (1.0 + np.exp(-x))
+
+def deriv_sigmoid(x):
+  return x * (1 - x)
+
 
 def forward(X, W):
-  return( step(X @ W) )
+  return( sigmoid(X @ W) )
 
-def backward(IN, OUT, Y, grad):
-  if not any(grad):
-    grad = OUT[-1] * (1-OUT[-1]) * (Y-OUT[-1])
+def backward(IN, OUT, W, Y, grad, k):
+  if k == len(grad)-1:
+    grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
   else:
-    grad = OUT[-1] * (1-OUT[-1]) * (Y-OUT[-1])
-    
-  grad = OUT
-  network["grad_12"] = network["OUT_12"] * (1-network["OUT_12"]) * network["error"]
-  network["grad_01"] = network["OUT_01"] * (1-network["OUT_01"]) * (network["W_12"].T @ network["grad_12"])
-  
-  network["new_W_01"] = network["W_01"] + eta * (network["grad_01"] @ network["IN_01"].T)
-  network["new_W_12"] = network["W_12"] + eta * (network["grad_12"] @ network["IN_12"].T)
+    grad[k] = ( grad[k+1] @ W[k+1][0:len(W[k+1])-1].T) * deriv_sigmoid(OUT[k]) # ohne das letzte W da wir ja nur die knoten ohen bias befüllen
   return(grad)
 
-
-for i in range(500):
-  IN = [None] * len(W)
-  IN[0] = X
-  OUT = [None] * len(W)
-  grad = [None] * len(W)
-  
+eta = 0.3
+errors = []
+for i in range(40000):
+  IN = []
+  OUT = []
+  grad = [None]*len(W)
   for k in range(len(W)):
-    if not any(OUT):
-      IN[k] = add_ones_to_input(OUT[k-1])
-    OUT[k] = forward(IN[k], W[k])
+    if k==0:
+      IN.append(add_ones_to_input(X))
+    else:
+      IN.append(add_ones_to_input(OUT[k-1]))
+    OUT.append(forward(IN[k], W[k]))
     
-  for k in range(-len(W)+1, 1):
+  errors.append(Y - OUT[-1])
     
+  for k in range(len(W)-1,-1, -1):
+    grad = backward(IN, OUT, W, Y, grad, k) 
+    
+  for k in range(len(W)):
+    W[k] = W[k] + eta * (IN[k].T @ grad[k])
+
+
+
+
+
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
+
+mean_square_errors = np.array(list(map(mean_square_error, errors)))
+
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(-0.01,max(errors)*1.2)
+  pyplot.show()
+  
+plot_error(mean_square_errors, "Mean-Square-Errors of a single Perceptron")
 
 ```

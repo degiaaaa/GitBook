@@ -88,7 +88,6 @@ def forward(X, W):
   return( step(X @ W) )
 
 def backward(W, X, Y, alpha, Y_approx):
-    print(alpha * X.T @ (Y - Y_approx))
     return(W + alpha * X.T @ (Y - Y_approx))
   
   

@@ -1,0 +1,5 @@
+consider full batch size:
+https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu
+
+epochs vs iterations:
+https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks
