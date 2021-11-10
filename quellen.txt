@@ -3,3 +3,6 @@ https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-b
 
 epochs vs iterations:
 https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks
+
+wie viele hidden layers:
+https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw

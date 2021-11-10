@@ -127,7 +127,7 @@ Y = np.array([
 n_input = len(X[0]) + 1
 n_output = len(Y[0])
 hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
-# example: np.array([6, 2]) would be 2 hidden layers, The first with 6 neurons and the second with 2 (+ there biases)
+# example: np.array([6, 2]) would be 2 hidden layers, The first with 6 neurons (+ there bias) and the second with 2 (+ there bias)
 
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):
