@@ -703,13 +703,13 @@ Additionaly will we choose the XOR-Gate as training dataset and generate the wei
 
 \begin{verbatim}
 ## W[0]: 
-##  [[0.85389208 0.63771452]
-##  [0.35833224 0.3101345 ]
-##  [0.49127735 0.61947135]]
+##  [[0.64457219 0.9852289 ]
+##  [0.97443724 0.60190663]
+##  [0.66631054 0.10114835]]
 ## W[1]: 
-##  [[0.37981092]
-##  [0.55536395]
-##  [0.10807399]]
+##  [[0.88275856]
+##  [0.1940694 ]
+##  [0.29011425]]
 \end{verbatim}
 
 The input and output layer neurons are calculated from the training dataset and the neurons from the hidden layers are generated with the \texttt{hidden\_layer\_neurons}. For example can we generate two hidden layers with 4 and 2 neurons by \texttt{hidden\_layer\_neurons\ =\ np.array({[}4,2{]})}. I didnt explicitly choose the bias because it gets corrected anyway.\\
@@ -757,10 +757,10 @@ Now we have everything to calculate the forward pass of the NN from above with t
 \end{Shaded}
 
 \begin{verbatim}
-## array([[-0.66924064],
-##        [ 0.31597761],
-##        [ 0.30116287],
-##        [-0.70866304]])
+## array([[-0.72616869],
+##        [ 0.23878516],
+##        [ 0.24406255],
+##        [-0.77818969]])
 \end{verbatim}
 
 Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)
@@ -810,15 +810,15 @@ Now you can look for example at the gradient of the last layer and on the direct
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.66924064]
-##  [0.68402239]
-##  [0.69883713]
-##  [0.70866304]]
+##  [[0.72616869]
+##  [0.76121484]
+##  [0.75593745]
+##  [0.77818969]]
 ## grad: 
-##  [[-0.14814151]
-##  [ 0.06829406]
-##  [ 0.06338388]
-##  [-0.14631038]]
+##  [[-0.14439699]
+##  [ 0.04340322]
+##  [ 0.04502857]
+##  [-0.13432371]]
 \end{verbatim}
 
 You can see that the gradient shows in the direction that would drift the output \(OUT\) closer to the desired output \(Y\). That is exactly what the gradient descent algorithm is doing.\\
@@ -960,6 +960,7 @@ Now can we use our generic MLP model from the previews chapter to forecast real 
 \ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ confusion\_matrix}
 \NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
 
 \NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
@@ -969,7 +970,7 @@ Now can we use our generic MLP model from the previews chapter to forecast real 
 \NormalTok{data[}\StringTok{"person\_home\_ownership"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"person\_home\_ownership"}\NormalTok{].replace(scale\_mapper)}
 \NormalTok{scale\_mapper }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}PERSONAL\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}EDUCATION\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}MEDICAL\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}VENTURE\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}HOMEIMPROVEMENT\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{,}\StringTok{\textquotesingle{}DEBTCONSOLIDATION\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{\}}
 \NormalTok{data[}\StringTok{"loan\_intent"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_intent"}\NormalTok{].replace(scale\_mapper)}
-\NormalTok{scale\_mapper }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}E\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{, }\StringTok{\textquotesingle{}F\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{, }\StringTok{\textquotesingle{}G\textquotesingle{}}\NormalTok{:}\DecValTok{7}\NormalTok{\}}
+\NormalTok{scale\_mapper }\OperatorTok{=}\NormalTok{ \{}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}E\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{, }\StringTok{\textquotesingle{}F\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{, }\StringTok{\textquotesingle{}G\textquotesingle{}}\NormalTok{:}\DecValTok{7}\NormalTok{\}}
 \NormalTok{data[}\StringTok{"loan\_grade"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_grade"}\NormalTok{].replace(scale\_mapper)}
 
 
@@ -1089,6 +1090,9 @@ Now can we use our generic MLP model from the previews chapter to forecast real 
 
 \BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
 \BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+
+
+\NormalTok{confusion\_matrix(Y\_test, classify(result\_test))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1099,6 +1103,8 @@ Now can we use our generic MLP model from the previews chapter to forecast real 
 ## Mean Square error over all classified testdata:  2458.5
 ## Probability of a wrong output:  16.08 %
 ## Probability of a right output:  83.92 %
+## array([[21463,  2843],
+##        [ 2074,  4201]], dtype=int64)
 \end{verbatim}
 
   \bibliography{book.bib,packages.bib}

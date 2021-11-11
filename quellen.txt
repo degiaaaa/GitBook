@@ -6,3 +6,7 @@ https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neu
 
 wie viele hidden layers:
 https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw
+
+
+why activation fucntion and what activation function is used where:
+https://medium.com/mlearning-ai/fundamentals-of-deep-learning-activation-functions-and-when-to-use-them-e7d8e2cb231b
