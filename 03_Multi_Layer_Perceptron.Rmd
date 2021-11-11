@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Multi Layer Perceptrons
+# Multi Layer Perceptrons (MLP)
 ```{python 2_0, include=FALSE, eval=TRUE}
 import numpy as np
 import matplotlib.pyplot as pyplot

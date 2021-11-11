@@ -1,0 +1,12 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# MLP example (Credit Default)
+Now we can use our generic MLP model to forecast real life credit defaults.
+
+
+
+
