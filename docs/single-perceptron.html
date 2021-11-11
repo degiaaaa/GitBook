@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-07" />
+<meta name="date" content="2021-11-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,7 +156,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a></li>
+<li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -182,7 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 2</span> Single Perceptron</h1>
 <p>In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret Vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.<br />
 First of all we are starting with the needed parameters, that are explained later:</p>
-<p>Number of runs over the training data := <code>n_train</code><br />
+<p>Number of iterations over all the training dataset := <code>epochs</code><br />
 Learning rate := <span class="math inline">\(\alpha =\)</span> <code>alpha</code><br />
 Bias value := <span class="math inline">\(\beta =\)</span> <code>bias</code>
 and the activation function:<br />
@@ -193,8 +197,8 @@ step(s)=
     0,&amp; s &lt; \beta
 \end{cases}
 \]</span>
-This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the <code>bias</code> it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.</p>
-<p>The traings dataset is the following:
+This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the bias <span class="math inline">\(\beta\)</span>, it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.</p>
+<p>The traing dataset is the following:
 <span class="math display">\[
 \left[
 \begin{array}{cc|c}
@@ -212,27 +216,22 @@ x_i,_1 &amp; x_i,_2 &amp; y_i \\
 \end{array}
 \right]
 \]</span>
-The provided training dataset contains the <code>X</code> matrix with two inputs for each scenario and the <code>Y</code> matrix with the correct output. If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.</p>
-<p>The needed python imports and default options are the following:</p>
+The provided training dataset contains the <code>X</code> matrix with two inputs for each scenario and the <code>Y</code> matrix with the correct output (each row contains the input and output of one scenario). If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.</p>
+<p>The needed python imports are the following:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="single-perceptron.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="single-perceptron.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random <span class="im">as</span> ra</span>
-<span id="cb2-3"><a href="single-perceptron.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb2-4"><a href="single-perceptron.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
-<span id="cb2-5"><a href="single-perceptron.html#cb2-5" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_rows&#39;</span>, <span class="dv">500</span>)</span>
-<span id="cb2-6"><a href="single-perceptron.html#cb2-6" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">500</span>)</span>
-<span id="cb2-7"><a href="single-perceptron.html#cb2-7" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.width&#39;</span>, <span class="dv">1000</span>)</span></code></pre></div>
+<span id="cb2-2"><a href="single-perceptron.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span></code></pre></div>
 <p>( Do you see more imports than only the numpy package? <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Yes</a> or No )</p>
 <p>Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.</p>
 <div id="neural-network-basics" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Neural Network Basics</h2>
-<p>In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life…<br />
-Ahh no no ok we have a look deeper into it :)</p>
-<p>Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have (with the matrix dimensions included) for one scenario out of the training dataset, the following:
+<p>In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life…<br />
+Ahh no no ok we have a deeper look into it :)</p>
+<p>Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario out of the training dataset, the following:
 <span class="math display">\[
-  step(W^{(1,2)} \cdot x^{(2,1)}) = y^{(1,1)}
+  step(W \cdot x^T_i) = y_i
 \]</span>
-That is the normal approach to iterate over all scenarios in the training dataset…<br />
-But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios.</p>
+That is the normal approach to use this formula to iterate over all scenarios in the training dataset…<br />
+But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios at the same time.</p>
 <p>My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all we need to interpret the new dimensions of <span class="math inline">\(W\)</span> and <span class="math inline">\(X\)</span>.<br />
 We have <span class="math inline">\(X\)</span> as:
 <span class="math display">\[
@@ -257,9 +256,9 @@ For the weights <span class="math inline">\(W\)</span> we have for example:
 \]</span>
 The new formular looks like this:
 <span class="math display">\[
-  step(X \cdot W) = Y
+  step(X * W) = Y
 \]</span>
-For example if you take a look at the <span class="math inline">\(i\)</span>-th row or scenario of <span class="math inline">\(X\)</span> you will see the following:
+The <span class="math inline">\(*\)</span> symbol defines a matrix to matrix multiplication. For example if you take a look at the <span class="math inline">\(i\)</span>-th row (scenario) of <span class="math inline">\(X\)</span> you will see the following:
 <span class="math display">\[
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 ])
 \]</span>
@@ -270,9 +269,9 @@ and <span class="math inline">\(Y_i,_0\)</span> is the approximated output of th
 <div id="forward-pass" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Forward pass</h2>
 <p>Now we create the so called <code>forward()</code> function in python:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="single-perceptron.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(X, W):</span>
-<span id="cb3-2"><a href="single-perceptron.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(X <span class="op">@</span> W) )</span></code></pre></div>
-<p>(Numpy provides us with the <code>@</code> symbol to make a matrix multiplication and the <code>.T</code> to transpose)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="single-perceptron.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(x, w):</span>
+<span id="cb3-2"><a href="single-perceptron.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(x <span class="op">@</span> w) )</span></code></pre></div>
+<p>(Numpy provides us with the <code>@</code> symbol to make a matrix to matrix multiplication and the <code>.T</code> to transpose)</p>
 <p>Because we want to put one dimensional matrices into the <code>step()</code> function we need to use numpy for the if-else statement:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="single-perceptron.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(s):</span>
 <span id="cb4-2"><a href="single-perceptron.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.where(s <span class="op">&gt;=</span> bias, <span class="dv">1</span>, <span class="dv">0</span>) )</span></code></pre></div>
@@ -344,14 +343,14 @@ and <span class="math inline">\(\hat{Y}\)</span> is the output of the NN.</p>
 <span id="cb10-16"><a href="single-perceptron.html#cb10-16" aria-hidden="true" tabindex="-1"></a>])</span>
 <span id="cb10-17"><a href="single-perceptron.html#cb10-17" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.01</span></span>
 <span id="cb10-18"><a href="single-perceptron.html#cb10-18" aria-hidden="true" tabindex="-1"></a>bias <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb10-19"><a href="single-perceptron.html#cb10-19" aria-hidden="true" tabindex="-1"></a>train_n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb10-19"><a href="single-perceptron.html#cb10-19" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb10-20"><a href="single-perceptron.html#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-21"><a href="single-perceptron.html#cb10-21" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> []</span>
-<span id="cb10-22"><a href="single-perceptron.html#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(train_n):</span>
+<span id="cb10-22"><a href="single-perceptron.html#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
 <span id="cb10-23"><a href="single-perceptron.html#cb10-23" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
 <span id="cb10-24"><a href="single-perceptron.html#cb10-24" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
 <span id="cb10-25"><a href="single-perceptron.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span></code></pre></div>
-<p>The KNN is trained now. Now we want to look at the error. We want to measure the mean-square-error with the following formula:
+<p>The KNN is trained. Now we want to look at the errors of each epoch. We want to measure the mean-square-error with the following formula:
 <span class="math display">\[
   Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 \]</span>
@@ -373,79 +372,75 @@ or as python code:</p>
 <span id="cb13-10"><a href="single-perceptron.html#cb13-10" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
 <span id="cb13-11"><a href="single-perceptron.html#cb13-11" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb13-12"><a href="single-perceptron.html#cb13-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-13"><a href="single-perceptron.html#cb13-13" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Mean-Square-Errors of a single Perceptron&quot;</span>)</span></code></pre></div>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<span id="cb13-13"><a href="single-perceptron.html#cb13-13" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Single Perceptron&quot;</span>)</span></code></pre></div>
+<p><img src="gitbook-demo_files/figure-html/0_9-1.png" width="576" /></p>
 <p>If you survived until now, you have learned how you can program a single Perceptron!</p>
 </div>
 <div id="appendix-complete-code" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Appendix (complete code)</h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="single-perceptron.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb14-2"><a href="single-perceptron.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random <span class="im">as</span> ra</span>
-<span id="cb14-3"><a href="single-perceptron.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb14-4"><a href="single-perceptron.html#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
-<span id="cb14-5"><a href="single-perceptron.html#cb14-5" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_rows&#39;</span>, <span class="dv">500</span>)</span>
-<span id="cb14-6"><a href="single-perceptron.html#cb14-6" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">500</span>)</span>
-<span id="cb14-7"><a href="single-perceptron.html#cb14-7" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.width&#39;</span>, <span class="dv">1000</span>)</span>
-<span id="cb14-8"><a href="single-perceptron.html#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="single-perceptron.html#cb14-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([</span>
-<span id="cb14-10"><a href="single-perceptron.html#cb14-10" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">0</span>],</span>
-<span id="cb14-11"><a href="single-perceptron.html#cb14-11" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">1</span>],</span>
-<span id="cb14-12"><a href="single-perceptron.html#cb14-12" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>],</span>
-<span id="cb14-13"><a href="single-perceptron.html#cb14-13" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>],</span>
-<span id="cb14-14"><a href="single-perceptron.html#cb14-14" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb14-15"><a href="single-perceptron.html#cb14-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.array([</span>
-<span id="cb14-16"><a href="single-perceptron.html#cb14-16" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>],</span>
-<span id="cb14-17"><a href="single-perceptron.html#cb14-17" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
-<span id="cb14-18"><a href="single-perceptron.html#cb14-18" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
-<span id="cb14-19"><a href="single-perceptron.html#cb14-19" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>]</span>
+<span id="cb14-2"><a href="single-perceptron.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
+<span id="cb14-3"><a href="single-perceptron.html#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="single-perceptron.html#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="single-perceptron.html#cb14-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([</span>
+<span id="cb14-6"><a href="single-perceptron.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb14-7"><a href="single-perceptron.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">1</span>],</span>
+<span id="cb14-8"><a href="single-perceptron.html#cb14-8" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>],</span>
+<span id="cb14-9"><a href="single-perceptron.html#cb14-9" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>],</span>
+<span id="cb14-10"><a href="single-perceptron.html#cb14-10" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb14-11"><a href="single-perceptron.html#cb14-11" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.array([</span>
+<span id="cb14-12"><a href="single-perceptron.html#cb14-12" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>],</span>
+<span id="cb14-13"><a href="single-perceptron.html#cb14-13" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
+<span id="cb14-14"><a href="single-perceptron.html#cb14-14" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
+<span id="cb14-15"><a href="single-perceptron.html#cb14-15" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>]</span>
+<span id="cb14-16"><a href="single-perceptron.html#cb14-16" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb14-17"><a href="single-perceptron.html#cb14-17" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.array([</span>
+<span id="cb14-18"><a href="single-perceptron.html#cb14-18" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.1</span>], </span>
+<span id="cb14-19"><a href="single-perceptron.html#cb14-19" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.2</span>]</span>
 <span id="cb14-20"><a href="single-perceptron.html#cb14-20" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb14-21"><a href="single-perceptron.html#cb14-21" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.array([</span>
-<span id="cb14-22"><a href="single-perceptron.html#cb14-22" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.1</span>], </span>
-<span id="cb14-23"><a href="single-perceptron.html#cb14-23" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.2</span>]</span>
-<span id="cb14-24"><a href="single-perceptron.html#cb14-24" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb14-25"><a href="single-perceptron.html#cb14-25" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.01</span></span>
-<span id="cb14-26"><a href="single-perceptron.html#cb14-26" aria-hidden="true" tabindex="-1"></a>bias <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb14-27"><a href="single-perceptron.html#cb14-27" aria-hidden="true" tabindex="-1"></a>train_n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb14-21"><a href="single-perceptron.html#cb14-21" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb14-22"><a href="single-perceptron.html#cb14-22" aria-hidden="true" tabindex="-1"></a>bias <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-23"><a href="single-perceptron.html#cb14-23" aria-hidden="true" tabindex="-1"></a>train_n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb14-24"><a href="single-perceptron.html#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="single-perceptron.html#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(s):</span>
+<span id="cb14-26"><a href="single-perceptron.html#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.where(s <span class="op">&gt;=</span> bias, <span class="dv">1</span>, <span class="dv">0</span>) )</span>
+<span id="cb14-27"><a href="single-perceptron.html#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-28"><a href="single-perceptron.html#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-29"><a href="single-perceptron.html#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(s):</span>
-<span id="cb14-30"><a href="single-perceptron.html#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.where(s <span class="op">&gt;=</span> bias, <span class="dv">1</span>, <span class="dv">0</span>) )</span>
+<span id="cb14-29"><a href="single-perceptron.html#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(X, W):</span>
+<span id="cb14-30"><a href="single-perceptron.html#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(X <span class="op">@</span> W) )</span>
 <span id="cb14-31"><a href="single-perceptron.html#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-32"><a href="single-perceptron.html#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-33"><a href="single-perceptron.html#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(X, W):</span>
-<span id="cb14-34"><a href="single-perceptron.html#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(X <span class="op">@</span> W) )</span>
-<span id="cb14-35"><a href="single-perceptron.html#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-36"><a href="single-perceptron.html#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward(W, X, Y, alpha, Y_approx):</span>
-<span id="cb14-37"><a href="single-perceptron.html#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(W <span class="op">+</span> alpha <span class="op">*</span> X.T <span class="op">@</span> (Y <span class="op">-</span> Y_approx))</span>
-<span id="cb14-38"><a href="single-perceptron.html#cb14-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-39"><a href="single-perceptron.html#cb14-39" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-40"><a href="single-perceptron.html#cb14-40" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> []</span>
-<span id="cb14-41"><a href="single-perceptron.html#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(train_n<span class="op">*</span><span class="dv">5</span>):</span>
-<span id="cb14-42"><a href="single-perceptron.html#cb14-42" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
-<span id="cb14-43"><a href="single-perceptron.html#cb14-43" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
-<span id="cb14-44"><a href="single-perceptron.html#cb14-44" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
-<span id="cb14-45"><a href="single-perceptron.html#cb14-45" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-46"><a href="single-perceptron.html#cb14-46" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-47"><a href="single-perceptron.html#cb14-47" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-48"><a href="single-perceptron.html#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
-<span id="cb14-49"><a href="single-perceptron.html#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
+<span id="cb14-32"><a href="single-perceptron.html#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward(W, X, Y, alpha, Y_approx):</span>
+<span id="cb14-33"><a href="single-perceptron.html#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(W <span class="op">+</span> alpha <span class="op">*</span> X.T <span class="op">@</span> (Y <span class="op">-</span> Y_approx))</span>
+<span id="cb14-34"><a href="single-perceptron.html#cb14-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-35"><a href="single-perceptron.html#cb14-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-36"><a href="single-perceptron.html#cb14-36" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> []</span>
+<span id="cb14-37"><a href="single-perceptron.html#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(train_n):</span>
+<span id="cb14-38"><a href="single-perceptron.html#cb14-38" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
+<span id="cb14-39"><a href="single-perceptron.html#cb14-39" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
+<span id="cb14-40"><a href="single-perceptron.html#cb14-40" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
+<span id="cb14-41"><a href="single-perceptron.html#cb14-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-42"><a href="single-perceptron.html#cb14-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-43"><a href="single-perceptron.html#cb14-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-44"><a href="single-perceptron.html#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
+<span id="cb14-45"><a href="single-perceptron.html#cb14-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
+<span id="cb14-46"><a href="single-perceptron.html#cb14-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-47"><a href="single-perceptron.html#cb14-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-48"><a href="single-perceptron.html#cb14-48" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
+<span id="cb14-49"><a href="single-perceptron.html#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-50"><a href="single-perceptron.html#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-51"><a href="single-perceptron.html#cb14-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-52"><a href="single-perceptron.html#cb14-52" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
-<span id="cb14-53"><a href="single-perceptron.html#cb14-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-54"><a href="single-perceptron.html#cb14-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-55"><a href="single-perceptron.html#cb14-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
-<span id="cb14-56"><a href="single-perceptron.html#cb14-56" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
-<span id="cb14-57"><a href="single-perceptron.html#cb14-57" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
-<span id="cb14-58"><a href="single-perceptron.html#cb14-58" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
-<span id="cb14-59"><a href="single-perceptron.html#cb14-59" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb14-60"><a href="single-perceptron.html#cb14-60" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb14-61"><a href="single-perceptron.html#cb14-61" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb14-62"><a href="single-perceptron.html#cb14-62" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
-<span id="cb14-63"><a href="single-perceptron.html#cb14-63" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
-<span id="cb14-64"><a href="single-perceptron.html#cb14-64" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
-<span id="cb14-65"><a href="single-perceptron.html#cb14-65" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-66"><a href="single-perceptron.html#cb14-66" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-67"><a href="single-perceptron.html#cb14-67" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Mean-Square-Errors of a single Perceptron&quot;</span>)</span></code></pre></div>
+<span id="cb14-51"><a href="single-perceptron.html#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
+<span id="cb14-52"><a href="single-perceptron.html#cb14-52" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
+<span id="cb14-53"><a href="single-perceptron.html#cb14-53" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
+<span id="cb14-54"><a href="single-perceptron.html#cb14-54" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb14-55"><a href="single-perceptron.html#cb14-55" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb14-56"><a href="single-perceptron.html#cb14-56" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb14-57"><a href="single-perceptron.html#cb14-57" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb14-58"><a href="single-perceptron.html#cb14-58" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
+<span id="cb14-59"><a href="single-perceptron.html#cb14-59" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
+<span id="cb14-60"><a href="single-perceptron.html#cb14-60" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
+<span id="cb14-61"><a href="single-perceptron.html#cb14-61" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-62"><a href="single-perceptron.html#cb14-62" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-63"><a href="single-perceptron.html#cb14-63" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Single Perceptron&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

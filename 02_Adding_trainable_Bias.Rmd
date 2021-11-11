@@ -1,5 +1,9 @@
 
 # Adding trainable Bias
+```{python 1_0, include=FALSE}
+import numpy as np
+import matplotlib.pyplot as pyplot
+```
 The single Perceptron, you saw in the previews chapter had the following activation function:
 $$ 
 step(s)= 
@@ -33,7 +37,7 @@ Now we have a NN that looks like all the other pictures of a single Perceptron i
 ![https://app.diagrams.net/](./img/NN_02.png){ width=50% }<br>   
 
 As python code we did the following:
-```{python, eval=FALSE}
+```{python 1_1, eval=FALSE}
 X = np.array([
   [0,0],
   [0,1],
@@ -52,10 +56,7 @@ We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added o
 
 ## Appendix (complete code)
 The complete code is the following:
-```{python, eval=TRUE}
-import numpy as np
-import matplotlib.pyplot as pyplot
-
+```{python 1_2, eval=TRUE}
 X = np.array([
   [0,0],
   [0,1],

@@ -3,18 +3,17 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-```{python, include=FALSE}
+# Multi Layer Perceptrons
+```{python 2_0, include=FALSE, eval=TRUE}
 import numpy as np
 import matplotlib.pyplot as pyplot
 ```
-
-# Multi Layer Perceptrons
 In a multi layer Perceptron you have multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. What we want to do is the NN of the following picture:    
-![https://app.diagrams.net/](./img/NN_03_new.png){ width=50% }<br>  
+![https://app.diagrams.net/](./img/NN_03_new.png){ width=100% }<br>  
 
 It is my own definition of layers, because i thought, it would be better to display layers like shown in the picture, to take the step from $n$ to $n+1$ hidden layers more easy. You can see that each layer has the same process in the forward pass by evaluating $f(IN^{layer} \cdot W^{layer}) = OUT^{layer}$ and just passing the result to the next layer like $OUT^{layer} = IN^{layer+1}$, with $f$ as the chosen activation function.  
 We will choose the sigmoid function as the activation function $f$, because it has an easy deviation $f^`$ for the backward pass and its very close to the behavior of the heavyside function.  
-```{python}
+```{python 2_1}
 def sigmoid(x):
   return 1.0 / (1.0 + np.exp(-x))
 
@@ -23,7 +22,7 @@ def deriv_sigmoid(x):
 ```
 
 Additionaly will we choose the XOR-Gate as training dataset and generate the weights in a very generic approach like the following code shows:
-```{python}
+```{python 2_2}
 X = np.array([
   [0,0],
   [0,1],
@@ -61,7 +60,7 @@ print("W[1]: \n", W[1])
 ```
 The input and output layer neurons are calculated from the training dataset and the neurons from the hidden layers are generated with the `hidden_layer_neurons`. For example can we generate two hidden layers with 4 and 2 neurons by `hidden_layer_neurons = np.array([4,2])`. I didnt explicitly choose the bias because it gets corrected anyway.  
 Now we need to define a helper function to add the biases, on the last column of the inputs, with:
-```{python}
+```{python 2_3}
 def add_ones_to_input(x):
   return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
 ```
@@ -69,12 +68,12 @@ def add_ones_to_input(x):
 
 ## forward pass
 The new forward function looks exactly like in the single Perceptron:
-```{python}
+```{python 2_4}
 def forward(x, w):
   return( sigmoid(x @ w) )
 ```
 Now we have everything to calculate the forward pass of the NN from above with the generated weights step by step:
-```{python}
+```{python 2_5}
 IN = []
 OUT = []
 
@@ -104,7 +103,7 @@ $$
 $$
 with $\widetilde{W}$ as the weights of that layer without the connection to the bias neuron, because it has no connection to the previews neurons. In our datastructur its done by removing the last row.  
 With the example from above is it done by the following lines of code:
-```{python}
+```{python 2_6}
 grad = [None] * 2
 
 # layer 1
@@ -116,7 +115,7 @@ i = 0
 grad[i] = deriv_sigmoid(OUT[i]) *(grad[i+1] @ W[i+1][0:len(W[i+1])-1].T)
 ```
 Now you can look for example at the gradient of the last layer and on the direction it is shown:
-```{python}
+```{python 2_7}
 print("Y: \n",Y)
 print("OUT: \n",OUT[1])
 print("grad: \n",grad[1])
@@ -127,7 +126,7 @@ $$
   W^i_{new} = W^i_{old} + \alpha \cdot ( IN^{i\ T} * grad^i) 
 $$
 In the example from above we have the following results for the adjusted weights after the first iteration:
-```{python}
+```{python 2_8}
 alpha = 0.03
 
 W[1] = W[1] + alpha * (IN[1].T @ grad[1]) 
@@ -138,10 +137,10 @@ W[0] = W[0] + alpha * (IN[0].T @ grad[0])
 
 
 
-```{python}
+```{python 2_9}
 import numpy as np
 import matplotlib.pyplot as pyplot
-numpy.random.seed(0)
+np.random.seed(0)
 
 X = np.array([
   [1,1],

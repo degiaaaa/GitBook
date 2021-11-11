@@ -41,7 +41,7 @@ $$
 The provided training dataset contains the `X` matrix with two inputs for each scenario and the `Y` matrix with the correct output (each row contains the input and output of one scenario). If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.  
 
 The needed python imports are the following:
-```{python}
+```{python 0_0}
 import numpy as np
 import matplotlib.pyplot as pyplot
 ```
@@ -97,20 +97,20 @@ Yes it is the same, its the weighted sum of the inputs and evaluated the activat
 
 ## Forward pass
 Now we create the so called `forward()` function in python:
-```{python}
+```{python 0_1}
 def forward(x, w):
   return( step(x @ w) )
 ```
 (Numpy provides us with the `@` symbol to make a matrix to matrix multiplication and the `.T` to transpose)
 
 Because we want to put one dimensional matrices into the `step()` function we need to use numpy for the if-else statement:
-```{python}
+```{python 0_2}
 def step(s):
   return( np.where(s >= bias, 1, 0) )
 ```
 
 Here an small example for the forward pass:
-```{python}
+```{python 0_3}
 X = np.array([
   [0,0],
   [0,1],
@@ -137,12 +137,12 @@ $$
   \Delta W(t) = \alpha \cdot X^{T} \cdot (Y - \hat{Y})
 $$
 and $\hat{Y}$ is the output of the NN. 
-```{python}
+```{python 0_4}
 def backward(W, X, Y, alpha, Y_approx):
     return(W + alpha * X.T @ (Y - Y_approx))
 ```
 with the result of the forward pass and example data we have the following:
-```{python}
+```{python 0_5}
 Y = np.array([
   [0],
   [1],
@@ -157,7 +157,7 @@ and this is the new weight.
 
 ## Single Perceptron
 Now we want to do the same process multiple times, to train the NN:
-```{python}
+```{python 0_6}
 X = np.array([
   [0,0],
   [0,1],
@@ -189,17 +189,17 @@ $$
   Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 $$
 or as python code:
-```{python}
+```{python 0_7}
 def mean_square_error(error):
   return( 0.5 * np.sum(error ** 2) )
 ```
 
 Now we need to calculate the mean-square-error for each element in the list `errors` which is made with `map()`:
-```{python}
+```{python 0_8}
 mean_square_errors = np.array(list(map(mean_square_error, errors)))
 ```
 To plot the errors, im using the following function:
-```{python}
+```{python 0_9}
 def plot_error(errors, title):
   x = list(range(len(errors)))
   y = np.array(errors)
@@ -218,7 +218,7 @@ plot_error(mean_square_errors, "Single Perceptron")
 If you survived until now, you have learned how you can program a single Perceptron!
 
 ## Appendix (complete code)
-```{python, eval=FALSE}
+```{python 0_10, eval=FALSE}
 import numpy as np
 import matplotlib.pyplot as pyplot
 

@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-07" />
+<meta name="date" content="2021-11-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -156,7 +156,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a></li>
+<li class="chapter" data-level="4" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -182,14 +186,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title"><div class="line-block">My First Steps in Neuronal Networks<br />
 (Beginners Guide)</div></h1>
 <p class="author"><em>Axel Roth</em></p>
-<p class="date"><em>2021-11-07</em></p>
+<p class="date"><em>2021-11-11</em></p>
 </div>
 <div id="about" class="section level1" number="1">
 <h1><span class="header-section-number">Chapter 1</span> About</h1>
 <div id="me" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Me</h2>
-<p>Hello, my name is Axel Roth and im studding math at a master degree in germany. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experience i gained was around R and all its features. And now the interesting question… Why do i want to write a beginners guide in the field of Neuronal Networks?<br />
-Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.</p>
+<p>Hello, my name is Axel Roth and im studding math at a master degree in germany and working half-time in the finance field as something between a data-analyst and a full stack developer. I already got a lot of experience in coding with R and all its features, but i never wrote a line of code in python and i never touched Neuronal Networks bevor. So Why do i want to write a beginners guide in the field of Neuronal Networks in python?<br />
+Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionally i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.</p>
 </div>
 <div id="the-book" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> The Book</h2>
@@ -197,10 +201,10 @@ Its simple, at the moment i have a lecture in that we learn how to program a Neu
 </div>
 <div id="how-it-works" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> How it works</h2>
-<p>Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. Thats why i need to load the python interpreter in the following R-chunk:</p>
+<p>Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. This is the reason, why i need to load the python interpreter in the following R-chunk:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
 <span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">&quot;D:</span><span class="sc">\\</span><span class="st">WinPython2</span><span class="sc">\\</span><span class="st">WPy64-3950</span><span class="sc">\\</span><span class="st">python-3.9.5.amd64</span><span class="sc">\\</span><span class="st">&quot;</span>)</span></code></pre></div>
-<p>Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website.</p>
+<p>Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website. If you are new to python and never used R i would recommend to use jupyter lab or PyCharm.</p>
 
 </div>
 </div>

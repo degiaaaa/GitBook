@@ -1,8 +1,7 @@
 --- 
 title: |
-  | My First Steps in Neuronal Networks 
+  | My First Steps in Neuronal Networks
   | (Beginners Guide)
-
 author: "Axel Roth"
 date: "`r Sys.Date()`"
 description: This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook.
