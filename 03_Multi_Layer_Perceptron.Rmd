@@ -38,7 +38,7 @@ Y = np.array([
   [0]
 ])
 
-n_input = len(X[0]) + 1
+n_input = len(X[0])
 n_output = len(Y[0])
 hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
 
@@ -46,7 +46,7 @@ def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
   for i in range(len(hidden_layer_neurons)+1):
     if i == 0: # first layer
-      W.append(np.random.random((n_input, hidden_layer_neurons[i])))
+      W.append(np.random.random((n_input+1, hidden_layer_neurons[i])))
     elif i == len(hidden_layer_neurons): # last layer
       W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
     else: # middle layers
@@ -157,7 +157,7 @@ Y = np.array([
   [0]
 ])
 
-n_input = len(X[0]) + 1
+n_input = len(X[0])
 n_output = len(Y[0])
 hidden_layer_neurons = np.array([2])
 
@@ -166,7 +166,7 @@ def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
   for i in range(len(hidden_layer_neurons)+1):
     if i == 0: # first layer
-      W.append(np.random.random((n_input, hidden_layer_neurons[i])))
+      W.append(np.random.random((n_input + 1, hidden_layer_neurons[i])))
     elif i == len(hidden_layer_neurons): # last layer
       W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
     else: # middle layers
