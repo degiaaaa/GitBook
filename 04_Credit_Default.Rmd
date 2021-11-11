@@ -5,13 +5,11 @@ editor_options:
 ---
 
 # MLP example (Credit Default)
-Now we can use our generic MLP model to forecast real life credit defaults.
-
-
+Now can we use our generic MLP model from the previews chapter to forecast real life credit defaults. The csv can be downloaded from [Kaggle Data Source](https://www.kaggle.com/laotse/credit-risk-dataset) or from my [github repo](https://github.com/AxelCode-R/GitBook) in the example_data folder. 
 
 
 ## Appendix (complete code)
-```{python 2_9}
+```{python}
 import numpy as np
 import matplotlib.pyplot as pyplot
 import pandas as pd
@@ -24,7 +22,7 @@ scale_mapper = {'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4}
 data["person_home_ownership"] = data["person_home_ownership"].replace(scale_mapper)
 scale_mapper = {'PERSONAL':1, 'EDUCATION':2, 'MEDICAL':3, 'VENTURE':4, 'HOMEIMPROVEMENT':5,'DEBTCONSOLIDATION':6}
 data["loan_intent"] = data["loan_intent"].replace(scale_mapper)
-scale_mapper = {'D':4, 'B':2, 'C':3, 'A':1, 'E':5, 'F':6, 'G':7}
+scale_mapper = {'A':1, 'B':2, 'C':3, 'D':4, 'E':5, 'F':6, 'G':7}
 data["loan_grade"] = data["loan_grade"].replace(scale_mapper)
 
 
@@ -41,10 +39,6 @@ X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_
 Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
 
 
-n_input = len(X_train[0])
-n_output = len(Y_train[0])
-hidden_layer_neurons = np.array([11])
-
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -60,8 +54,6 @@ def generate_weights(n_input, n_output, hidden_layer_neurons):
 def add_ones_to_input(x):
   return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
 
-
-W = generate_weights(n_input, n_output, hidden_layer_neurons)
 
 
 def sigmoid(x):
@@ -81,34 +73,41 @@ def backward(IN, OUT, W, Y, grad, k):
     grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
   return(grad)
 
+def train(X, Y, hidden_layer_neurons, alpha, epochs):
+  n_input = len(X_train[0])
+  n_output = len(Y_train[0])
+  W = generate_weights(n_input, n_output, hidden_layer_neurons)
+  errors = []
+  for i in range(epochs):
+    IN = []
+    OUT = []
+    grad = [None]*len(W)
+    for k in range(len(W)):
+      if k==0:
+        IN.append(add_ones_to_input(X))
+      else:
+        IN.append(add_ones_to_input(OUT[k-1]))
+      OUT.append(forward(x=IN[k], w=W[k]))
+      
+    errors.append(Y_train - OUT[-1])
+      
+    for k in range(len(W)-1,-1, -1):
+      grad = backward(IN, OUT, W, Y, grad, k) 
+      
+    for k in range(len(W)):
+      W[k] = W[k] + alpha * (IN[k].T @ grad[k])
+      
+  return W, errors
 
-eta = 0.01
-errors = []
-for i in range(40000):
-  IN = []
-  OUT = []
-  grad = [None]*len(W)
-  for k in range(len(W)):
-    if k==0:
-      IN.append(add_ones_to_input(X_train))
-    else:
-      IN.append(add_ones_to_input(OUT[k-1]))
-    OUT.append(forward(x=IN[k], w=W[k]))
-    
-  errors.append(Y_train - OUT[-1])
-    
-  for k in range(len(W)-1,-1, -1):
-    grad = backward(IN, OUT, W, Y_train, grad, k) 
-    
-  for k in range(len(W)):
-    W[k] = W[k] + eta * (IN[k].T @ grad[k])
 
+
+W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = np.array([11,4]), alpha = 0.01, epochs = 20000)
 
 
 def mean_square_error(error):
   return( 0.5 * np.sum(error ** 2) )
 
-mean_square_errors = np.array(list(map(mean_square_error, errors)))
+ms_errors_train = np.array(list(map(mean_square_error, errors_train)))
 
 def plot_error(errors, title):
   x = list(range(len(errors)))
@@ -121,7 +120,28 @@ def plot_error(errors, title):
   pyplot.ylim(0,max(errors)*1.1)
   pyplot.show()
   
-plot_error(mean_square_errors, "MLP Credit Default")
+plot_error(ms_errors_train, "MLP Credit Default")
+
+
+
+def test(X_test, W):
+  for i in range(len(W)):
+    X_test = forward(add_ones_to_input(X_test), W[i])
+  return(X_test)
+  
+
+result_test = test(X_test, W_train)
+print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
+
+
+def classify(Y_approx):
+  return( np.round(Y_approx,0) )
+
+classified_error = Y_test - classify(result_test)
+print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
+
+print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
+print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
 
 ```
 

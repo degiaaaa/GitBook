@@ -197,7 +197,7 @@ def backward(IN, OUT, W, Y, grad, k):
     grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
   return(grad)
 
-eta = 0.03
+alpha = 0.03
 errors = []
 for i in range(40000):
   IN = []
@@ -216,7 +216,7 @@ for i in range(40000):
     grad = backward(IN, OUT, W, Y, grad, k) 
     
   for k in range(len(W)):
-    W[k] = W[k] + eta * (IN[k].T @ grad[k])
+    W[k] = W[k] + alpha * (IN[k].T @ grad[k])
 
 
 
