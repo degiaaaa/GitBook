@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="adding-trainable-bias.html"/>
-
+<link rel="next" href="mlp-example-credit-default.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -162,6 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
 <li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
+<li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -230,13 +231,13 @@ We will choose the sigmoid function as the activation function <span class="math
 <span id="cb18-33"><a href="multi-layer-perceptrons-mlp.html#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;W[0]: </span><span class="ch">\n</span><span class="st">&quot;</span>, W[<span class="dv">0</span>])</span>
 <span id="cb18-34"><a href="multi-layer-perceptrons-mlp.html#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;W[1]: </span><span class="ch">\n</span><span class="st">&quot;</span>, W[<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## W[0]: 
-##  [[0.91174216 0.17591466]
-##  [0.94769925 0.53523187]
-##  [0.62740427 0.55434194]]
+##  [[0.5755443  0.91401357]
+##  [0.11984087 0.99105167]
+##  [0.13621415 0.58956084]]
 ## W[1]: 
-##  [[0.54535167]
-##  [0.02988902]
-##  [0.79704848]]</code></pre>
+##  [[0.14739473]
+##  [0.97624926]
+##  [0.022929  ]]</code></pre>
 <p>The input and output layer neurons are calculated from the training dataset and the neurons from the hidden layers are generated with the <code>hidden_layer_neurons</code>. For example can we generate two hidden layers with 4 and 2 neurons by <code>hidden_layer_neurons = np.array([4,2])</code>. I didnt explicitly choose the bias because it gets corrected anyway.<br />
 Now we need to define a helper function to add the biases, on the last column of the inputs, with:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="multi-layer-perceptrons-mlp.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_ones_to_input(x):</span>
@@ -262,10 +263,10 @@ Now we need to define a helper function to add the biases, on the last column of
 <span id="cb22-13"><a href="multi-layer-perceptrons-mlp.html#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-14"><a href="multi-layer-perceptrons-mlp.html#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># error</span></span>
 <span id="cb22-15"><a href="multi-layer-perceptrons-mlp.html#cb22-15" aria-hidden="true" tabindex="-1"></a>Y<span class="op">-</span>OUT[<span class="op">-</span><span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## array([[-0.7634246 ],
-##        [ 0.21904441],
-##        [ 0.21990336],
-##        [-0.78981947]])</code></pre>
+<pre><code>## array([[-0.67472282],
+##        [ 0.28585417],
+##        [ 0.28486088],
+##        [-0.73641968]])</code></pre>
 <p>Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)</p>
 </div>
 <div id="backward-pass-1" class="section level2" number="4.2">
@@ -299,15 +300,15 @@ With the example from above is it done by the following lines of code:</p>
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.7634246 ]
-##  [0.78095559]
-##  [0.78009664]
-##  [0.78981947]]
+##  [[0.67472282]
+##  [0.71414583]
+##  [0.71513912]
+##  [0.73641968]]
 ## grad: 
-##  [[-0.13788019]
-##  [ 0.0374706 ]
-##  [ 0.03772351]
-##  [-0.13111372]]</code></pre>
+##  [[-0.14808272]
+##  [ 0.05835472]
+##  [ 0.05803048]
+##  [-0.14294328]]</code></pre>
 <p>You can see that the gradient shows in the direction that would drift the output <span class="math inline">\(OUT\)</span> closer to the desired output <span class="math inline">\(Y\)</span>. That is exactly what the gradient descent algorithm is doing.<br />
 Now do we need to adjust the weights with the gradients and the learningrate <span class="math inline">\(\alpha\)</span> according to the direction of the gradients with the following formula:
 <span class="math display">\[
@@ -429,8 +430,8 @@ In the example from above we have the following results for the adjusted weights
           </div>
         </div>
       </div>
-<a href="adding-trainable-bias.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="adding-trainable-bias.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mlp-example-credit-default.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
