@@ -8,7 +8,7 @@ step(s)=
     0,& s < \beta
 \end{cases}
 $$
-with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $-5$ to the $X$ matrix? Now it will never give you the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal $\beta$ by hand. 
+with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $-5$ to the $X$ matrix? Now it will never find the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal $\beta$ by hand. 
 
 ## Generalising the Bias
 That is why we now generalise the weighted sum step by step. First we generalise the activation function:
@@ -39,7 +39,7 @@ X = np.array([
   [0,1],
   [1,0],
   [1,1],
-])+5
+])-5
 X = np.append(X, np.array([np.ones(len(X))]).T, axis=1)
 
 W = np.array([
@@ -48,7 +48,7 @@ W = np.array([
 ])
 W = np.append(W, -np.array([np.random.random(len(W[0]))]).T, axis=0)
 ```
-We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more iterations, because it needs to find a good $\beta$ by it self.  
+We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes, if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more epochs, because it needs to find a good $\beta$ by it self.  
 
 ## Appendix (complete code)
 The complete code is the following:
@@ -78,7 +78,7 @@ Y = np.array([
 ])
 
 alpha = 0.01
-train_n = 1000
+epochs = 1000
 
 def step(s):
   return( np.where(s >= 0, 1, 0) )
@@ -92,7 +92,7 @@ def backward(W, X, Y, alpha, Y_approx):
   
   
 errors = []
-for i in range(train_n):
+for i in range(epochs):
   Y_approx = forward(X, W)
   errors.append(Y - Y_approx)
   W = backward(W, X, Y, alpha, Y_approx)
@@ -118,7 +118,7 @@ def plot_error(errors, title):
   pyplot.show()
   
   
-plot_error(mean_square_errors, "Mean-Square-Errors of a single Perceptron")
+plot_error(mean_square_errors, "Single Perceptron with trainable bias")
 ```
 
 

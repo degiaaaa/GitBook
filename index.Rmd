@@ -18,19 +18,19 @@ biblio-style: apalike
 
 # About
 ## Me
-Hello, my name is Axel Roth and im studding math at a master degree in germany. In the same moment im working half-time in the finance field and programming in a wide range of tasks like index replication, factormodels, data visualisation, datamanagement, shiny applications, documantations with rmarkdown, building internal packages and much more. So the most of my experience i gained was around R and all its features. And now the interesting question... Why do i want to write a beginners guide in the field of Neuronal Networks?  
-Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionaly i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
+Hello, my name is Axel Roth and im studding math at a master degree in germany and working half-time in the finance field as something between a data-analyst and a full stack developer. I already got a lot of experience in coding with R and all its features, but i never wrote a line of code in python and i never touched Neuronal Networks bevor. So Why do i want to write a beginners guide in the field of Neuronal Networks in python?  
+Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionally i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
 
 ## The Book
 This Book will be more or the less the documentation of my lecture "Finance Project" in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.  
 
 ## How it works
-Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. Thats why i need to load the python interpreter in the following R-chunk:
+Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. This is the reason, why i need to load the python interpreter in the following R-chunk:
 ```{r, warning=FALSE}
 library(reticulate)
 Sys.setenv(RETICULATE_PYTHON = "D:\\WinPython2\\WPy64-3950\\python-3.9.5.amd64\\")
 ```
-Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website.
+Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website. If you are new to python and never used R i would recommend to use jupyter lab or PyCharm.
 
 
  

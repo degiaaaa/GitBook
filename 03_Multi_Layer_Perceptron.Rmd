@@ -5,12 +5,7 @@ editor_options:
 ---
 ```{python, include=FALSE}
 import numpy as np
-import random as ra
-import pandas as pd
 import matplotlib.pyplot as pyplot
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
 ```
 
 # Multi Layer Perceptrons
@@ -29,9 +24,6 @@ def deriv_sigmoid(x):
 
 Additionaly will we choose the XOR-Gate as training dataset and generate the weights in a very generic approach like the following code shows:
 ```{python}
-import numpy as np
-import matplotlib.pyplot as pyplot
-
 X = np.array([
   [0,0],
   [0,1],
@@ -134,97 +126,13 @@ Now do we need to adjust the weights with the gradients and the learningrate $\a
 $$
   W^i_{new} = W^i_{old} + \alpha \cdot ( IN^{i\ T} * grad^i) 
 $$
-
-
-
-
-
-
-According to the image, the new $W$ is
-$$
-  W^{\text{layer}}_{\text{IN, OUT}}
-$$
-the new $X$ is
-$$
-  X^{\text{layer}}_{\text{scenario, value}}
-$$
-the new $Y$ is
-$$
-  Y^{\text{layer}}_{\text{scenario, value}}
-$$
-If you understood the pattern, you can see that we have to create a list with the same $X$, $Y$ and $W$ of the previews chapter for each layer to get the datastructur for a multi layer Perceptron.  
-Now we will start with a small example for the XOR-Gate dataset with 2+1 input values, 2+1 hidden neurons and 1 output value like in the image above. With random generated weights ($\beta$ is implicit in the weights and gets adjusted anyway) and the XOR-Gate as dataset, we have the following structur:
+In the example from above we have the following results for the adjusted weights after the first iteration:
 ```{python}
-import numpy as np
-import matplotlib.pyplot as pyplot
+alpha = 0.03
 
-X = np.array([
-  [0,0],
-  [0,1],
-  [1,0],
-  [1,1],
-]) 
-
-Y = np.array([
-  [0],
-  [1],
-  [1],
-  [0]
-])
-
-n_input = len(X[0]) + 1
-n_output = len(Y[0])
-hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
-
-def generate_weights(n_input, n_output, hidden_layer_neurons):
-  W = []
-  for i in range(len(hidden_layer_neurons)+1):
-    if i == 0: # first layer
-      W.append(np.random.random((n_input, hidden_layer_neurons[i])))
-    elif i == len(hidden_layer_neurons): # last layer
-      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
-    else: # middle layers
-      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
-   
-  return(W)
-
-def add_ones_to_input(x):
-  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
-
-X = add_ones_to_input(X)
-
-W = generate_weights(n_input, n_output, hidden_layer_neurons)
-
-print("W[0]: \n", W[0])
-print("W[1]: \n", W[1])
+W[1] = W[1] + alpha * (IN[1].T @ grad[1]) 
+W[0] = W[0] + alpha * (IN[0].T @ grad[0]) 
 ```
-
-<!-- And we are changing the activation function to the sigmoid function: -->
-<!-- ```{python} -->
-<!-- def sigmoid(s): -->
-<!--   return 1.0 / (1.0 + np.exp(-s)) -->
-<!-- ``` -->
-<!-- and change the activation function in the forward pass: -->
-<!-- ```{python} -->
-<!-- def forward(X, W): -->
-<!--   return( sigmoid(X @ W) ) -->
-<!-- ``` -->
-
-
-Now we can calculate the output value of the NN by evaluating the `forward()` function, adding the ones to the output and evaluating the `forward()` function again. All of this with the according weights:
-```{python}
-def step(s):
-  return( np.where(s >= 0, 1, 0) )
-
-def forward(X, W):
-  return( step(X @ W) )
-
-output = forward( add_ones_to_input(forward(X, W[0])), W[1])
-print("output: \n", output)
-```
-
-
-
 
 
 
