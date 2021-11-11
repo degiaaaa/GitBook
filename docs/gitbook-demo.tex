@@ -322,7 +322,7 @@ To adjust the weights in a single Perceptron, we need the Delta-Rule:
 \]
 with
 \[
-  \Delta W(t) = \alpha \cdot X^{T} \cdot (Y - \hat{Y})
+  \Delta W(t) = \alpha \cdot X^{T} * (Y - \hat{Y})
 \]
 and \(\hat{Y}\) is the output of the NN.
 
@@ -533,7 +533,7 @@ step(s)=
 \]
 Now we can list it in the weighted sum:
 \[
-  step(X \cdot W - \beta) = Y
+  step(X * W - \beta) = Y
 \]
 But we have the same problem as previews, because we need to specify the \(\beta\) explicit. To add it to the training process we add a column with ones on the right side of \(X\) and add the \(-\beta\) to the last row of \(W\). The output of one scenario is now caluclated as the following:
 \[
@@ -697,27 +697,19 @@ Additionaly will we choose the XOR-Gate as training dataset and generate the wei
 \NormalTok{W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
 
 \BuiltInTok{print}\NormalTok{(}\StringTok{"W[0]: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, W[}\DecValTok{0}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## W[0]: 
-##  [[0.04178698 0.6534004 ]
-##  [0.30155295 0.05432158]
-##  [0.28037563 0.97066514]]
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \BuiltInTok{print}\NormalTok{(}\StringTok{"W[1]: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, W[}\DecValTok{1}\NormalTok{])}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
+## W[0]: 
+##  [[0.58033012 0.70962204]
+##  [0.57655531 0.65858182]
+##  [0.46381748 0.264379  ]]
 ## W[1]: 
-##  [[0.01781123]
-##  [0.39772268]
-##  [0.94137109]]
+##  [[0.91028087]
+##  [0.04065656]
+##  [0.17894913]]
 \end{verbatim}
 
 The input and output layer neurons are calculated from the training dataset and the neurons from the hidden layers are generated with the \texttt{hidden\_layer\_neurons}. For example can we generate two hidden layers with 4 and 2 neurons by \texttt{hidden\_layer\_neurons\ =\ np.array({[}4,2{]})}. I didnt explicitly choose the bias because it gets corrected anyway.\\
@@ -765,10 +757,10 @@ Now we have everything to calculate the forward pass of the NN from above with t
 \end{Shaded}
 
 \begin{verbatim}
-## array([[-0.77555814],
-##        [ 0.22348037],
-##        [ 0.21688053],
-##        [-0.78382959]])
+## array([[-0.68152482],
+##        [ 0.29303869],
+##        [ 0.29281502],
+##        [-0.72570622]])
 \end{verbatim}
 
 Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)
@@ -797,7 +789,7 @@ With the example from above is it done by the following lines of code:
 
 \CommentTok{\# layer 0}
 \NormalTok{i }\OperatorTok{=} \DecValTok{0}
-\NormalTok{grad[i] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[i]) }\OperatorTok{*}\NormalTok{(grad[i}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[i}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[i}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T)}
+\NormalTok{grad[i] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[i]) }\OperatorTok{*}\NormalTok{(grad[i}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[i}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[i}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T) }\CommentTok{\# without bias weights}
 \end{Highlighting}
 \end{Shaded}
 
@@ -806,6 +798,8 @@ Now you can look for example at the gradient of the last layer and on the direct
 \begin{Shaded}
 \begin{Highlighting}[]
 \BuiltInTok{print}\NormalTok{(}\StringTok{"Y: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,Y)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"OUT: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,OUT[}\DecValTok{1}\NormalTok{])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"grad: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,grad[}\DecValTok{1}\NormalTok{])}
 \end{Highlighting}
 \end{Shaded}
 
@@ -815,34 +809,16 @@ Now you can look for example at the gradient of the last layer and on the direct
 ##  [1]
 ##  [1]
 ##  [0]]
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\BuiltInTok{print}\NormalTok{(}\StringTok{"OUT: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,OUT[}\DecValTok{1}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
 ## OUT: 
-##  [[0.77555814]
-##  [0.77651963]
-##  [0.78311947]
-##  [0.78382959]]
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\BuiltInTok{print}\NormalTok{(}\StringTok{"grad: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,grad[}\DecValTok{1}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
+##  [[0.68152482]
+##  [0.70696131]
+##  [0.70718498]
+##  [0.72570622]]
 ## grad: 
-##  [[-0.13499963]
-##  [ 0.03878209]
-##  [ 0.03683572]
-##  [-0.13281269]]
+##  [[-0.1479241 ]
+##  [ 0.06070795]
+##  [ 0.06063449]
+##  [-0.14445669]]
 \end{verbatim}
 
 You can see that the gradient shows in the direction that would drift the output \(OUT\) closer to the desired output \(Y\). That is exactly what the gradient descent algorithm is doing.\\
@@ -860,6 +836,11 @@ In the example from above we have the following results for the adjusted weights
 \NormalTok{W[}\DecValTok{0}\NormalTok{] }\OperatorTok{=}\NormalTok{ W[}\DecValTok{0}\NormalTok{] }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ (IN[}\DecValTok{0}\NormalTok{].T }\OperatorTok{@}\NormalTok{ grad[}\DecValTok{0}\NormalTok{]) }
 \end{Highlighting}
 \end{Shaded}
+
+This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons an done output neuron. It is simple to use the given code from above to create a more generic NN for dynamic hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
+
+\hypertarget{appendix-complete-code-2}{%
+\section{Appendix (complete code)}\label{appendix-complete-code-2}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -883,8 +864,7 @@ In the example from above we have the following results for the adjusted weights
 
 \NormalTok{n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X[}\DecValTok{0}\NormalTok{]) }\OperatorTok{+} \DecValTok{1}
 \NormalTok{n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y[}\DecValTok{0}\NormalTok{])}
-\NormalTok{hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{2}\NormalTok{]) }\CommentTok{\# the 2 means that there is one hidden layer with 2 neurons}
-\CommentTok{\# example: np.array([6, 2]) would be 2 hidden layers, The first with 6 neurons (+ there bias) and the second with 2 (+ there bias)}
+\NormalTok{hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{2}\NormalTok{])}
 
 
 \KeywordTok{def}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons):}
@@ -919,7 +899,7 @@ In the example from above we have the following results for the adjusted weights
   \ControlFlowTok{if}\NormalTok{ k }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(grad)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{:}
 \NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{ (Y}\OperatorTok{{-}}\NormalTok{OUT[k])}
   \ControlFlowTok{else}\NormalTok{:}
-\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{(grad[k}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T) }\CommentTok{\# ohne das letzte W da wir ja nur die knoten ohne bias befüllen}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{(grad[k}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T)}
   \ControlFlowTok{return}\NormalTok{(grad)}
 
 \NormalTok{eta }\OperatorTok{=} \FloatTok{0.03}

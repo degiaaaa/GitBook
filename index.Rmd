@@ -31,5 +31,11 @@ Sys.setenv(RETICULATE_PYTHON = "D:\\WinPython2\\WPy64-3950\\python-3.9.5.amd64\\
 ```
 Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website. If you are new to python and never used R i would recommend to use jupyter lab or PyCharm.
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results = "hold"
+)
+```
+
 
  

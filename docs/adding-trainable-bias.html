@@ -160,6 +160,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
 <li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons.html"><a href="multi-layer-perceptrons.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -205,7 +206,7 @@ step(s)=
 \]</span>
 Now we can list it in the weighted sum:
 <span class="math display">\[
-  step(X \cdot W - \beta) = Y
+  step(X * W - \beta) = Y
 \]</span>
 But we have the same problem as previews, because we need to specify the <span class="math inline">\(\beta\)</span> explicit. To add it to the training process we add a column with ones on the right side of <span class="math inline">\(X\)</span> and add the <span class="math inline">\(-\beta\)</span> to the last row of <span class="math inline">\(W\)</span>. The output of one scenario is now caluclated as the following:
 <span class="math display">\[

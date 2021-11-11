@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 
 # Adding trainable Bias
 ```{python 1_0, include=FALSE}
@@ -25,7 +30,7 @@ step(s)=
 $$
 Now we can list it in the weighted sum:
 $$
-  step(X \cdot W - \beta) = Y
+  step(X * W - \beta) = Y
 $$
 But we have the same problem as previews, because we need to specify the $\beta$ explicit. To add it to the training process we add a column with ones on the right side of $X$ and add the $-\beta$ to the last row of $W$. The output of one scenario is now caluclated as the following:
 $$

@@ -3,6 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 # Single Perceptron
 In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret Vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.  
 First of all we are starting with the needed parameters, that are explained later:
@@ -134,7 +135,7 @@ $$
 $$
 with
 $$
-  \Delta W(t) = \alpha \cdot X^{T} \cdot (Y - \hat{Y})
+  \Delta W(t) = \alpha \cdot X^{T} * (Y - \hat{Y})
 $$
 and $\hat{Y}$ is the output of the NN. 
 ```{python 0_4}

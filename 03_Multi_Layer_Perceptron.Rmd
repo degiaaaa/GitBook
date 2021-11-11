@@ -3,6 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 # Multi Layer Perceptrons
 ```{python 2_0, include=FALSE, eval=TRUE}
 import numpy as np
@@ -112,7 +113,7 @@ grad[i] = deriv_sigmoid(OUT[i]) * (Y-OUT[i])
 
 # layer 0
 i = 0
-grad[i] = deriv_sigmoid(OUT[i]) *(grad[i+1] @ W[i+1][0:len(W[i+1])-1].T)
+grad[i] = deriv_sigmoid(OUT[i]) *(grad[i+1] @ W[i+1][0:len(W[i+1])-1].T) # without bias weights
 ```
 Now you can look for example at the gradient of the last layer and on the direction it is shown:
 ```{python 2_7}
@@ -132,11 +133,11 @@ alpha = 0.03
 W[1] = W[1] + alpha * (IN[1].T @ grad[1]) 
 W[0] = W[0] + alpha * (IN[0].T @ grad[0]) 
 ```
+This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons an done output neuron. It is simple to use the given code from above to create a more generic NN for dynamic hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
 
 
 
-
-
+## Appendix (complete code)
 ```{python 2_9}
 import numpy as np
 import matplotlib.pyplot as pyplot
@@ -158,8 +159,7 @@ Y = np.array([
 
 n_input = len(X[0]) + 1
 n_output = len(Y[0])
-hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
-# example: np.array([6, 2]) would be 2 hidden layers, The first with 6 neurons (+ there bias) and the second with 2 (+ there bias)
+hidden_layer_neurons = np.array([2])
 
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):
@@ -194,7 +194,7 @@ def backward(IN, OUT, W, Y, grad, k):
   if k == len(grad)-1:
     grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
   else:
-    grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T) # ohne das letzte W da wir ja nur die knoten ohne bias befüllen
+    grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
   return(grad)
 
 eta = 0.03
