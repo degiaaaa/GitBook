@@ -4,7 +4,9 @@ rmd_files: [
   "01_Single_Perceptron.Rmd",
   "02_Adding_trainable_Bias.Rmd",
   "03_Multi_Layer_Perceptron.Rmd",
-  "04_Credit_Default.Rmd"
+  "04_Credit_Default.Rmd",
+  "05_Batch_Size.Rmd",
+  "06_Class_MLP.Rmd"
             ]
 output_dir: "docs"
 language:

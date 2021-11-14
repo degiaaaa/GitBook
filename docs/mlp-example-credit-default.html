@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-13" />
+<meta name="date" content="2021-11-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="multi-layer-perceptrons-mlp.html"/>
-
+<link rel="next" href="effect-of-batch-size.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -168,6 +168,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html#train-and-test-phase"><i class="fa fa-check"></i><b>5.2</b> Train and test phase</a></li>
 <li class="chapter" data-level="5.3" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html#appendix-complete-code-3"><i class="fa fa-check"></i><b>5.3</b> Appendix (complete code)</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html"><i class="fa fa-check"></i><b>6</b> Effect of batch size</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#impact-of-diffrent-hyperparameters"><i class="fa fa-check"></i><b>6.1</b> Impact of diffrent hyperparameters</a></li>
+<li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -195,14 +201,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="loading-and-analysing-the-data" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Loading and analysing the data</h2>
 <p>First all do we need to load the csv via pandas and analyse it:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="mlp-example-credit-default.html#cb29-1" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.float_format&#39;</span>, <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span>)</span>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="mlp-example-credit-default.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb29-2"><a href="mlp-example-credit-default.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb29-3"><a href="mlp-example-credit-default.html#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
-<span id="cb29-4"><a href="mlp-example-credit-default.html#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="mlp-example-credit-default.html#cb29-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;example_data/credit_risk_dataset.csv&quot;</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb29-4"><a href="mlp-example-credit-default.html#cb29-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">&#39;display.float_format&#39;</span>, <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span>)</span>
+<span id="cb29-5"><a href="mlp-example-credit-default.html#cb29-5" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
 <span id="cb29-6"><a href="mlp-example-credit-default.html#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="mlp-example-credit-default.html#cb29-7" aria-hidden="true" tabindex="-1"></a>data.shape</span>
-<span id="cb29-8"><a href="mlp-example-credit-default.html#cb29-8" aria-hidden="true" tabindex="-1"></a>data.head()</span></code></pre></div>
+<span id="cb29-7"><a href="mlp-example-credit-default.html#cb29-7" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;example_data/credit_risk_dataset.csv&quot;</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb29-8"><a href="mlp-example-credit-default.html#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="mlp-example-credit-default.html#cb29-9" aria-hidden="true" tabindex="-1"></a>data.shape</span>
+<span id="cb29-10"><a href="mlp-example-credit-default.html#cb29-10" aria-hidden="true" tabindex="-1"></a>data.head()</span></code></pre></div>
 <pre><code>## (32581, 12)
 ##    person_age  person_income person_home_ownership  person_emp_length loan_intent loan_grade  loan_amnt  loan_int_rate  loan_status  loan_percent_income cb_person_default_on_file  cb_person_cred_hist_length
 ## 0          22          59000                  RENT             123.00    PERSONAL          D      35000          16.02            1                 0.59                         Y                           3
@@ -212,7 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4          24          54400                  RENT               8.00     MEDICAL          C      35000          14.27            1                 0.55                         Y                           4</code></pre>
 <p>You can find the detailed information about the columns on kaggle, additionaly to the next table:<br />
 <img src="img/credit_default_kaggle_data_info.png" style="width:100.0%" alt="https://www.kaggle.com/laotse/credit-risk-dataset" /><br>
-The important column is <code>load_status</code> that determinates the customers credit default and is used as the correct outputs <span class="math inline">\(Y\)</span>. All other columns are considered as the input matrix <span class="math inline">\(X\)</span>. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the folLowing charts:</p>
+The important column is <code>load_status</code> that determinates the customers credit default and is used as the correct outputs <span class="math inline">\(Y\)</span>. All other columns are considered as the input matrix <span class="math inline">\(X\)</span>. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="mlp-example-credit-default.html#cb31-1" aria-hidden="true" tabindex="-1"></a>l <span class="op">=</span> [<span class="st">&quot;person_age&quot;</span>, <span class="st">&quot;person_income&quot;</span>, <span class="st">&quot;person_emp_length&quot;</span>, <span class="st">&quot;loan_amnt&quot;</span>, <span class="st">&quot;loan_int_rate&quot;</span>, <span class="st">&quot;loan_status&quot;</span>, <span class="st">&quot;loan_percent_income&quot;</span>, <span class="st">&quot;cb_person_cred_hist_length&quot;</span>]</span>
 <span id="cb31-2"><a href="mlp-example-credit-default.html#cb31-2" aria-hidden="true" tabindex="-1"></a>data[l].hist(bins<span class="op">=</span><span class="dv">10</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
 <span id="cb31-3"><a href="mlp-example-credit-default.html#cb31-3" aria-hidden="true" tabindex="-1"></a>pyplot.tight_layout()</span>
@@ -227,7 +235,7 @@ The important column is <code>load_status</code> that determinates the customers
 ##         &lt;AxesSubplot:title={&#39;center&#39;:&#39;cb_person_cred_hist_length&#39;}&gt;,
 ##         &lt;AxesSubplot:&gt;]], dtype=object)</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-5-7.png" width="768" />
-All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding and Embedding (more information can be found <a href="https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/">here</a>). I will choose the simplest, the Ordinal Encoding, for our dataset. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:</p>
+All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found <a href="https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/">here</a>). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="mlp-example-credit-default.html#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace({<span class="st">&quot;Y&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;N&quot;</span>:<span class="dv">0</span>})</span>
 <span id="cb33-2"><a href="mlp-example-credit-default.html#cb33-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;person_home_ownership&quot;</span>] <span class="op">=</span> data[<span class="st">&quot;person_home_ownership&quot;</span>].replace({<span class="st">&#39;OWN&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;RENT&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;MORTGAGE&#39;</span>:<span class="dv">3</span>, <span class="st">&#39;OTHER&#39;</span>:<span class="dv">4</span>})</span>
 <span id="cb33-3"><a href="mlp-example-credit-default.html#cb33-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;loan_intent&quot;</span>] <span class="op">=</span> data[<span class="st">&quot;loan_intent&quot;</span>].replace({<span class="st">&#39;PERSONAL&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;EDUCATION&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;MEDICAL&#39;</span>:<span class="dv">3</span>, <span class="st">&#39;VENTURE&#39;</span>:<span class="dv">4</span>, <span class="st">&#39;HOMEIMPROVEMENT&#39;</span>:<span class="dv">5</span>,<span class="st">&#39;DEBTCONSOLIDATION&#39;</span>:<span class="dv">6</span>})</span>
@@ -246,14 +254,14 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 <span id="cb35-2"><a href="mlp-example-credit-default.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(np_arr.shape[<span class="dv">1</span>]):</span>
 <span id="cb35-3"><a href="mlp-example-credit-default.html#cb35-3" aria-hidden="true" tabindex="-1"></a>    np_arr[:,i] <span class="op">=</span> (np_arr[:,i] <span class="op">-</span> np.<span class="bu">min</span>(np_arr[:,i])) <span class="op">/</span> (np.<span class="bu">max</span>(np_arr[:,i]) <span class="op">-</span> np.<span class="bu">min</span>(np_arr[:,i]))</span>
 <span id="cb35-4"><a href="mlp-example-credit-default.html#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(np_arr)</span></code></pre></div>
-<p>Now do we need to split the given data in a training set and a test set, convert the pandas dataframe to a numpy array and normalize it:</p>
+<p>Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="mlp-example-credit-default.html#cb36-1" aria-hidden="true" tabindex="-1"></a>training_n <span class="op">=</span> <span class="dv">2000</span></span>
 <span id="cb36-2"><a href="mlp-example-credit-default.html#cb36-2" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> NormalizeData( data.loc[<span class="dv">0</span>:(training_n<span class="op">-</span><span class="dv">1</span>), data.columns <span class="op">!=</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy() )</span>
 <span id="cb36-3"><a href="mlp-example-credit-default.html#cb36-3" aria-hidden="true" tabindex="-1"></a>Y_train <span class="op">=</span> data.loc[<span class="dv">0</span>:(training_n<span class="op">-</span><span class="dv">1</span>), data.columns <span class="op">==</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy()</span>
 <span id="cb36-4"><a href="mlp-example-credit-default.html#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-5"><a href="mlp-example-credit-default.html#cb36-5" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> NormalizeData( data.loc[training_n:, data.columns <span class="op">!=</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy() )</span>
 <span id="cb36-6"><a href="mlp-example-credit-default.html#cb36-6" aria-hidden="true" tabindex="-1"></a>Y_test <span class="op">=</span> data.loc[training_n:, data.columns <span class="op">==</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy()</span></code></pre></div>
-<p>Now its time to load the created functions from the previews chapters.</p>
+<p>Its time to load the created functions from the previews chapters.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="mlp-example-credit-default.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_weights(n_input, n_output, hidden_layer_neurons):</span>
 <span id="cb37-2"><a href="mlp-example-credit-default.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> []</span>
 <span id="cb37-3"><a href="mlp-example-credit-default.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(hidden_layer_neurons)<span class="op">+</span><span class="dv">1</span>):</span>
@@ -306,7 +314,7 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 <span id="cb38-14"><a href="mlp-example-credit-default.html#cb38-14" aria-hidden="true" tabindex="-1"></a>        IN.append(add_ones_to_input(OUT[k<span class="op">-</span><span class="dv">1</span>]))</span>
 <span id="cb38-15"><a href="mlp-example-credit-default.html#cb38-15" aria-hidden="true" tabindex="-1"></a>      OUT.append(forward(x<span class="op">=</span>IN[k], w<span class="op">=</span>W[k]))</span>
 <span id="cb38-16"><a href="mlp-example-credit-default.html#cb38-16" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb38-17"><a href="mlp-example-credit-default.html#cb38-17" aria-hidden="true" tabindex="-1"></a>    errors.append(Y_train <span class="op">-</span> OUT[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb38-17"><a href="mlp-example-credit-default.html#cb38-17" aria-hidden="true" tabindex="-1"></a>    errors.append(Y <span class="op">-</span> OUT[<span class="op">-</span><span class="dv">1</span>])</span>
 <span id="cb38-18"><a href="mlp-example-credit-default.html#cb38-18" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb38-19"><a href="mlp-example-credit-default.html#cb38-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(W)<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
 <span id="cb38-20"><a href="mlp-example-credit-default.html#cb38-20" aria-hidden="true" tabindex="-1"></a>      grad <span class="op">=</span> backward(IN, OUT, W, Y, grad, k) </span>
@@ -320,10 +328,10 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 <span id="cb38-28"><a href="mlp-example-credit-default.html#cb38-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(W)):</span>
 <span id="cb38-29"><a href="mlp-example-credit-default.html#cb38-29" aria-hidden="true" tabindex="-1"></a>    X_test <span class="op">=</span> forward(add_ones_to_input(X_test), W[i])</span>
 <span id="cb38-30"><a href="mlp-example-credit-default.html#cb38-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(X_test)</span></code></pre></div>
-<p>The <code>train()</code> function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given <code>X_train</code> and <code>Y_train</code>. The <code>test()</code> function only contains the forward pass to get the given output of the NN to evaluate the quality.<br />
+<p>The <code>train()</code> function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given <code>X_train</code> and <code>Y_train</code>. The <code>test()</code> function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.<br />
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="mlp-example-credit-default.html#cb39-1" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span></code></pre></div>
-<p>The return contains multiple values, that are assigned with the <code>a, b = fun_that_returns_2_vals()</code> pattern. We can visualize the learning process by calculating the mean-square-error and plotting with the familiar line-chart:</p>
+<p>The return contains multiple values, that are assigned with the <code>a, b = fun_that_returns_2_vals()</code> pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="mlp-example-credit-default.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
 <span id="cb40-2"><a href="mlp-example-credit-default.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
 <span id="cb40-3"><a href="mlp-example-credit-default.html#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -341,12 +349,12 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb40-15"><a href="mlp-example-credit-default.html#cb40-15" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
 <span id="cb40-16"><a href="mlp-example-credit-default.html#cb40-16" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb40-17"><a href="mlp-example-credit-default.html#cb40-17" aria-hidden="true" tabindex="-1"></a>plot_error(ms_errors_train, <span class="st">&quot;MLP Credit Default&quot;</span>)</span></code></pre></div>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-12-9.png" width="576" />
-Now its time to test the NN on the never seen <code>X_test</code> and <code>Y_test</code> dataset.</p>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-12-9.png" width="576" /></p>
+<p>In the next step its time to test the NN on the never seen <code>X_test</code> and <code>Y_test</code> dataset.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="mlp-example-credit-default.html#cb41-1" aria-hidden="true" tabindex="-1"></a>result_test <span class="op">=</span> test(X_test, W_train)</span>
 <span id="cb41-2"><a href="mlp-example-credit-default.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Mean Square error over all testdata: &quot;</span>, mean_square_error(Y_test <span class="op">-</span> result_test))</span></code></pre></div>
-<pre><code>## Mean Square error over all testdata:  2944.4912492971584</code></pre>
-<p>Because the Mean Square Error is hard to interpret we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.</p>
+<pre><code>## Mean Square error over all testdata:  2135.358966722297</code></pre>
+<p>Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="mlp-example-credit-default.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify(Y_approx):</span>
 <span id="cb43-2"><a href="mlp-example-credit-default.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.<span class="bu">round</span>(Y_approx,<span class="dv">0</span>) )</span>
 <span id="cb43-3"><a href="mlp-example-credit-default.html#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -354,17 +362,17 @@ Now its time to test the NN on the never seen <code>X_test</code> and <code>Y_te
 <span id="cb43-5"><a href="mlp-example-credit-default.html#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Mean Square error over all classified testdata: &quot;</span>, mean_square_error(classified_error))</span>
 <span id="cb43-6"><a href="mlp-example-credit-default.html#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-7"><a href="mlp-example-credit-default.html#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Probability of a wrong output: &quot;</span>, np.<span class="bu">round</span>(np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(classified_error)) <span class="op">/</span> <span class="bu">len</span>(classified_error) <span class="op">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">&quot;%&quot;</span> )</span>
-<span id="cb43-8"><a href="mlp-example-credit-default.html#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Probability of a right output: &quot;</span>, np.<span class="bu">round</span>((<span class="dv">1</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(classified_error)) <span class="op">/</span> <span class="bu">len</span>(classified_error))<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>),<span class="st">&quot;%&quot;</span> )</span></code></pre></div>
-<pre><code>## Mean Square error over all classified testdata:  3361.0
-## Probability of a wrong output:  21.98 %
-## Probability of a right output:  78.02 %</code></pre>
-<p>An incredible tool to qualify the result is the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a> from the sklearn package. It splits the results into 4 categories that can be used to qualify the results in to the following table:
+<span id="cb43-8"><a href="mlp-example-credit-default.html#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Probability of a correct output: &quot;</span>, np.<span class="bu">round</span>((<span class="dv">1</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(classified_error)) <span class="op">/</span> <span class="bu">len</span>(classified_error))<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>),<span class="st">&quot;%&quot;</span> )</span></code></pre></div>
+<pre><code>## Mean Square error over all classified testdata:  2458.5
+## Probability of a wrong output:  16.08 %
+## Probability of a correct output:  83.92 %</code></pre>
+<p>An incredible tool to qualify the result is the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a> from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 <img src="img/confusion_matrix.png" style="width:50.0%" alt="https://en.wikipedia.org/wiki/Confusion_matrix" /><br></p>
-<p>For example <code>TP</code> mean True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:</p>
+<p>For example is <code>TP</code> short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="mlp-example-credit-default.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb45-2"><a href="mlp-example-credit-default.html#cb45-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## array([[19968,  4338],
-##        [ 2384,  3891]], dtype=int64)</code></pre>
+<pre><code>## array([[21463,  2843],
+##        [ 2074,  4201]], dtype=int64)</code></pre>
 </div>
 <div id="appendix-complete-code-3" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Appendix (complete code)</h2>
@@ -445,7 +453,7 @@ Now its time to test the NN on the never seen <code>X_test</code> and <code>Y_te
 <span id="cb47-75"><a href="mlp-example-credit-default.html#cb47-75" aria-hidden="true" tabindex="-1"></a>        IN.append(add_ones_to_input(OUT[k<span class="op">-</span><span class="dv">1</span>]))</span>
 <span id="cb47-76"><a href="mlp-example-credit-default.html#cb47-76" aria-hidden="true" tabindex="-1"></a>      OUT.append(forward(x<span class="op">=</span>IN[k], w<span class="op">=</span>W[k]))</span>
 <span id="cb47-77"><a href="mlp-example-credit-default.html#cb47-77" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb47-78"><a href="mlp-example-credit-default.html#cb47-78" aria-hidden="true" tabindex="-1"></a>    errors.append(Y_train <span class="op">-</span> OUT[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb47-78"><a href="mlp-example-credit-default.html#cb47-78" aria-hidden="true" tabindex="-1"></a>    errors.append(Y <span class="op">-</span> OUT[<span class="op">-</span><span class="dv">1</span>])</span>
 <span id="cb47-79"><a href="mlp-example-credit-default.html#cb47-79" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb47-80"><a href="mlp-example-credit-default.html#cb47-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(W)<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
 <span id="cb47-81"><a href="mlp-example-credit-default.html#cb47-81" aria-hidden="true" tabindex="-1"></a>      grad <span class="op">=</span> backward(IN, OUT, W, Y, grad, k) </span>
@@ -516,8 +524,8 @@ Now its time to test the NN on the never seen <code>X_test</code> and <code>Y_te
           </div>
         </div>
       </div>
-<a href="multi-layer-perceptrons-mlp.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="multi-layer-perceptrons-mlp.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="effect-of-batch-size.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -20,7 +20,7 @@ $$
 with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $-5$ to the $X$ matrix? Now it will never find the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal $\beta$ by hand. 
 
 ## Generalising the Bias
-That is why we now generalise the weighted sum step by step. First we generalise the activation function:
+First of all do we need to generalise the use of the bias, stating with the generalisation of the activation function:
 $$ 
 step(s)= 
 \begin{cases}
@@ -28,20 +28,19 @@ step(s)=
     0,& s < 0
 \end{cases}
 $$
-Now we can list it in the weighted sum:
+Now can we list it in the weighted sum:
 $$
   step(X * W - \beta) = Y
 $$
-But we have the same problem as previews, because we need to specify the $\beta$ explicit. To add it to the training process we add a column with ones on the right side of $X$ and add the $-\beta$ to the last row of $W$. The output of one scenario is now caluclated as the following:
+But we have the same problem as previews, because we need to specify the $\beta$ explicit. Adding the bias to the training process is done by adding ones on the right side of the $X$ matrix and adding the negative bias to the last row of $W$. The output of one scenario is calculated as the following:
 $$
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0]) = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 - \beta])
 $$
-Furthermore because the $W$ is holding the $\beta$, it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.   
+The resulting NN includes the bias into the re-adjusting process of the backward pass, because of that we will generate a random number for the bias that will be corrected anyway.    
 
 Now we have a NN that looks like all the other pictures of a single Perceptron in the internet:  
 ![https://app.diagrams.net/](./img/NN_02.png){ width=50% }<br>   
-
-As python code we did the following:
+The same step can be made with the following python code:
 ```{python 1_1, eval=FALSE}
 X = np.array([
   [0,0],
@@ -56,8 +55,11 @@ W = np.array([
   [0.2]
 ])
 W = np.append(W, -np.array([np.random.random(len(W[0]))]).T, axis=0)
+
+print("X: \n", X)
+print("W: \n", W)
 ```
-We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers between $(0,1)$ to the weights. Yes, if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new problem needs more epochs, because it needs to find a good $\beta$ by it self.  
+We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added ones on the left side of $X$ and added negative random numbers in $(0,1)$ to the weights. Yes, if you would have a clue, what $\beta$ would be great for the given problem, its better to choose it explicit. The new NN is slower, because it needs to find a good $\beta$ by it self.  
 
 ## Appendix (complete code)
 The complete code is the following:

@@ -1,0 +1,343 @@
+
+# Effect of batch size
+First of all do we need to differentiate between the following definitions that i found [here](https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks):  
+* one epoch := one forward pass and backward pass of all the training examples.  
+* batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.  
+* number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).   
+
+In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?  
+
+Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior [here](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu). The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found [here](https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e). He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.   
+
+All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.  
+
+## Impact of diffrent hyperparameters
+First of all do we add a `batch_size` parameter to the preview `train()` function and generate random batches that all contain distinct random integers in each batch. We will use the following function to generate the random batches:
+```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import math as ma
+import time
+np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning) 
+
+def generate_random_batches(batch_size, full_batch_size):
+  batches = np.arange(full_batch_size)
+  np.random.shuffle(batches)
+  return(np.array_split(batches, ma.ceil(full_batch_size/batch_size)))
+
+generate_random_batches(3, 10)
+```
+Now do we need to adjust the `train()` function to iterate over all batches:
+```{python}
+def train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):
+  n_input = len(X_train[0])
+  n_output = len(Y_train[0])
+  W = generate_weights(n_input, n_output, hidden_layer_neurons)
+  errors = []
+  batches = generate_random_batches(batch_size, full_batch_size = len(X))
+  for i in range(epochs):
+    error_temp = np.array([])
+    for z in range(len(batches)):
+      IN = []
+      OUT = []
+      grad = [None]*len(W)
+      for k in range(len(W)):
+        if k==0:
+          IN.append(add_ones_to_input(X[batches[z],:]))
+        else:
+          IN.append(add_ones_to_input(OUT[k-1]))
+        OUT.append(forward(x=IN[k], w=W[k]))
+        
+      error_temp = np.append(error_temp, Y[batches[z],:] - OUT[-1])
+        
+      for k in range(len(W)-1,-1, -1):
+        grad = backward(IN, OUT, W, Y[batches[z],:], grad, k) 
+        
+      for k in range(len(W)):
+        W[k] = W[k] + alpha * (IN[k].T @ grad[k])
+    errors.append(error_temp)
+    
+  return W, errors
+```
+And all the previes created functions, dataloading and transformations are:
+```{python}
+data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
+data = data.replace({"Y": 1, "N":0})
+data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
+data["loan_intent"] = data["loan_intent"].replace({'PERSONAL':1, 'EDUCATION':2, 'MEDICAL':3, 'VENTURE':4, 'HOMEIMPROVEMENT':5,'DEBTCONSOLIDATION':6})
+data["loan_grade"] = data["loan_grade"].replace({'A':1, 'B':2, 'C':3, 'D':4, 'E':5, 'F':6, 'G':7})
+
+def NormalizeData(np_arr):
+  for i in range(np_arr.shape[1]):
+    np_arr[:,i] = (np_arr[:,i] - np.min(np_arr[:,i])) / (np.max(np_arr[:,i]) - np.min(np_arr[:,i]))
+  return(np_arr)
+
+training_n = 2000
+X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
+Y_train = data.loc[0:(training_n-1), data.columns == 'loan_status'].to_numpy()
+
+X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_numpy() )
+Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
+
+
+def generate_weights(n_input, n_output, hidden_layer_neurons):
+  W = []
+  for i in range(len(hidden_layer_neurons)+1):
+    if i == 0: # first layer
+      W.append(np.random.random((n_input+1, hidden_layer_neurons[i])))
+    elif i == len(hidden_layer_neurons): # last layer
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
+    else: # middle layers
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
+  return(W)
+
+def add_ones_to_input(x):
+  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
+
+
+def sigmoid(x):
+  return 1.0 / (1.0 + np.exp(-x))
+
+def deriv_sigmoid(x):
+  return x * (1 - x)
+
+
+def forward(x, w):
+  return( sigmoid(x @ w) )
+
+def backward(IN, OUT, W, Y, grad, k):
+  if k == len(grad)-1:
+    grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
+  else:
+    grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
+  return(grad)
+
+
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
+
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(0,max(errors)*1.1)
+  pyplot.show()
+  
+def test(X_test, W):
+  for i in range(len(W)):
+    X_test = forward(add_ones_to_input(X_test), W[i])
+  return(X_test)
+  
+def classify(Y_approx):
+  return( np.round(Y_approx,0) )
+```
+
+Everything is loaded and set up. Now can we compare the time and the error for different `batch_size`:
+
+```{python}
+# full batch size
+np.random.seed(0)
+
+start = time.time()
+W_train, errors_train = train(X = X_train, Y = Y_train, hidden_layer_neurons = np.array([11,4]), alpha = 0.01, epochs = 5000, batch_size = 2000)
+time_diff = time.time() - start
+print("Time to train the NN: ", time_diff)
+
+ms_errors_train = np.array(list(map(mean_square_error, errors_train)))
+plot_error(ms_errors_train, "MLP Credit Default")
+result_test = test(X_test, W_train)
+print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
+
+classified_error = Y_test - classify(result_test)
+print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
+
+print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
+print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
+
+
+confusion_matrix(Y_test, classify(result_test))
+```
+```{python}
+# batch size = 100
+np.random.seed(0)
+
+start = time.time()
+W_train, errors_train = train(X = X_train, Y = Y_train, hidden_layer_neurons = np.array([11,4]), alpha = 0.01, epochs = 5000, batch_size = 100)
+time_diff = time.time() - start
+print("Time to train the NN: ", time_diff)
+
+ms_errors_train = np.array(list(map(mean_square_error, errors_train)))
+plot_error(ms_errors_train, "MLP Credit Default")
+result_test = test(X_test, W_train)
+print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
+
+classified_error = Y_test - classify(result_test)
+print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
+
+print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
+print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
+
+
+confusion_matrix(Y_test, classify(result_test))
+```
+
+
+We can see that the full batch size is much faster than the smaller one, but the smaller batch size has a smaller error. Maybe the perfect batch size depends on the problem itself. If you have a low dimensional input matrix and need to get a fast solution, its better to go with full batch size. If you have high dimensional input its not possible to use a full batch size, because your ram is jumping off. I think its the best to analyze the underlying data and select a suitable batch size for it. Maybe some situations will need a dynamic batch size, that shrinks over time, to get the best results, like in the blog post i mentioned at the start of the chapter.
+
+
+
+## Appendix (complete code)
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import math as ma
+np.random.seed(0)
+np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning) 
+
+data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
+data = data.replace({"Y": 1, "N":0})
+
+data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
+data["loan_intent"] = data["loan_intent"].replace({'PERSONAL':1, 'EDUCATION':2, 'MEDICAL':3, 'VENTURE':4, 'HOMEIMPROVEMENT':5,'DEBTCONSOLIDATION':6})
+data["loan_grade"] = data["loan_grade"].replace({'A':1, 'B':2, 'C':3, 'D':4, 'E':5, 'F':6, 'G':7})
+
+
+def NormalizeData(np_arr):
+  for i in range(np_arr.shape[1]):
+    np_arr[:,i] = (np_arr[:,i] - np.min(np_arr[:,i])) / (np.max(np_arr[:,i]) - np.min(np_arr[:,i]))
+  return(np_arr)
+
+training_n = 2000
+X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
+Y_train = data.loc[0:(training_n-1), data.columns == 'loan_status'].to_numpy()
+
+X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_numpy() )
+Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
+
+
+
+def generate_weights(n_input, n_output, hidden_layer_neurons):
+  W = []
+  for i in range(len(hidden_layer_neurons)+1):
+    if i == 0: # first layer
+      W.append(np.random.random((n_input+1, hidden_layer_neurons[i])))
+    elif i == len(hidden_layer_neurons): # last layer
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
+    else: # middle layers
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
+  return(W)
+
+def add_ones_to_input(x):
+  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
+
+
+
+def sigmoid(x):
+  return 1.0 / (1.0 + np.exp(-x))
+
+def deriv_sigmoid(x):
+  return x * (1 - x)
+
+
+def forward(x, w):
+  return( sigmoid(x @ w) )
+
+def backward(IN, OUT, W, Y, grad, k):
+  if k == len(grad)-1:
+    grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
+  else:
+    grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
+  return(grad)
+
+def generate_random_batches(batch_size, full_batch_size):
+  batches = np.arange(full_batch_size)
+  np.random.shuffle(batches)
+  return(np.array_split(batches, ma.ceil(full_batch_size/batch_size)))
+
+def train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):
+  n_input = len(X_train[0])
+  n_output = len(Y_train[0])
+  W = generate_weights(n_input, n_output, hidden_layer_neurons)
+  errors = []
+  batches = generate_random_batches(batch_size, full_batch_size = len(X))
+  for i in range(epochs):
+    error_temp = np.array([])
+    for z in range(len(batches)):
+      IN = []
+      OUT = []
+      grad = [None]*len(W)
+      for k in range(len(W)):
+        if k==0:
+          IN.append(add_ones_to_input(X[batches[z],:]))
+        else:
+          IN.append(add_ones_to_input(OUT[k-1]))
+        OUT.append(forward(x=IN[k], w=W[k]))
+        
+      error_temp = np.append(error_temp, Y[batches[z],:] - OUT[-1])
+        
+      for k in range(len(W)-1,-1, -1):
+        grad = backward(IN, OUT, W, Y[batches[z],:], grad, k) 
+        
+      for k in range(len(W)):
+        W[k] = W[k] + alpha * (IN[k].T @ grad[k])
+    errors.append(error_temp)
+    
+  return W, errors
+
+
+
+W_train, errors_train = train(X = X_train, Y = Y_train, hidden_layer_neurons = np.array([11,4]), alpha = 0.01, epochs = 2000, batch_size = 2000)
+
+
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
+
+ms_errors_train = np.array(list(map(mean_square_error, errors_train)))
+
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(0,max(errors)*1.1)
+  pyplot.show()
+  
+plot_error(ms_errors_train, "MLP Credit Default")
+
+
+
+def test(X_test, W):
+  for i in range(len(W)):
+    X_test = forward(add_ones_to_input(X_test), W[i])
+  return(X_test)
+  
+
+result_test = test(X_test, W_train)
+print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
+
+
+def classify(Y_approx):
+  return( np.round(Y_approx,0) )
+
+classified_error = Y_test - classify(result_test)
+print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
+
+print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
+print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
+
+
+confusion_matrix(Y_test, classify(result_test))
+```
+

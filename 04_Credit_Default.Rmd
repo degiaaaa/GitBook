@@ -23,7 +23,7 @@ data.head()
 ```
 You can find the detailed information about the columns on kaggle, additionaly to the next table:  
 ![https://www.kaggle.com/laotse/credit-risk-dataset](./img/credit_default_kaggle_data_info.png){ width=100% }<br>
-The important column is `load_status` that determinates the customers credit default and is used as the correct outputs $Y$. All other columns are considered as the input matrix $X$. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the folLowing charts:
+The important column is `load_status` that determinates the customers credit default and is used as the correct outputs $Y$. All other columns are considered as the input matrix $X$. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:
 
 ```{python}
 l = ["person_age", "person_income", "person_emp_length", "loan_amnt", "loan_int_rate", "loan_status", "loan_percent_income", "cb_person_cred_hist_length"]
@@ -31,7 +31,7 @@ data[l].hist(bins=10,figsize=(8,8))
 pyplot.tight_layout()
 pyplot.show()
 ```
-All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding and Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). I will choose the simplest, the Ordinal Encoding, for our dataset. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
+All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
 ```{python}
 data = data.replace({"Y": 1, "N":0})
 data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
@@ -50,7 +50,7 @@ def NormalizeData(np_arr):
   return(np_arr)
 ```
 
-Now do we need to split the given data in a training set and a test set, convert the pandas dataframe to a numpy array and normalize it:
+Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:
 ```{python}
 training_n = 2000
 X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
@@ -59,7 +59,8 @@ Y_train = data.loc[0:(training_n-1), data.columns == 'loan_status'].to_numpy()
 X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_numpy() )
 Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
 ```
-Now its time to load the created functions from the previews chapters.
+
+Its time to load the created functions from the previews chapters.
 ```{python}
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -114,7 +115,7 @@ def train(X, Y, hidden_layer_neurons, alpha, epochs):
         IN.append(add_ones_to_input(OUT[k-1]))
       OUT.append(forward(x=IN[k], w=W[k]))
       
-    errors.append(Y_train - OUT[-1])
+    errors.append(Y - OUT[-1])
       
     for k in range(len(W)-1,-1, -1):
       grad = backward(IN, OUT, W, Y, grad, k) 
@@ -129,13 +130,14 @@ def test(X_test, W):
     X_test = forward(add_ones_to_input(X_test), W[i])
   return(X_test)
 ```
-The `train()` function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given `X_train` and `Y_train`. The `test()` function only contains the forward pass to get the given output of the NN to evaluate the quality.   
+
+The `train()` function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given `X_train` and `Y_train`. The `test()` function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.   
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:
 ```{python}
 W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = np.array([11,4]), alpha = 0.01, epochs = 20000)
 ```
 
-The return contains multiple values, that are assigned with the `a, b = fun_that_returns_2_vals()` pattern. We can visualize the learning process by calculating the mean-square-error and plotting with the familiar line-chart:
+The return contains multiple values, that are assigned with the `a, b = fun_that_returns_2_vals()` pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:
 ```{python}
 def mean_square_error(error):
   return( 0.5 * np.sum(error ** 2) )
@@ -155,13 +157,14 @@ def plot_error(errors, title):
   
 plot_error(ms_errors_train, "MLP Credit Default")
 ```
-Now its time to test the NN on the never seen `X_test` and `Y_test` dataset.
+
+In the next step its time to test the NN on the never seen `X_test` and `Y_test` dataset.
 ```{python}
 result_test = test(X_test, W_train)
 print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
 ```
 
-Because the Mean Square Error is hard to interpret we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
+Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
 ```{python}
 def classify(Y_approx):
   return( np.round(Y_approx,0) )
@@ -170,14 +173,14 @@ classified_error = Y_test - classify(result_test)
 print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
 
 print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
-print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
+print("Probability of a correct output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
 ```
 
 
-An incredible tool to qualify the result is the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix) from the sklearn package. It splits the results into 4 categories that can be used to qualify the results in to the following table:
+An incredible tool to qualify the result is the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix) from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 ![https://en.wikipedia.org/wiki/Confusion_matrix](./img/confusion_matrix.png){ width=50% }<br>
 
-For example `TP` mean True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
+For example is `TP` short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
 ```{python}
 from sklearn.metrics import confusion_matrix
 confusion_matrix(Y_test, classify(result_test))
@@ -264,7 +267,7 @@ def train(X, Y, hidden_layer_neurons, alpha, epochs):
         IN.append(add_ones_to_input(OUT[k-1]))
       OUT.append(forward(x=IN[k], w=W[k]))
       
-    errors.append(Y_train - OUT[-1])
+    errors.append(Y - OUT[-1])
       
     for k in range(len(W)-1,-1, -1):
       grad = backward(IN, OUT, W, Y, grad, k) 

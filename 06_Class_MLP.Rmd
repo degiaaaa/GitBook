@@ -1,0 +1,8 @@
+
+# Class MLP
+Finally its time to create a class `MLP` that contains all functions from the previews chapters. You can use this class to play arround with some settings and make your own discoveries about the datasets of your choice.
+
+```{python}
+
+```
+

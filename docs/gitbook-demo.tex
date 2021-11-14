@@ -7,7 +7,7 @@
 \title{My First Steps in Neuronal Networks\\
 (Beginners Guide)}
 \author{Axel Roth}
-\date{2021-11-13}
+\date{2021-11-14}
 
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
@@ -120,6 +120,7 @@
   \thm@postskip=\thm@preskip
 }
 \makeatother
+\usepackage{fvextra} \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -140,12 +141,12 @@
 \section{Me}\label{me}}
 
 Hello, my name is Axel Roth and im studding math at a master degree in germany and working half-time in the finance field as something between a data-analyst and a full stack developer. I already got a lot of experience in coding with R and all its features, but i never wrote a line of code in python and i never touched Neuronal Networks bevor. So Why do i want to write a beginners guide in the field of Neuronal Networks in python?\\
-Its simple, at the moment i have a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionally i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
+Its simple, at the moment im having a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionally i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.
 
 \hypertarget{the-book}{%
 \section{The Book}\label{the-book}}
 
-This Book will be more or the less the documentation of my lecture ``Finance Project'' in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.
+This Book will be more or the less the documentation of my lecture in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.
 
 \hypertarget{how-it-works}{%
 \section{How it works}\label{how-it-works}}
@@ -164,8 +165,8 @@ Additionaly im using a fully portable version of R-Studio, R and python. Its nic
 \hypertarget{single-perceptron}{%
 \chapter{Single Perceptron}\label{single-perceptron}}
 
-In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret Vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.\\
-First of all we are starting with the needed parameters, that are explained later:
+In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.\\
+First of all do we start with the necessary parameters, that are explained later:
 
 Number of iterations over all the training dataset := \texttt{epochs}\\
 Learning rate := \(\alpha =\) \texttt{alpha}\\
@@ -180,7 +181,7 @@ step(s)=
 \]
 This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the bias \(\beta\), it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.
 
-The traing dataset is the following:
+The training dataset is the following:
 \[
 \left[
 \begin{array}{cc|c}
@@ -216,17 +217,17 @@ Now that we have all the needed parameters and settings, i can give you a quick 
 \hypertarget{neural-network-basics}{%
 \section{Neural Network Basics}\label{neural-network-basics}}
 
-In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass we are calculating the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass we are analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
+In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass do we calculate the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass do we analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
 Ahh no no ok we have a deeper look into it :)
 
-Whats exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario out of the training dataset, the following:
+What exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario of the training dataset, the following:
 \[
   step(W \cdot x^T_i) = y_i
 \]
-That is the normal approach to use this formula to iterate over all scenarios in the training dataset\ldots{}\\
+This is the normal approach to use this formula to iterate over all scenarios in the training dataset\ldots{}\\
 But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios at the same time.
 
-My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all we need to interpret the new dimensions of \(W\) and \(X\).\\
+My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all do we need to interpret the new dimensions of \(W\) and \(X\).\\
 We have \(X\) as:
 \[
   X = \left[
@@ -239,7 +240,7 @@ We have \(X\) as:
   \right]
 \]
 each row describes the inputs for each neuron in the scenario \(i\).\\
-For the weights \(W\) we have for example:
+For the weights \(W\) do we have for example:
 \[
   W =\left[
   \begin{array}{c}
@@ -248,7 +249,7 @@ For the weights \(W\) we have for example:
   \end{array}
   \right]
 \]
-The new formular looks like this:
+The new formula looks like this:
 \[
   step(X * W) = Y
 \]
@@ -256,15 +257,15 @@ The \(*\) symbol defines a matrix to matrix multiplication. For example if you t
 \[
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 ])
 \]
-and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now we can look at the NN and compare the formula with it:\\
+and \(Y_i,_0\) is the approximated output of the \(i\)-th scenario. Now can we look at the NN and compare the formula with it:\\
 \includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_01_v4.png}
 
-Yes it is the same, its the weighted sum of the inputs and evaluated the activation function with it to calculate the output of the scenario \(i\).
+Yes it is the same, its the weighted sum of the inputs and evaluated the activation function with it, to calculate the output of the scenario \(i\).
 
 \hypertarget{forward-pass}{%
 \section{Forward pass}\label{forward-pass}}
 
-Now we create the so called \texttt{forward()} function in python:
+Now can we create the so called \texttt{forward()} function in python:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -275,7 +276,7 @@ Now we create the so called \texttt{forward()} function in python:
 
 (Numpy provides us with the \texttt{@} symbol to make a matrix to matrix multiplication and the \texttt{.T} to transpose)
 
-Because we want to put one dimensional matrices into the \texttt{step()} function we need to use numpy for the if-else statement:
+Because we want to put one dimensional matrices into the \texttt{step()} function, its necessary to use numpy for the if-else statement:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -284,7 +285,7 @@ Because we want to put one dimensional matrices into the \texttt{step()} functio
 \end{Highlighting}
 \end{Shaded}
 
-Here an small example for the forward pass:
+In the next step will we create an small example for the forward pass:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -311,12 +312,12 @@ Here an small example for the forward pass:
 ##  [0]]
 \end{verbatim}
 
-And these are all the generated outputs of our NN over all scenarios. Now we need to calculate the error and adjust the weights accordingly.
+And these are all the generated outputs of our NN over all scenarios. Now do we need to calculate the error and adjust the weights accordingly.
 
 \hypertarget{backward-pass}{%
 \section{backward pass}\label{backward-pass}}
 
-To adjust the weights in a single Perceptron, we need the Delta-Rule:
+We need the Delta-Rule to adjust the weights in a single Perceptron:
 \[
   W(t+1) = W(t) + \Delta W(t)
 \]
@@ -324,7 +325,7 @@ with
 \[
   \Delta W(t) = \alpha \cdot X^{T} * (Y - \hat{Y})
 \]
-and \(\hat{Y}\) is the output of the NN.
+and \(\hat{Y}\) is the output of the NN. Translatet to code it is:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -333,7 +334,7 @@ and \(\hat{Y}\) is the output of the NN.
 \end{Highlighting}
 \end{Shaded}
 
-with the result of the forward pass and example data we have the following:
+With the result of the forward pass and and the correct outputs, do we have the following:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -354,12 +355,12 @@ with the result of the forward pass and example data we have the following:
 ##  [0.22]]
 \end{verbatim}
 
-and this is the new weight.
+and these are the new weight.
 
 \hypertarget{single-perceptron-1}{%
 \section{Single Perceptron}\label{single-perceptron-1}}
 
-Now we want to do the same process multiple times, to train the NN:
+Now do we want to do the same process multiple times, to train the NN:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -391,9 +392,9 @@ Now we want to do the same process multiple times, to train the NN:
 \end{Highlighting}
 \end{Shaded}
 
-The KNN is trained. Now we want to look at the errors of each epoch. We want to measure the mean-square-error with the following formula:
+The KNN is trained. In the next step do we analyze the errors of each epoch. The best way to consider all the errors of each scenario is to measure the mean-square-error with the following formula:
 \[
-  Error_i = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
+  Errors = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 \]
 or as python code:
 
@@ -404,7 +405,7 @@ or as python code:
 \end{Highlighting}
 \end{Shaded}
 
-Now we need to calculate the mean-square-error for each element in the list \texttt{errors} which is made with \texttt{map()}:
+Now do we need to calculate the mean-square-error for each element in the list \texttt{errors} which can be performed with \texttt{map()}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -434,7 +435,7 @@ To plot the errors, im using the following function:
 
 \includegraphics{gitbook-demo_files/figure-latex/0_9-1.pdf}
 
-If you survived until now, you have learned how you can program a single Perceptron!
+If you survived until now, you have learned how to program a single Perceptron!
 
 \hypertarget{appendix-complete-code}{%
 \section{Appendix (complete code)}\label{appendix-complete-code}}
@@ -523,7 +524,7 @@ with \(\beta = 1\) and that is just the right \(\beta\) for the given training d
 \hypertarget{generalising-the-bias}{%
 \section{Generalising the Bias}\label{generalising-the-bias}}
 
-That is why we now generalise the weighted sum step by step. First we generalise the activation function:
+First of all do we need to generalise the use of the bias, stating with the generalisation of the activation function:
 \[ 
 step(s)= 
 \begin{cases}
@@ -531,20 +532,19 @@ step(s)=
     0,& s < 0
 \end{cases}
 \]
-Now we can list it in the weighted sum:
+Now can we list it in the weighted sum:
 \[
   step(X * W - \beta) = Y
 \]
-But we have the same problem as previews, because we need to specify the \(\beta\) explicit. To add it to the training process we add a column with ones on the right side of \(X\) and add the \(-\beta\) to the last row of \(W\). The output of one scenario is now caluclated as the following:
+But we have the same problem as previews, because we need to specify the \(\beta\) explicit. Adding the bias to the training process is done by adding ones on the right side of the \(X\) matrix and adding the negative bias to the last row of \(W\). The output of one scenario is calculated as the following:
 \[
   Y_i,_0 = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 + X_i,_2 \cdot W_2,_0]) = step([X_i,_0 \cdot W_0,_0 + X_i,_1 \cdot W_1,_0 - \beta])
 \]
-Furthermore because the \(W\) is holding the \(\beta\), it now gets re-adjusted in the backward pass so it is involved in the training process. Thats why we now generate a random number for it, because it gets corrected anyway.
+The resulting NN includes the bias into the re-adjusting process of the backward pass, because of that we will generate a random number for the bias that will be corrected anyway.
 
 Now we have a NN that looks like all the other pictures of a single Perceptron in the internet:\\
-\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_02.png}
-
-As python code we did the following:
+\includegraphics[width=0.5\textwidth,height=\textheight]{./img/NN_02.png}\\
+The same step can be made with the following python code:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -561,10 +561,13 @@ As python code we did the following:
 \NormalTok{  [}\FloatTok{0.2}\NormalTok{]}
 \NormalTok{])}
 \NormalTok{W }\OperatorTok{=}\NormalTok{ np.append(W, }\OperatorTok{{-}}\NormalTok{np.array([np.random.random(}\BuiltInTok{len}\NormalTok{(W[}\DecValTok{0}\NormalTok{]))]).T, axis}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"X: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, X)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"W: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, W)}
 \end{Highlighting}
 \end{Shaded}
 
-We added \(-5\) to the \(X\) matrix to simulate the problem of shifted data, added ones on the left side of \(X\) and added negative random numbers between \((0,1)\) to the weights. Yes, if you would have a clue, what \(\beta\) would be great for the given problem, its better to choose it explicit. The new problem needs more epochs, because it needs to find a good \(\beta\) by it self.
+We added \(-5\) to the \(X\) matrix to simulate the problem of shifted data, added ones on the left side of \(X\) and added negative random numbers in \((0,1)\) to the weights. Yes, if you would have a clue, what \(\beta\) would be great for the given problem, its better to choose it explicit. The new NN is slower, because it needs to find a good \(\beta\) by it self.
 
 \hypertarget{appendix-complete-code-1}{%
 \section{Appendix (complete code)}\label{appendix-complete-code-1}}
@@ -644,11 +647,11 @@ The complete code is the following:
 \hypertarget{multi-layer-perceptrons-mlp}{%
 \chapter{Multi Layer Perceptrons (MLP)}\label{multi-layer-perceptrons-mlp}}
 
-In a multi layer Perceptron you have multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalise some definitions, to support this behavior. What we want to do is the NN of the following picture:\\
+A multi layer Perceptron contains multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalize some definitions, to support this behavior. What we want to do is the NN of the following picture:\\
 \includegraphics[width=1\textwidth,height=\textheight]{./img/NN_03_new.png}
 
 It is my own definition of layers, because i thought, it would be better to display layers like shown in the picture, to take the step from \(n\) to \(n+1\) hidden layers more easy. You can see that each layer has the same process in the forward pass by evaluating \(f(IN^{layer} \cdot W^{layer}) = OUT^{layer}\) and just passing the result to the next layer like \(OUT^{layer} = IN^{layer+1}\), with \(f\) as the chosen activation function.\\
-We will choose the sigmoid function as the activation function \(f\), because it has an easy deviation \(f^`\) for the backward pass and its very close to the behavior of the heavyside function.
+We will choose the sigmoid function as the activation function \(f\), because it has an easy deviation \(f^`\) for the backward pass and its very close to the behavior of the heavyside function with an output between 0 and 1.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -660,7 +663,7 @@ We will choose the sigmoid function as the activation function \(f\), because it
 \end{Highlighting}
 \end{Shaded}
 
-Additionaly will we choose the XOR-Gate as training dataset and generate the weights in a very generic approach like the following code shows:
+Additionaly will we choose the XOR-Gate as training dataset and generate random weights in a very generic approach:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -703,17 +706,17 @@ Additionaly will we choose the XOR-Gate as training dataset and generate the wei
 
 \begin{verbatim}
 ## W[0]: 
-##  [[0.68823775 0.65188743]
-##  [0.54435202 0.62033879]
-##  [0.09792154 0.37793845]]
+##  [[0.14641446 0.24580899]
+##  [0.36141235 0.50416487]
+##  [0.99357406 0.23792218]]
 ## W[1]: 
-##  [[0.93457527]
-##  [0.89860947]
-##  [0.73682695]]
+##  [[0.35047968]
+##  [0.46937943]
+##  [0.62655433]]
 \end{verbatim}
 
-The input and output layer neurons are calculated from the training dataset and the neurons from the hidden layers are generated with the \texttt{hidden\_layer\_neurons}. For example can we generate two hidden layers with 4 and 2 neurons by \texttt{hidden\_layer\_neurons\ =\ np.array({[}4,2{]})}. I didnt explicitly choose the bias because it gets corrected anyway.\\
-Now we need to define a helper function to add the biases, on the last column of the inputs, with:
+The input and output layer neurons are calculated from the training dataset and the neurons for the hidden layers are generated with the \texttt{hidden\_layer\_neurons} array. For example, can we generate two hidden layers with 4 and 2 neurons by \texttt{hidden\_layer\_neurons\ =\ np.array({[}4,2{]})}. I didnt explicitly choose the bias because it gets corrected anyway.\\
+Now do we need to define a helper function to add the biases, on the last column of the inputs, with:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -725,7 +728,7 @@ Now we need to define a helper function to add the biases, on the last column of
 \hypertarget{forward-pass-1}{%
 \section{forward pass}\label{forward-pass-1}}
 
-The new forward function looks exactly like in the single Perceptron:
+The structur of the new forward function looks exactly like in the single Perceptron:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -757,10 +760,10 @@ Now we have everything to calculate the forward pass of the NN from above with t
 \end{Shaded}
 
 \begin{verbatim}
-## array([[-0.85323323],
-##        [ 0.11858954],
-##        [ 0.11495934],
-##        [-0.90289922]])
+## array([[-0.75856162],
+##        [ 0.22738294],
+##        [ 0.23460722],
+##        [-0.77819776]])
 \end{verbatim}
 
 Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)
@@ -768,7 +771,7 @@ Thats all! We calculated the forward pass in a very generic way for the NN with 
 \hypertarget{backward-pass-1}{%
 \section{backward pass}\label{backward-pass-1}}
 
-We will adjust the weights with the backpropagation algorithm what is a special case of the descent gradient algorithm. In the output layer is it done by calculating the sensitives of the outputs according to the activation function multiplied with the error that occured. On all other layers its calculated by passing backwards the earlier calculated gradient splitted up on each neuron by the previes weights and multiplied by the sensitivity of the outputs of that layer according to the activation function. The formula is the following:
+We will adjust the weights with the backpropagation algorithm that is a special case of the descent gradient algorithm. In the output layer is it done by calculating the sensitives of the outputs according to the activation function multiplied with the error that occurred. On all other layers its calculated by passing backwards the earlier calculated gradient, splitted up on each neuron by the previews weights and multiplied by the sensitivity of the outputs of that layer according to the activation function. The formula is the following:
 \[
   grad^i= 
 \begin{cases}
@@ -776,8 +779,8 @@ We will adjust the weights with the backpropagation algorithm what is a special 
     f^`(OUT^i) \cdot (grad^{i+1} * \widetilde{W}^{i+1\ T}),& \text{else}
 \end{cases}
 \]
-with \(\widetilde{W}\) as the weights of that layer without the connection to the bias neuron, because it has no connection to the previews neurons. In our datastructur its done by removing the last row.\\
-With the example from above is it done by the following lines of code:
+with \(\widetilde{W}\) as the weights of the layer \(i\) without the connection to the bias neuron, because it has no connection to the previews neurons. In our datastructur its done by removing the last row.\\
+With the example from above, it can be done with:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -793,7 +796,7 @@ With the example from above is it done by the following lines of code:
 \end{Highlighting}
 \end{Shaded}
 
-Now you can look for example at the gradient of the last layer and on the direction it is shown:
+Now you can look, for example, at the gradient of the last layer and in which direction it is shown:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -810,23 +813,23 @@ Now you can look for example at the gradient of the last layer and on the direct
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.85323323]
-##  [0.88141046]
-##  [0.88504066]
-##  [0.90289922]]
+##  [[0.75856162]
+##  [0.77261706]
+##  [0.76539278]
+##  [0.77819776]]
 ## grad: 
-##  [[-0.10684723]
-##  [ 0.0123957 ]
-##  [ 0.01169639]
-##  [-0.07915918]]
+##  [[-0.13892744]
+##  [ 0.03994662]
+##  [ 0.04212764]
+##  [-0.13432161]]
 \end{verbatim}
 
 You can see that the gradient shows in the direction that would drift the output \(OUT\) closer to the desired output \(Y\). That is exactly what the gradient descent algorithm is doing.\\
-Now do we need to adjust the weights with the gradients and the learningrate \(\alpha\) according to the direction of the gradients with the following formula:
+In the next step do we need to adjust the weights with the gradients and the learningrate \(\alpha\) according to the direction of the gradients with the following formula:
 \[
   W^i_{new} = W^i_{old} + \alpha \cdot ( IN^{i\ T} * grad^i) 
 \]
-In the example from above we have the following results for the adjusted weights after the first iteration:
+In the example from above do we have the following results for the adjusted weights after the first epoch:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -837,7 +840,7 @@ In the example from above we have the following results for the adjusted weights
 \end{Highlighting}
 \end{Shaded}
 
-This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons an done output neuron. It is simple to use the given code from above to create a more generic NN for dynamic hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
+This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons and one output neuron. It is simple to use the given code from above to create a more generic NN for dynamic number of hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
 
 \hypertarget{appendix-complete-code-2}{%
 \section{Appendix (complete code)}\label{appendix-complete-code-2}}
@@ -959,9 +962,11 @@ First all do we need to load the csv via pandas and analyse it:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.float\_format\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}}\SpecialCharTok{\{:.2f\}}\StringTok{\textquotesingle{}}\NormalTok{.}\BuiltInTok{format}\NormalTok{)}
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
 \ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
 \ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\NormalTok{pd.set\_option(}\StringTok{\textquotesingle{}display.float\_format\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}}\SpecialCharTok{\{:.2f\}}\StringTok{\textquotesingle{}}\NormalTok{.}\BuiltInTok{format}\NormalTok{)}
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
 
 \NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
 
@@ -982,7 +987,7 @@ First all do we need to load the csv via pandas and analyse it:
 
 You can find the detailed information about the columns on kaggle, additionaly to the next table:\\
 \includegraphics[width=1\textwidth,height=\textheight]{./img/credit_default_kaggle_data_info.png}
-The important column is \texttt{load\_status} that determinates the customers credit default and is used as the correct outputs \(Y\). All other columns are considered as the input matrix \(X\). First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the folLowing charts:
+The important column is \texttt{load\_status} that determinates the customers credit default and is used as the correct outputs \(Y\). All other columns are considered as the input matrix \(X\). First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1006,7 +1011,7 @@ The important column is \texttt{load\_status} that determinates the customers cr
 \end{verbatim}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-5-7.pdf}
-All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding and Embedding (more information can be found \href{https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/}{here}). I will choose the simplest, the Ordinal Encoding, for our dataset. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
+All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found \href{https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/}{here}). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1041,7 +1046,7 @@ Additionaly its important to normalize the data which leads to more stability an
 \end{Highlighting}
 \end{Shaded}
 
-Now do we need to split the given data in a training set and a test set, convert the pandas dataframe to a numpy array and normalize it:
+Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1054,7 +1059,7 @@ Now do we need to split the given data in a training set and a test set, convert
 \end{Highlighting}
 \end{Shaded}
 
-Now its time to load the created functions from the previews chapters.
+Its time to load the created functions from the previews chapters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1116,7 +1121,7 @@ We are creating a simple wrapper for the training and the test phase.
 \NormalTok{        IN.append(add\_ones\_to\_input(OUT[k}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]))}
 \NormalTok{      OUT.append(forward(x}\OperatorTok{=}\NormalTok{IN[k], w}\OperatorTok{=}\NormalTok{W[k]))}
       
-\NormalTok{    errors.append(Y\_train }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+\NormalTok{    errors.append(Y }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
       
     \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{):}
 \NormalTok{      grad }\OperatorTok{=}\NormalTok{ backward(IN, OUT, W, Y, grad, k) }
@@ -1133,7 +1138,7 @@ We are creating a simple wrapper for the training and the test phase.
 \end{Highlighting}
 \end{Shaded}
 
-The \texttt{train()} function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given \texttt{X\_train} and \texttt{Y\_train}. The \texttt{test()} function only contains the forward pass to get the given output of the NN to evaluate the quality.\\
+The \texttt{train()} function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given \texttt{X\_train} and \texttt{Y\_train}. The \texttt{test()} function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.\\
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:
 
 \begin{Shaded}
@@ -1142,7 +1147,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 \end{Highlighting}
 \end{Shaded}
 
-The return contains multiple values, that are assigned with the \texttt{a,\ b\ =\ fun\_that\_returns\_2\_vals()} pattern. We can visualize the learning process by calculating the mean-square-error and plotting with the familiar line-chart:
+The return contains multiple values, that are assigned with the \texttt{a,\ b\ =\ fun\_that\_returns\_2\_vals()} pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1167,7 +1172,8 @@ The return contains multiple values, that are assigned with the \texttt{a,\ b\ =
 \end{Shaded}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-12-9.pdf}
-Now its time to test the NN on the never seen \texttt{X\_test} and \texttt{Y\_test} dataset.
+
+In the next step its time to test the NN on the never seen \texttt{X\_test} and \texttt{Y\_test} dataset.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1177,10 +1183,10 @@ Now its time to test the NN on the never seen \texttt{X\_test} and \texttt{Y\_te
 \end{Shaded}
 
 \begin{verbatim}
-## Mean Square error over all testdata:  2944.4912492971584
+## Mean Square error over all testdata:  2135.358966722297
 \end{verbatim}
 
-Because the Mean Square Error is hard to interpret we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
+Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1191,20 +1197,20 @@ Because the Mean Square Error is hard to interpret we will classify the output o
 \BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all classified testdata: "}\NormalTok{, mean\_square\_error(classified\_error))}
 
 \BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
-\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a correct output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Mean Square error over all classified testdata:  3361.0
-## Probability of a wrong output:  21.98 %
-## Probability of a right output:  78.02 %
+## Mean Square error over all classified testdata:  2458.5
+## Probability of a wrong output:  16.08 %
+## Probability of a correct output:  83.92 %
 \end{verbatim}
 
-An incredible tool to qualify the result is the \href{https://en.wikipedia.org/wiki/Confusion_matrix}{confusion matrix} from the sklearn package. It splits the results into 4 categories that can be used to qualify the results in to the following table:
+An incredible tool to qualify the result is the \href{https://en.wikipedia.org/wiki/Confusion_matrix}{confusion matrix} from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 \includegraphics[width=0.5\textwidth,height=\textheight]{./img/confusion_matrix.png}
 
-For example \texttt{TP} mean True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
+For example is \texttt{TP} short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1214,8 +1220,8 @@ For example \texttt{TP} mean True-Positiv which means that the prediction was Tr
 \end{Shaded}
 
 \begin{verbatim}
-## array([[19968,  4338],
-##        [ 2384,  3891]], dtype=int64)
+## array([[21463,  2843],
+##        [ 2074,  4201]], dtype=int64)
 \end{verbatim}
 
 \hypertarget{appendix-complete-code-3}{%
@@ -1300,7 +1306,7 @@ For example \texttt{TP} mean True-Positiv which means that the prediction was Tr
 \NormalTok{        IN.append(add\_ones\_to\_input(OUT[k}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]))}
 \NormalTok{      OUT.append(forward(x}\OperatorTok{=}\NormalTok{IN[k], w}\OperatorTok{=}\NormalTok{W[k]))}
       
-\NormalTok{    errors.append(Y\_train }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+\NormalTok{    errors.append(Y }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
       
     \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{):}
 \NormalTok{      grad }\OperatorTok{=}\NormalTok{ backward(IN, OUT, W, Y, grad, k) }
@@ -1369,6 +1375,418 @@ For example \texttt{TP} mean True-Positiv which means that the prediction was Tr
 ## array([[21463,  2843],
 ##        [ 2074,  4201]], dtype=int64)
 \end{verbatim}
+
+\hypertarget{effect-of-batch-size}{%
+\chapter{Effect of batch size}\label{effect-of-batch-size}}
+
+First of all do we need to differentiate between the following definitions that i found \href{https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks}{here}:\\
+* one epoch := one forward pass and backward pass of all the training examples.\\
+* batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.\\
+* number of iterations := number of passes, each pass using {[}batch size{]} number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).
+
+In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?
+
+Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior \href{https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu}{here}. The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found \href{https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e}{here}. He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.
+
+All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.
+
+\hypertarget{impact-of-diffrent-hyperparameters}{%
+\section{Impact of diffrent hyperparameters}\label{impact-of-diffrent-hyperparameters}}
+
+First of all do we add a \texttt{batch\_size} parameter to the preview \texttt{train()} function and generate random batches that all contain distinct random integers in each batch. We will use the following function to generate the random batches:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ confusion\_matrix}
+\ImportTok{import}\NormalTok{ math }\ImportTok{as}\NormalTok{ ma}
+\ImportTok{import}\NormalTok{ time}
+\NormalTok{np.warnings.filterwarnings(}\StringTok{\textquotesingle{}ignore\textquotesingle{}}\NormalTok{, category}\OperatorTok{=}\NormalTok{np.VisibleDeprecationWarning) }
+
+\KeywordTok{def}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size):}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ np.arange(full\_batch\_size)}
+\NormalTok{  np.random.shuffle(batches)}
+  \ControlFlowTok{return}\NormalTok{(np.array\_split(batches, ma.ceil(full\_batch\_size}\OperatorTok{/}\NormalTok{batch\_size)))}
+
+\NormalTok{generate\_random\_batches(}\DecValTok{3}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [array([0, 8, 9]), array([4, 1, 5]), array([6, 2]), array([3, 7])]
+\end{verbatim}
+
+Now do we need to adjust the \texttt{train()} function to iterate over all batches:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs, batch\_size):}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
+\NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X))}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(epochs):}
+\NormalTok{    error\_temp }\OperatorTok{=}\NormalTok{ np.array([])}
+    \ControlFlowTok{for}\NormalTok{ z }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(batches)):}
+\NormalTok{      IN }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      OUT }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      grad }\OperatorTok{=}\NormalTok{ [}\VariableTok{None}\NormalTok{]}\OperatorTok{*}\BuiltInTok{len}\NormalTok{(W)}
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+        \ControlFlowTok{if}\NormalTok{ k}\OperatorTok{==}\DecValTok{0}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(X[batches[z],:]))}
+        \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(OUT[k}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]))}
+\NormalTok{        OUT.append(forward(x}\OperatorTok{=}\NormalTok{IN[k], w}\OperatorTok{=}\NormalTok{W[k]))}
+        
+\NormalTok{      error\_temp }\OperatorTok{=}\NormalTok{ np.append(error\_temp, Y[batches[z],:] }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{):}
+\NormalTok{        grad }\OperatorTok{=}\NormalTok{ backward(IN, OUT, W, Y[batches[z],:], grad, k) }
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{        W[k] }\OperatorTok{=}\NormalTok{ W[k] }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ (IN[k].T }\OperatorTok{@}\NormalTok{ grad[k])}
+\NormalTok{    errors.append(error\_temp)}
+    
+  \ControlFlowTok{return}\NormalTok{ W, errors}
+\end{Highlighting}
+\end{Shaded}
+
+And all the previes created functions, dataloading and transformations are:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.replace(\{}\StringTok{"Y"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"N"}\NormalTok{:}\DecValTok{0}\NormalTok{\})}
+\NormalTok{data[}\StringTok{"person\_home\_ownership"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"person\_home\_ownership"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}OWN\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}RENT\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}MORTGAGE\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}OTHER\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{\})}
+\NormalTok{data[}\StringTok{"loan\_intent"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_intent"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}PERSONAL\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}EDUCATION\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}MEDICAL\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}VENTURE\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}HOMEIMPROVEMENT\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{,}\StringTok{\textquotesingle{}DEBTCONSOLIDATION\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{\})}
+\NormalTok{data[}\StringTok{"loan\_grade"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_grade"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}E\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{, }\StringTok{\textquotesingle{}F\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{, }\StringTok{\textquotesingle{}G\textquotesingle{}}\NormalTok{:}\DecValTok{7}\NormalTok{\})}
+
+\KeywordTok{def}\NormalTok{ NormalizeData(np\_arr):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(np\_arr.shape[}\DecValTok{1}\NormalTok{]):}
+\NormalTok{    np\_arr[:,i] }\OperatorTok{=}\NormalTok{ (np\_arr[:,i] }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i])) }\OperatorTok{/}\NormalTok{ (np.}\BuiltInTok{max}\NormalTok{(np\_arr[:,i]) }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i]))}
+  \ControlFlowTok{return}\NormalTok{(np\_arr)}
+
+\NormalTok{training\_n }\OperatorTok{=} \DecValTok{2000}
+\NormalTok{X\_train }\OperatorTok{=}\NormalTok{ NormalizeData( data.loc[}\DecValTok{0}\NormalTok{:(training\_n}\OperatorTok{{-}}\DecValTok{1}\NormalTok{), data.columns }\OperatorTok{!=} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy() )}
+\NormalTok{Y\_train }\OperatorTok{=}\NormalTok{ data.loc[}\DecValTok{0}\NormalTok{:(training\_n}\OperatorTok{{-}}\DecValTok{1}\NormalTok{), data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()}
+
+\NormalTok{X\_test }\OperatorTok{=}\NormalTok{ NormalizeData( data.loc[training\_n:, data.columns }\OperatorTok{!=} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy() )}
+\NormalTok{Y\_test }\OperatorTok{=}\NormalTok{ data.loc[training\_n:, data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()}
+
+
+\KeywordTok{def}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons):}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ []}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons)}\OperatorTok{+}\DecValTok{1}\NormalTok{):}
+    \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{==} \DecValTok{0}\NormalTok{: }\CommentTok{\# first layer}
+\NormalTok{      W.append(np.random.random((n\_input}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+    \ControlFlowTok{elif}\NormalTok{ i }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons): }\CommentTok{\# last layer}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, n\_output)))}
+    \ControlFlowTok{else}\NormalTok{: }\CommentTok{\# middle layers}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+  \ControlFlowTok{return}\NormalTok{(W)}
+
+\KeywordTok{def}\NormalTok{ add\_ones\_to\_input(x):}
+  \ControlFlowTok{return}\NormalTok{(np.append(x, np.array([np.ones(}\BuiltInTok{len}\NormalTok{(x))]).T, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))}
+
+
+\KeywordTok{def}\NormalTok{ sigmoid(x):}
+  \ControlFlowTok{return} \FloatTok{1.0} \OperatorTok{/}\NormalTok{ (}\FloatTok{1.0} \OperatorTok{+}\NormalTok{ np.exp(}\OperatorTok{{-}}\NormalTok{x))}
+
+\KeywordTok{def}\NormalTok{ deriv\_sigmoid(x):}
+  \ControlFlowTok{return}\NormalTok{ x }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ x)}
+
+
+\KeywordTok{def}\NormalTok{ forward(x, w):}
+  \ControlFlowTok{return}\NormalTok{( sigmoid(x }\OperatorTok{@}\NormalTok{ w) )}
+
+\KeywordTok{def}\NormalTok{ backward(IN, OUT, W, Y, grad, k):}
+  \ControlFlowTok{if}\NormalTok{ k }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(grad)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{ (Y}\OperatorTok{{-}}\NormalTok{OUT[k])}
+  \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{(grad[k}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T)}
+  \ControlFlowTok{return}\NormalTok{(grad)}
+
+
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
+
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\DecValTok{0}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.1}\NormalTok{)}
+\NormalTok{  pyplot.show()}
+  
+\KeywordTok{def}\NormalTok{ test(X\_test, W):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{    X\_test }\OperatorTok{=}\NormalTok{ forward(add\_ones\_to\_input(X\_test), W[i])}
+  \ControlFlowTok{return}\NormalTok{(X\_test)}
+  
+\KeywordTok{def}\NormalTok{ classify(Y\_approx):}
+  \ControlFlowTok{return}\NormalTok{( np.}\BuiltInTok{round}\NormalTok{(Y\_approx,}\DecValTok{0}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+Everything is loaded and set up. Now can we compare the time and the error for different \texttt{batch\_size}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# full batch size}
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+
+\NormalTok{start }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X }\OperatorTok{=}\NormalTok{ X\_train, Y }\OperatorTok{=}\NormalTok{ Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{]), alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{5000}\NormalTok{, batch\_size }\OperatorTok{=} \DecValTok{2000}\NormalTok{)}
+\NormalTok{time\_diff }\OperatorTok{=}\NormalTok{ time.time() }\OperatorTok{{-}}\NormalTok{ start}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Time to train the NN: "}\NormalTok{, time\_diff)}
+
+\NormalTok{ms\_errors\_train }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors\_train)))}
+\NormalTok{plot\_error(ms\_errors\_train, }\StringTok{"MLP Credit Default"}\NormalTok{)}
+\NormalTok{result\_test }\OperatorTok{=}\NormalTok{ test(X\_test, W\_train)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all testdata: "}\NormalTok{, mean\_square\_error(Y\_test }\OperatorTok{{-}}\NormalTok{ result\_test))}
+
+\NormalTok{classified\_error }\OperatorTok{=}\NormalTok{ Y\_test }\OperatorTok{{-}}\NormalTok{ classify(result\_test)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all classified testdata: "}\NormalTok{, mean\_square\_error(classified\_error))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+
+
+\NormalTok{confusion\_matrix(Y\_test, classify(result\_test))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Time to train the NN:  7.66628360748291
+\end{verbatim}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-20-13.pdf}
+
+\begin{verbatim}
+## Mean Square error over all testdata:  2402.2283244767077
+## Mean Square error over all classified testdata:  2932.0
+## Probability of a wrong output:  19.18 %
+## Probability of a right output:  80.82 %
+## array([[20193,  4113],
+##        [ 1751,  4524]], dtype=int64)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# batch size = 100}
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+
+\NormalTok{start }\OperatorTok{=}\NormalTok{ time.time()}
+\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X }\OperatorTok{=}\NormalTok{ X\_train, Y }\OperatorTok{=}\NormalTok{ Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{]), alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{5000}\NormalTok{, batch\_size }\OperatorTok{=} \DecValTok{100}\NormalTok{)}
+\NormalTok{time\_diff }\OperatorTok{=}\NormalTok{ time.time() }\OperatorTok{{-}}\NormalTok{ start}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Time to train the NN: "}\NormalTok{, time\_diff)}
+
+\NormalTok{ms\_errors\_train }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors\_train)))}
+\NormalTok{plot\_error(ms\_errors\_train, }\StringTok{"MLP Credit Default"}\NormalTok{)}
+\NormalTok{result\_test }\OperatorTok{=}\NormalTok{ test(X\_test, W\_train)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all testdata: "}\NormalTok{, mean\_square\_error(Y\_test }\OperatorTok{{-}}\NormalTok{ result\_test))}
+
+\NormalTok{classified\_error }\OperatorTok{=}\NormalTok{ Y\_test }\OperatorTok{{-}}\NormalTok{ classify(result\_test)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all classified testdata: "}\NormalTok{, mean\_square\_error(classified\_error))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+
+
+\NormalTok{confusion\_matrix(Y\_test, classify(result\_test))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Time to train the NN:  22.562650203704834
+\end{verbatim}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-21-15.pdf}
+
+\begin{verbatim}
+## Mean Square error over all testdata:  2210.3693145823286
+## Mean Square error over all classified testdata:  2559.5
+## Probability of a wrong output:  16.74 %
+## Probability of a right output:  83.26 %
+## array([[21396,  2910],
+##        [ 2209,  4066]], dtype=int64)
+\end{verbatim}
+
+We can see that the full batch size is much faster than the smaller one, but the smaller batch size has a smaller error. Maybe the perfect batch size depends on the problem itself. If you have a low dimensional input matrix and need to get a fast solution, its better to go with full batch size. If you have high dimensional input its not possible to use a full batch size, because your ram is jumping off. I think its the best to analyze the underlying data and select a suitable batch size for it. Maybe some situations will need a dynamic batch size, that shrinks over time, to get the best results, like in the blog post i mentioned at the start of the chapter.
+
+\hypertarget{appendix-complete-code-4}{%
+\section{Appendix (complete code)}\label{appendix-complete-code-4}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ confusion\_matrix}
+\ImportTok{import}\NormalTok{ math }\ImportTok{as}\NormalTok{ ma}
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+\NormalTok{np.warnings.filterwarnings(}\StringTok{\textquotesingle{}ignore\textquotesingle{}}\NormalTok{, category}\OperatorTok{=}\NormalTok{np.VisibleDeprecationWarning) }
+
+\NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.replace(\{}\StringTok{"Y"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"N"}\NormalTok{:}\DecValTok{0}\NormalTok{\})}
+
+\NormalTok{data[}\StringTok{"person\_home\_ownership"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"person\_home\_ownership"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}OWN\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}RENT\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}MORTGAGE\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}OTHER\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{\})}
+\NormalTok{data[}\StringTok{"loan\_intent"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_intent"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}PERSONAL\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}EDUCATION\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}MEDICAL\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}VENTURE\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}HOMEIMPROVEMENT\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{,}\StringTok{\textquotesingle{}DEBTCONSOLIDATION\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{\})}
+\NormalTok{data[}\StringTok{"loan\_grade"}\NormalTok{] }\OperatorTok{=}\NormalTok{ data[}\StringTok{"loan\_grade"}\NormalTok{].replace(\{}\StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{:}\DecValTok{1}\NormalTok{, }\StringTok{\textquotesingle{}B\textquotesingle{}}\NormalTok{:}\DecValTok{2}\NormalTok{, }\StringTok{\textquotesingle{}C\textquotesingle{}}\NormalTok{:}\DecValTok{3}\NormalTok{, }\StringTok{\textquotesingle{}D\textquotesingle{}}\NormalTok{:}\DecValTok{4}\NormalTok{, }\StringTok{\textquotesingle{}E\textquotesingle{}}\NormalTok{:}\DecValTok{5}\NormalTok{, }\StringTok{\textquotesingle{}F\textquotesingle{}}\NormalTok{:}\DecValTok{6}\NormalTok{, }\StringTok{\textquotesingle{}G\textquotesingle{}}\NormalTok{:}\DecValTok{7}\NormalTok{\})}
+
+
+\KeywordTok{def}\NormalTok{ NormalizeData(np\_arr):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(np\_arr.shape[}\DecValTok{1}\NormalTok{]):}
+\NormalTok{    np\_arr[:,i] }\OperatorTok{=}\NormalTok{ (np\_arr[:,i] }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i])) }\OperatorTok{/}\NormalTok{ (np.}\BuiltInTok{max}\NormalTok{(np\_arr[:,i]) }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i]))}
+  \ControlFlowTok{return}\NormalTok{(np\_arr)}
+
+\NormalTok{training\_n }\OperatorTok{=} \DecValTok{2000}
+\NormalTok{X\_train }\OperatorTok{=}\NormalTok{ NormalizeData( data.loc[}\DecValTok{0}\NormalTok{:(training\_n}\OperatorTok{{-}}\DecValTok{1}\NormalTok{), data.columns }\OperatorTok{!=} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy() )}
+\NormalTok{Y\_train }\OperatorTok{=}\NormalTok{ data.loc[}\DecValTok{0}\NormalTok{:(training\_n}\OperatorTok{{-}}\DecValTok{1}\NormalTok{), data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()}
+
+\NormalTok{X\_test }\OperatorTok{=}\NormalTok{ NormalizeData( data.loc[training\_n:, data.columns }\OperatorTok{!=} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy() )}
+\NormalTok{Y\_test }\OperatorTok{=}\NormalTok{ data.loc[training\_n:, data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()}
+
+
+
+\KeywordTok{def}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons):}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ []}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons)}\OperatorTok{+}\DecValTok{1}\NormalTok{):}
+    \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{==} \DecValTok{0}\NormalTok{: }\CommentTok{\# first layer}
+\NormalTok{      W.append(np.random.random((n\_input}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+    \ControlFlowTok{elif}\NormalTok{ i }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons): }\CommentTok{\# last layer}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, n\_output)))}
+    \ControlFlowTok{else}\NormalTok{: }\CommentTok{\# middle layers}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+  \ControlFlowTok{return}\NormalTok{(W)}
+
+\KeywordTok{def}\NormalTok{ add\_ones\_to\_input(x):}
+  \ControlFlowTok{return}\NormalTok{(np.append(x, np.array([np.ones(}\BuiltInTok{len}\NormalTok{(x))]).T, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))}
+
+
+
+\KeywordTok{def}\NormalTok{ sigmoid(x):}
+  \ControlFlowTok{return} \FloatTok{1.0} \OperatorTok{/}\NormalTok{ (}\FloatTok{1.0} \OperatorTok{+}\NormalTok{ np.exp(}\OperatorTok{{-}}\NormalTok{x))}
+
+\KeywordTok{def}\NormalTok{ deriv\_sigmoid(x):}
+  \ControlFlowTok{return}\NormalTok{ x }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ x)}
+
+
+\KeywordTok{def}\NormalTok{ forward(x, w):}
+  \ControlFlowTok{return}\NormalTok{( sigmoid(x }\OperatorTok{@}\NormalTok{ w) )}
+
+\KeywordTok{def}\NormalTok{ backward(IN, OUT, W, Y, grad, k):}
+  \ControlFlowTok{if}\NormalTok{ k }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(grad)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{ (Y}\OperatorTok{{-}}\NormalTok{OUT[k])}
+  \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{(grad[k}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T)}
+  \ControlFlowTok{return}\NormalTok{(grad)}
+
+\KeywordTok{def}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size):}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ np.arange(full\_batch\_size)}
+\NormalTok{  np.random.shuffle(batches)}
+  \ControlFlowTok{return}\NormalTok{(np.array\_split(batches, ma.ceil(full\_batch\_size}\OperatorTok{/}\NormalTok{batch\_size)))}
+
+\KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs, batch\_size):}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
+\NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X))}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(epochs):}
+\NormalTok{    error\_temp }\OperatorTok{=}\NormalTok{ np.array([])}
+    \ControlFlowTok{for}\NormalTok{ z }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(batches)):}
+\NormalTok{      IN }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      OUT }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      grad }\OperatorTok{=}\NormalTok{ [}\VariableTok{None}\NormalTok{]}\OperatorTok{*}\BuiltInTok{len}\NormalTok{(W)}
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+        \ControlFlowTok{if}\NormalTok{ k}\OperatorTok{==}\DecValTok{0}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(X[batches[z],:]))}
+        \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(OUT[k}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]))}
+\NormalTok{        OUT.append(forward(x}\OperatorTok{=}\NormalTok{IN[k], w}\OperatorTok{=}\NormalTok{W[k]))}
+        
+\NormalTok{      error\_temp }\OperatorTok{=}\NormalTok{ np.append(error\_temp, Y[batches[z],:] }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{):}
+\NormalTok{        grad }\OperatorTok{=}\NormalTok{ backward(IN, OUT, W, Y[batches[z],:], grad, k) }
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{        W[k] }\OperatorTok{=}\NormalTok{ W[k] }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ (IN[k].T }\OperatorTok{@}\NormalTok{ grad[k])}
+\NormalTok{    errors.append(error\_temp)}
+    
+  \ControlFlowTok{return}\NormalTok{ W, errors}
+
+
+
+\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X }\OperatorTok{=}\NormalTok{ X\_train, Y }\OperatorTok{=}\NormalTok{ Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{]), alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{2000}\NormalTok{, batch\_size }\OperatorTok{=} \DecValTok{2000}\NormalTok{)}
+
+
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
+
+\NormalTok{ms\_errors\_train }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors\_train)))}
+
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\DecValTok{0}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.1}\NormalTok{)}
+\NormalTok{  pyplot.show()}
+  
+\NormalTok{plot\_error(ms\_errors\_train, }\StringTok{"MLP Credit Default"}\NormalTok{)}
+
+
+
+\KeywordTok{def}\NormalTok{ test(X\_test, W):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{    X\_test }\OperatorTok{=}\NormalTok{ forward(add\_ones\_to\_input(X\_test), W[i])}
+  \ControlFlowTok{return}\NormalTok{(X\_test)}
+  
+
+\NormalTok{result\_test }\OperatorTok{=}\NormalTok{ test(X\_test, W\_train)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all testdata: "}\NormalTok{, mean\_square\_error(Y\_test }\OperatorTok{{-}}\NormalTok{ result\_test))}
+
+
+\KeywordTok{def}\NormalTok{ classify(Y\_approx):}
+  \ControlFlowTok{return}\NormalTok{( np.}\BuiltInTok{round}\NormalTok{(Y\_approx,}\DecValTok{0}\NormalTok{) )}
+
+\NormalTok{classified\_error }\OperatorTok{=}\NormalTok{ Y\_test }\OperatorTok{{-}}\NormalTok{ classify(result\_test)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all classified testdata: "}\NormalTok{, mean\_square\_error(classified\_error))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+
+
+\NormalTok{confusion\_matrix(Y\_test, classify(result\_test))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-22-17.pdf}
+
+\begin{verbatim}
+## Mean Square error over all testdata:  2330.8698549481937
+## Mean Square error over all classified testdata:  2940.0
+## Probability of a wrong output:  19.23 %
+## Probability of a right output:  80.77 %
+## array([[20516,  3790],
+##        [ 2090,  4185]], dtype=int64)
+\end{verbatim}
+
+\hypertarget{class-mlp}{%
+\chapter{Class MLP}\label{class-mlp}}
+
+Finally its time to create a class \texttt{MLP} that contains all functions from the previews chapters. You can use this class to play arround with some settings and make your own discoveries about the datasets of your choice.
 
   \bibliography{book.bib,packages.bib}
 
