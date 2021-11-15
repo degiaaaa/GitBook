@@ -40,7 +40,7 @@ Y = np.array([
 
 n_input = len(X[0])
 n_output = len(Y[0])
-hidden_layer_neurons = np.array([2]) # the 2 means that there is one hidden layer with 2 neurons
+hidden_layer_neurons = [2] # the 2 means that there is one hidden layer with 2 neurons
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -59,7 +59,7 @@ W = generate_weights(n_input, n_output, hidden_layer_neurons)
 print("W[0]: \n", W[0])
 print("W[1]: \n", W[1])
 ```
-The input and output layer neurons are calculated from the training dataset and the neurons for the hidden layers are generated with the `hidden_layer_neurons` array. For example, can we generate two hidden layers with 4 and 2 neurons by `hidden_layer_neurons = np.array([4,2])`. I didnt explicitly choose the bias because it gets corrected anyway.  
+The input and output layer neurons are calculated from the training dataset and the neurons for the hidden layers are generated with the `hidden_layer_neurons` list. For example, can we generate two hidden layers with 4 and 2 neurons by `hidden_layer_neurons = [4,2]`. I didnt explicitly choose the bias because it gets corrected anyway.  
 Now do we need to define a helper function to add the biases, on the last column of the inputs, with:
 ```{python 2_3}
 def add_ones_to_input(x):
@@ -160,7 +160,7 @@ Y = np.array([
 
 n_input = len(X[0])
 n_output = len(Y[0])
-hidden_layer_neurons = np.array([2])
+hidden_layer_neurons = [2]
 
 
 def generate_weights(n_input, n_output, hidden_layer_neurons):

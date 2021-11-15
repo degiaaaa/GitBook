@@ -3,6 +3,139 @@
 Finally its time to create a class `MLP` that contains all functions from the previews chapters. You can use this class to play arround with some settings and make your own discoveries about the datasets of your choice.
 
 ```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import math as ma
+import time
+np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning) 
+
+class MLP:
+  def __init__(self, X_train, Y_train, X_test, Y_test, hidden_layer_neurons, alpha, epochs, batch_size):
+    self.X_train = X_train
+    self.Y_train = Y_train
+    self.X_test = X_test
+    self.Y_test = Y_test
+    self.hidden_layer_neurons = hidden_layer_neurons
+    self.alpha = alpha
+    self.epochs = epochs
+    self.batch_size = batch_size
+   
+  def generate_weights(self):
+    W = []
+    for i in range(len(self.hidden_layer_neurons)+1):
+      if i == 0: # first layer
+        W.append(np.random.random((len(self.X_train)+1, self.hidden_layer_neurons[i])))
+      elif i == len(self.hidden_layer_neurons): # last layer
+        W.append(np.random.random((self.hidden_layer_neurons[i-1]+1, len(self.Y_train))))
+      else: # middle layers
+        W.append(np.random.random((self.hidden_layer_neurons[i-1]+1, self.hidden_layer_neurons[i])))
+    return(W)
+    
+  @staticmethod
+  def add_ones_to_input(x):
+    return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
+  @staticmethod
+  def sigmoid(x):
+    return 1.0 / (1.0 + np.exp(-x))
+  @staticmethod
+  def deriv_sigmoid(x):
+    return x * (1 - x)
+   
+  @staticmethod
+  def forward(x, w):
+    return( sigmoid(x @ w) )
+  
+  @staticmethod
+  def backward(IN, OUT, W, Y, grad, k):
+    if k == len(grad)-1:
+      grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
+    else:
+      grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
+    return(grad)
+    
+  def generate_random_batches(self):
+    batches = np.arange(len(self.X_train))
+    np.random.shuffle(batches)
+    return(np.array_split(batches, ma.ceil(len(self.X_train)/self.batch_size)))
+    
+  def train(self):
+    W = self.generate_weights()
+    errors = []
+    batches = self.generate_random_batches()
+    for i in range(self.epochs):
+      error_temp = np.array([])
+      for z in range(len(batches)):
+        IN = []
+        OUT = []
+        grad = [None]*len(W)
+        for k in range(len(W)):
+          if k==0:
+            IN.append(self.add_ones_to_input(x = self.X_train[batches[z],:]))
+          else:
+            IN.append(self.add_ones_to_input(x = OUT[k-1]))
+          OUT.append(self.forward(IN[k], W[k]))
+          
+        error_temp = np.append(error_temp, self.Y_train[batches[z],:] - OUT[-1])
+          
+        for k in range(len(W)-1,-1, -1):
+          grad = self.backward(IN, OUT, W, self.Y_train[batches[z],:], grad, k) 
+          
+        for k in range(len(W)):
+          W[k] = W[k] + self.alpha * (IN[k].T @ grad[k])
+      errors.append(error_temp)
+    self.W = W
+    self.errors = errors
+  @staticmethod
+  def mean_square_error(error):
+    return( 0.5 * np.sum(error ** 2) )
+  @staticmethod
+  def plot_error(errors, title):
+    x = list(range(len(errors)))
+    y = np.array(errors)
+    pyplot.figure(figsize=(6,6))
+    pyplot.plot(x, y, "g", linewidth=1)
+    pyplot.xlabel("Iterations", fontsize = 16)
+    pyplot.ylabel("Mean Square Error", fontsize = 16)
+    pyplot.title(title)
+    pyplot.ylim(0,max(errors)*1.1)
+    pyplot.show()
+    
+  def test(self):
+    X_test = self.X_test
+    for i in range(len(self.W)):
+      X_test = self.forward(self.add_ones_to_input(X_test), self.W[i])
+    return(X_test)
+  @staticmethod
+  def classify(Y_approx):
+    return( np.round(Y_approx,0) )
+  
 
 ```
 
+```{python}
+data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
+data = data.replace({"Y": 1, "N":0})
+
+data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
+data["loan_intent"] = data["loan_intent"].replace({'PERSONAL':1, 'EDUCATION':2, 'MEDICAL':3, 'VENTURE':4, 'HOMEIMPROVEMENT':5,'DEBTCONSOLIDATION':6})
+data["loan_grade"] = data["loan_grade"].replace({'A':1, 'B':2, 'C':3, 'D':4, 'E':5, 'F':6, 'G':7})
+
+def NormalizeData(np_arr):
+  for i in range(np_arr.shape[1]):
+    np_arr[:,i] = (np_arr[:,i] - np.min(np_arr[:,i])) / (np.max(np_arr[:,i]) - np.min(np_arr[:,i]))
+  return(np_arr)
+
+training_n = 2000
+X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
+Y_train = data.loc[0:(training_n-1), data.columns == 'loan_status'].to_numpy()
+
+X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_numpy() )
+Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
+
+
+mlp = MLP(X_train, Y_train, X_test, Y_test, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 2000, batch_size = 2000)
+mlp.train()
+
+```

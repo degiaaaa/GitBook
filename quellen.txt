@@ -10,3 +10,11 @@ https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden
 
 why activation fucntion and what activation function is used where:
 https://medium.com/mlearning-ai/fundamentals-of-deep-learning-activation-functions-and-when-to-use-them-e7d8e2cb231b
+
+
+
+decission tree:
+http://www-2.rotman.utoronto.ca/~hull/Second%20edition%20Online%20Files/Lending%20Club%20Decision%20Tree%20(Ch%204)/lending_club_DecisionTree_Python.html
+
+predict with tree:
+https://scikit-learn.org/stable/modules/tree.html
