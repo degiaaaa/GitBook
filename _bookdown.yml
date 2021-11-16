@@ -6,7 +6,8 @@ rmd_files: [
   "03_Multi_Layer_Perceptron.Rmd",
   "04_Credit_Default.Rmd",
   "05_Batch_Size.Rmd",
-  "06_Class_MLP.Rmd"
+  "06_Class_MLP.Rmd",
+  "07_Decision_Tree.Rmd"
             ]
 output_dir: "docs"
 language:

@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-14" />
+<meta name="date" content="2021-11-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,6 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
+<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision tree</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -331,7 +332,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb53-2"><a href="effect-of-batch-size.html#cb53-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
 <span id="cb53-3"><a href="effect-of-batch-size.html#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-4"><a href="effect-of-batch-size.html#cb53-4" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb53-5"><a href="effect-of-batch-size.html#cb53-5" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">5000</span>, batch_size <span class="op">=</span> <span class="dv">2000</span>)</span>
+<span id="cb53-5"><a href="effect-of-batch-size.html#cb53-5" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">5000</span>, batch_size <span class="op">=</span> <span class="dv">2000</span>)</span>
 <span id="cb53-6"><a href="effect-of-batch-size.html#cb53-6" aria-hidden="true" tabindex="-1"></a>time_diff <span class="op">=</span> time.time() <span class="op">-</span> start</span>
 <span id="cb53-7"><a href="effect-of-batch-size.html#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Time to train the NN: &quot;</span>, time_diff)</span>
 <span id="cb53-8"><a href="effect-of-batch-size.html#cb53-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -348,7 +349,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb53-19"><a href="effect-of-batch-size.html#cb53-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-20"><a href="effect-of-batch-size.html#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-21"><a href="effect-of-batch-size.html#cb53-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  7.57993745803833</code></pre>
+<pre><code>## Time to train the NN:  7.906833648681641</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-20-13.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2402.2283244767077
 ## Mean Square error over all classified testdata:  2932.0
@@ -360,7 +361,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb56-2"><a href="effect-of-batch-size.html#cb56-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
 <span id="cb56-3"><a href="effect-of-batch-size.html#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-4"><a href="effect-of-batch-size.html#cb56-4" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb56-5"><a href="effect-of-batch-size.html#cb56-5" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">5000</span>, batch_size <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb56-5"><a href="effect-of-batch-size.html#cb56-5" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">5000</span>, batch_size <span class="op">=</span> <span class="dv">100</span>)</span>
 <span id="cb56-6"><a href="effect-of-batch-size.html#cb56-6" aria-hidden="true" tabindex="-1"></a>time_diff <span class="op">=</span> time.time() <span class="op">-</span> start</span>
 <span id="cb56-7"><a href="effect-of-batch-size.html#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Time to train the NN: &quot;</span>, time_diff)</span>
 <span id="cb56-8"><a href="effect-of-batch-size.html#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -377,7 +378,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb56-19"><a href="effect-of-batch-size.html#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-20"><a href="effect-of-batch-size.html#cb56-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-21"><a href="effect-of-batch-size.html#cb56-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  22.374845266342163</code></pre>
+<pre><code>## Time to train the NN:  21.776628971099854</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-21-15.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2210.3693145823286
 ## Mean Square error over all classified testdata:  2559.5
@@ -489,7 +490,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb59-98"><a href="effect-of-batch-size.html#cb59-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-99"><a href="effect-of-batch-size.html#cb59-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-100"><a href="effect-of-batch-size.html#cb59-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-101"><a href="effect-of-batch-size.html#cb59-101" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">2000</span>, batch_size <span class="op">=</span> <span class="dv">2000</span>)</span>
+<span id="cb59-101"><a href="effect-of-batch-size.html#cb59-101" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X <span class="op">=</span> X_train, Y <span class="op">=</span> Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">2000</span>, batch_size <span class="op">=</span> <span class="dv">2000</span>)</span>
 <span id="cb59-102"><a href="effect-of-batch-size.html#cb59-102" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-103"><a href="effect-of-batch-size.html#cb59-103" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-104"><a href="effect-of-batch-size.html#cb59-104" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>

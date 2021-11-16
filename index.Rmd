@@ -38,6 +38,7 @@ Additionaly im using a fully portable version of R-Studio, R and python. Its nic
 knitr::opts_chunk$set(
   results = "hold"
 )
+options(scipen=999)
 ```
 ```{python, include=FALSE}
 import pandas as pd

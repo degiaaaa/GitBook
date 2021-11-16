@@ -1,0 +1,128 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Decision tree
+
+```{python}
+import numpy as np
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as pyplot
+import math as ma
+
+
+data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
+data = data.replace({"Y": 1, "N":0})
+data = data.loc[:, ["person_age", "loan_percent_income", "loan_int_rate", "cb_person_default_on_file" ,"loan_status"]]
+
+
+
+
+# from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz, export_text
+# X = data.drop('loan_status',axis=1)
+# y = data['loan_status']
+# clf = DecisionTreeClassifier(criterion='entropy',max_depth=4,min_samples_split=1000,min_samples_leaf=200,random_state=0)
+# clf = clf.fit(X,y)
+# #fig, ax = pyplot.subplots(figsize=(40, 30))
+# plot_tree(clf, filled=True, feature_names=X.columns, proportion=False)
+# pyplot.tight_layout()
+# pyplot.show()
+# 
+# r = export_text(clf, feature_names=list(X.columns))
+# print(r)
+
+
+
+
+
+
+
+
+def calc_entropy(df, col, val, decision_on = "loan_status"):
+  p1 = np.sum(df[col] > val)/len(df)
+  p2 = np.sum((df[col] > val) & (df[decision_on] == 0))/len(df)
+  p3 = np.sum((df[col] <= val) & (df[decision_on] == 0))/len(df)
+  
+  if any([p1 == 0, p2 == 0, p3 == 0]):
+    return 1
+  
+  result = p1 * (-p2 * ma.log(p2,2) - (1-p2)*ma.log(1-p2,2)) + (1-p1)*(-p3*ma.log(p3,2)-(1-p3)*ma.log(1-p3,2))
+  return result
+
+def find_minima(df, col, decision_on = "loan_status", round_at = 5):
+  direction = 1
+  step = (df[col].max()-df[col].min()) * 0.1
+  val = df[col].min() + step
+  best_entropy = 1
+  stagnation = 0
+  
+  while stagnation <= 15:
+    temp = calc_entropy(df, col, val)
+    if temp > best_entropy:
+      direction = -direction
+      step = 0.5 * step
+      stagnation += 1
+    elif round(temp,round_at) < round(best_entropy,round_at):
+      stagnation = 0
+    else:
+      stagnation += 1
+    best_entropy = temp
+    val = val + direction * step
+    
+  return best_entropy, val
+
+
+def find_best_col(df, decision_on = "loan_status", round_at = 5):
+  cols = list(df.columns[df.columns != decision_on])
+  entropys = np.ones(len(cols))
+  vals = np.ones(len(cols))
+  
+  for i in range(len(cols)):
+    entropys[i], vals[i] = find_minima(df, col=cols[i], decision_on = "loan_status", round_at = 5)
+  
+  best_i = int(np.where(entropys == min(entropys))[0][0])
+  return cols[best_i], entropys[best_i], vals[best_i]
+
+
+
+
+def make_node_and_leafs(df, decision_on = "loan_status", round_at = 5, path = "", condition = "", min_size = 1000, max_depth = 4, leafs = pd.DataFrame(columns=["path", "condition", "rows", "P_of_no_default", "entropy"]), pass_entropy = 0):
+  if len(df) < min_size or (path.count("-")-1) >= max_depth or len(df.columns) <= 1:
+    leafs = leafs.append({"path":path+"}", "condition":condition[0:(len(condition)-5)], "rows":len(df), "P_of_no_default":np.sum(df[decision_on] == 0)/len(df), "entropy":pass_entropy}, ignore_index=True)
+  else:
+    col, entropy, val = find_best_col(df, decision_on, round_at)
+    print("path:", path, "   entropy:", entropy, "  col:", col, "   val:", val, "  rows:", len(df))
+    leafs = make_node_and_leafs( df.loc[df[col] > val, df.columns != col], decision_on, round_at, path+"-R", condition+col+" > "+str(float(round(val)))+" and ", min_size, max_depth, leafs, entropy * np.sum(df[col] > val))
+    leafs = make_node_and_leafs( df.loc[df[col] <= val, df.columns != col], decision_on, round_at, path + "-L", condition+col+" <= "+str(float(round(val,4)))+" and ", min_size, max_depth, leafs, entropy * np.sum(df[col] <= val))
+  return(leafs)
+  
+  
+  
+
+
+leafs = make_node_and_leafs(df=data, decision_on = "loan_status", round_at = 5, path = "I", min_size = 1000, max_depth = 4)
+leafs["entropy"] = leafs["entropy"]/len(data)
+
+
+data_temp = data.copy()
+data_temp["ID"] = list(range(len(data_temp)))
+conditions = list(leafs.loc[leafs["P_of_no_default"] < np.sum(data["loan_status"])/len(data), leafs.columns == "condition"]["condition"].replace("and","&"))
+data_temp = data_temp.query(" | ".join(conditions))
+X = np.zeros(len(data))
+X[list(data_temp["ID"])] = 1
+
+Y = data.loc[:, data.columns == 'loan_status'].to_numpy()[:,0]
+
+print("Wrong answers of the decission tree: ",np.sum(np.abs(Y-X))/len(Y) * 100, "%")
+confusion_matrix(Y,X)
+
+
+```
+
+
+
+
+

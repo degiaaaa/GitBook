@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Decision tree | gitbook-demo.knit</title>
+  <meta name="description" content="This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Decision tree | gitbook-demo.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook." />
+  <meta name="github-repo" content="https://github.com/AxelCode-R/GitBook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Decision tree | gitbook-demo.knit" />
+  
+  <meta name="twitter:description" content="This GitBook should provide an slide insight into my own learning process of coding Neuronal Networks (NN). Additionaly its a good chance for me to learn how to write a GitBook." />
+  
+
+<meta name="author" content="Axel Roth" />
+
+
+<meta name="date" content="2021-11-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="class-mlp.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A GitBook for Teaching</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#me"><i class="fa fa-check"></i><b>1.1</b> Me</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-book"><i class="fa fa-check"></i><b>1.2</b> The Book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#how-it-works"><i class="fa fa-check"></i><b>1.3</b> How it works</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="single-perceptron.html"><a href="single-perceptron.html"><i class="fa fa-check"></i><b>2</b> Single Perceptron</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="single-perceptron.html"><a href="single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
+<li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
+<li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html#loading-and-analysing-the-data"><i class="fa fa-check"></i><b>5.1</b> Loading and analysing the data</a></li>
+<li class="chapter" data-level="5.2" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html#train-and-test-phase"><i class="fa fa-check"></i><b>5.2</b> Train and test phase</a></li>
+<li class="chapter" data-level="5.3" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html#appendix-complete-code-3"><i class="fa fa-check"></i><b>5.3</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html"><i class="fa fa-check"></i><b>6</b> Effect of batch size</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#impact-of-diffrent-hyperparameters"><i class="fa fa-check"></i><b>6.1</b> Impact of diffrent hyperparameters</a></li>
+<li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
+<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision tree</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><div class="line-block">My First Steps in Neuronal Networks<br />
+(Beginners Guide)</div></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="decision-tree" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Decision tree</h1>
+<div class="sourceCode" id="cb63"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb63-1"><a href="decision-tree.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb63-2"><a href="decision-tree.html#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb63-3"><a href="decision-tree.html#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb63-4"><a href="decision-tree.html#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
+<span id="cb63-5"><a href="decision-tree.html#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math <span class="im">as</span> ma</span>
+<span id="cb63-6"><a href="decision-tree.html#cb63-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="decision-tree.html#cb63-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-8"><a href="decision-tree.html#cb63-8" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">&quot;example_data/credit_risk_dataset.csv&quot;</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb63-9"><a href="decision-tree.html#cb63-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace({<span class="st">&quot;Y&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;N&quot;</span>:<span class="dv">0</span>})</span>
+<span id="cb63-10"><a href="decision-tree.html#cb63-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.loc[:, [<span class="st">&quot;person_age&quot;</span>, <span class="st">&quot;loan_percent_income&quot;</span>, <span class="st">&quot;loan_int_rate&quot;</span>, <span class="st">&quot;cb_person_default_on_file&quot;</span> ,<span class="st">&quot;loan_status&quot;</span>]]</span>
+<span id="cb63-11"><a href="decision-tree.html#cb63-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-12"><a href="decision-tree.html#cb63-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-13"><a href="decision-tree.html#cb63-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-14"><a href="decision-tree.html#cb63-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-15"><a href="decision-tree.html#cb63-15" aria-hidden="true" tabindex="-1"></a><span class="co"># from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz, export_text</span></span>
+<span id="cb63-16"><a href="decision-tree.html#cb63-16" aria-hidden="true" tabindex="-1"></a><span class="co"># X = data.drop(&#39;loan_status&#39;,axis=1)</span></span>
+<span id="cb63-17"><a href="decision-tree.html#cb63-17" aria-hidden="true" tabindex="-1"></a><span class="co"># y = data[&#39;loan_status&#39;]</span></span>
+<span id="cb63-18"><a href="decision-tree.html#cb63-18" aria-hidden="true" tabindex="-1"></a><span class="co"># clf = DecisionTreeClassifier(criterion=&#39;entropy&#39;,max_depth=4,min_samples_split=1000,min_samples_leaf=200,random_state=0)</span></span>
+<span id="cb63-19"><a href="decision-tree.html#cb63-19" aria-hidden="true" tabindex="-1"></a><span class="co"># clf = clf.fit(X,y)</span></span>
+<span id="cb63-20"><a href="decision-tree.html#cb63-20" aria-hidden="true" tabindex="-1"></a><span class="co"># #fig, ax = pyplot.subplots(figsize=(40, 30))</span></span>
+<span id="cb63-21"><a href="decision-tree.html#cb63-21" aria-hidden="true" tabindex="-1"></a><span class="co"># plot_tree(clf, filled=True, feature_names=X.columns, proportion=False)</span></span>
+<span id="cb63-22"><a href="decision-tree.html#cb63-22" aria-hidden="true" tabindex="-1"></a><span class="co"># pyplot.tight_layout()</span></span>
+<span id="cb63-23"><a href="decision-tree.html#cb63-23" aria-hidden="true" tabindex="-1"></a><span class="co"># pyplot.show()</span></span>
+<span id="cb63-24"><a href="decision-tree.html#cb63-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb63-25"><a href="decision-tree.html#cb63-25" aria-hidden="true" tabindex="-1"></a><span class="co"># r = export_text(clf, feature_names=list(X.columns))</span></span>
+<span id="cb63-26"><a href="decision-tree.html#cb63-26" aria-hidden="true" tabindex="-1"></a><span class="co"># print(r)</span></span>
+<span id="cb63-27"><a href="decision-tree.html#cb63-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-28"><a href="decision-tree.html#cb63-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-29"><a href="decision-tree.html#cb63-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-30"><a href="decision-tree.html#cb63-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-31"><a href="decision-tree.html#cb63-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-32"><a href="decision-tree.html#cb63-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-33"><a href="decision-tree.html#cb63-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-34"><a href="decision-tree.html#cb63-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-35"><a href="decision-tree.html#cb63-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_entropy(df, col, val, decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>):</span>
+<span id="cb63-36"><a href="decision-tree.html#cb63-36" aria-hidden="true" tabindex="-1"></a>  p1 <span class="op">=</span> np.<span class="bu">sum</span>(df[col] <span class="op">&gt;</span> val)<span class="op">/</span><span class="bu">len</span>(df)</span>
+<span id="cb63-37"><a href="decision-tree.html#cb63-37" aria-hidden="true" tabindex="-1"></a>  p2 <span class="op">=</span> np.<span class="bu">sum</span>((df[col] <span class="op">&gt;</span> val) <span class="op">&amp;</span> (df[decision_on] <span class="op">==</span> <span class="dv">0</span>))<span class="op">/</span><span class="bu">len</span>(df)</span>
+<span id="cb63-38"><a href="decision-tree.html#cb63-38" aria-hidden="true" tabindex="-1"></a>  p3 <span class="op">=</span> np.<span class="bu">sum</span>((df[col] <span class="op">&lt;=</span> val) <span class="op">&amp;</span> (df[decision_on] <span class="op">==</span> <span class="dv">0</span>))<span class="op">/</span><span class="bu">len</span>(df)</span>
+<span id="cb63-39"><a href="decision-tree.html#cb63-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-40"><a href="decision-tree.html#cb63-40" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">any</span>([p1 <span class="op">==</span> <span class="dv">0</span>, p2 <span class="op">==</span> <span class="dv">0</span>, p3 <span class="op">==</span> <span class="dv">0</span>]):</span>
+<span id="cb63-41"><a href="decision-tree.html#cb63-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb63-42"><a href="decision-tree.html#cb63-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-43"><a href="decision-tree.html#cb63-43" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> p1 <span class="op">*</span> (<span class="op">-</span>p2 <span class="op">*</span> ma.log(p2,<span class="dv">2</span>) <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>p2)<span class="op">*</span>ma.log(<span class="dv">1</span><span class="op">-</span>p2,<span class="dv">2</span>)) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>p1)<span class="op">*</span>(<span class="op">-</span>p3<span class="op">*</span>ma.log(p3,<span class="dv">2</span>)<span class="op">-</span>(<span class="dv">1</span><span class="op">-</span>p3)<span class="op">*</span>ma.log(<span class="dv">1</span><span class="op">-</span>p3,<span class="dv">2</span>))</span>
+<span id="cb63-44"><a href="decision-tree.html#cb63-44" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result</span>
+<span id="cb63-45"><a href="decision-tree.html#cb63-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-46"><a href="decision-tree.html#cb63-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_minima(df, col, decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>, round_at <span class="op">=</span> <span class="dv">5</span>):</span>
+<span id="cb63-47"><a href="decision-tree.html#cb63-47" aria-hidden="true" tabindex="-1"></a>  direction <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb63-48"><a href="decision-tree.html#cb63-48" aria-hidden="true" tabindex="-1"></a>  step <span class="op">=</span> (df[col].<span class="bu">max</span>()<span class="op">-</span>df[col].<span class="bu">min</span>()) <span class="op">*</span> <span class="fl">0.1</span></span>
+<span id="cb63-49"><a href="decision-tree.html#cb63-49" aria-hidden="true" tabindex="-1"></a>  val <span class="op">=</span> df[col].<span class="bu">min</span>() <span class="op">+</span> step</span>
+<span id="cb63-50"><a href="decision-tree.html#cb63-50" aria-hidden="true" tabindex="-1"></a>  best_entropy <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb63-51"><a href="decision-tree.html#cb63-51" aria-hidden="true" tabindex="-1"></a>  stagnation <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb63-52"><a href="decision-tree.html#cb63-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-53"><a href="decision-tree.html#cb63-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> stagnation <span class="op">&lt;=</span> <span class="dv">15</span>:</span>
+<span id="cb63-54"><a href="decision-tree.html#cb63-54" aria-hidden="true" tabindex="-1"></a>    temp <span class="op">=</span> calc_entropy(df, col, val)</span>
+<span id="cb63-55"><a href="decision-tree.html#cb63-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> temp <span class="op">&gt;</span> best_entropy:</span>
+<span id="cb63-56"><a href="decision-tree.html#cb63-56" aria-hidden="true" tabindex="-1"></a>      direction <span class="op">=</span> <span class="op">-</span>direction</span>
+<span id="cb63-57"><a href="decision-tree.html#cb63-57" aria-hidden="true" tabindex="-1"></a>      step <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> step</span>
+<span id="cb63-58"><a href="decision-tree.html#cb63-58" aria-hidden="true" tabindex="-1"></a>      stagnation <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb63-59"><a href="decision-tree.html#cb63-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">round</span>(temp,round_at) <span class="op">&lt;</span> <span class="bu">round</span>(best_entropy,round_at):</span>
+<span id="cb63-60"><a href="decision-tree.html#cb63-60" aria-hidden="true" tabindex="-1"></a>      stagnation <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb63-61"><a href="decision-tree.html#cb63-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb63-62"><a href="decision-tree.html#cb63-62" aria-hidden="true" tabindex="-1"></a>      stagnation <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb63-63"><a href="decision-tree.html#cb63-63" aria-hidden="true" tabindex="-1"></a>    best_entropy <span class="op">=</span> temp</span>
+<span id="cb63-64"><a href="decision-tree.html#cb63-64" aria-hidden="true" tabindex="-1"></a>    val <span class="op">=</span> val <span class="op">+</span> direction <span class="op">*</span> step</span>
+<span id="cb63-65"><a href="decision-tree.html#cb63-65" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb63-66"><a href="decision-tree.html#cb63-66" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> best_entropy, val</span>
+<span id="cb63-67"><a href="decision-tree.html#cb63-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-68"><a href="decision-tree.html#cb63-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-69"><a href="decision-tree.html#cb63-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_best_col(df, decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>, round_at <span class="op">=</span> <span class="dv">5</span>):</span>
+<span id="cb63-70"><a href="decision-tree.html#cb63-70" aria-hidden="true" tabindex="-1"></a>  cols <span class="op">=</span> <span class="bu">list</span>(df.columns[df.columns <span class="op">!=</span> decision_on])</span>
+<span id="cb63-71"><a href="decision-tree.html#cb63-71" aria-hidden="true" tabindex="-1"></a>  entropys <span class="op">=</span> np.ones(<span class="bu">len</span>(cols))</span>
+<span id="cb63-72"><a href="decision-tree.html#cb63-72" aria-hidden="true" tabindex="-1"></a>  vals <span class="op">=</span> np.ones(<span class="bu">len</span>(cols))</span>
+<span id="cb63-73"><a href="decision-tree.html#cb63-73" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-74"><a href="decision-tree.html#cb63-74" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(cols)):</span>
+<span id="cb63-75"><a href="decision-tree.html#cb63-75" aria-hidden="true" tabindex="-1"></a>    entropys[i], vals[i] <span class="op">=</span> find_minima(df, col<span class="op">=</span>cols[i], decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>, round_at <span class="op">=</span> <span class="dv">5</span>)</span>
+<span id="cb63-76"><a href="decision-tree.html#cb63-76" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-77"><a href="decision-tree.html#cb63-77" aria-hidden="true" tabindex="-1"></a>  best_i <span class="op">=</span> <span class="bu">int</span>(np.where(entropys <span class="op">==</span> <span class="bu">min</span>(entropys))[<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb63-78"><a href="decision-tree.html#cb63-78" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> cols[best_i], entropys[best_i], vals[best_i]</span>
+<span id="cb63-79"><a href="decision-tree.html#cb63-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-80"><a href="decision-tree.html#cb63-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-81"><a href="decision-tree.html#cb63-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-82"><a href="decision-tree.html#cb63-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-83"><a href="decision-tree.html#cb63-83" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_node_and_leafs(df, decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>, round_at <span class="op">=</span> <span class="dv">5</span>, path <span class="op">=</span> <span class="st">&quot;&quot;</span>, condition <span class="op">=</span> <span class="st">&quot;&quot;</span>, min_size <span class="op">=</span> <span class="dv">1000</span>, max_depth <span class="op">=</span> <span class="dv">4</span>, leafs <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">&quot;path&quot;</span>, <span class="st">&quot;condition&quot;</span>, <span class="st">&quot;rows&quot;</span>, <span class="st">&quot;P_of_no_default&quot;</span>, <span class="st">&quot;entropy&quot;</span>]), pass_entropy <span class="op">=</span> <span class="dv">0</span>):</span>
+<span id="cb63-84"><a href="decision-tree.html#cb63-84" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">len</span>(df) <span class="op">&lt;</span> min_size <span class="kw">or</span> (path.count(<span class="st">&quot;-&quot;</span>)<span class="op">-</span><span class="dv">1</span>) <span class="op">&gt;=</span> max_depth <span class="kw">or</span> <span class="bu">len</span>(df.columns) <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
+<span id="cb63-85"><a href="decision-tree.html#cb63-85" aria-hidden="true" tabindex="-1"></a>    leafs <span class="op">=</span> leafs.append({<span class="st">&quot;path&quot;</span>:path<span class="op">+</span><span class="st">&quot;}&quot;</span>, <span class="st">&quot;condition&quot;</span>:condition[<span class="dv">0</span>:(<span class="bu">len</span>(condition)<span class="op">-</span><span class="dv">5</span>)], <span class="st">&quot;rows&quot;</span>:<span class="bu">len</span>(df), <span class="st">&quot;P_of_no_default&quot;</span>:np.<span class="bu">sum</span>(df[decision_on] <span class="op">==</span> <span class="dv">0</span>)<span class="op">/</span><span class="bu">len</span>(df), <span class="st">&quot;entropy&quot;</span>:pass_entropy}, ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb63-86"><a href="decision-tree.html#cb63-86" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb63-87"><a href="decision-tree.html#cb63-87" aria-hidden="true" tabindex="-1"></a>    col, entropy, val <span class="op">=</span> find_best_col(df, decision_on, round_at)</span>
+<span id="cb63-88"><a href="decision-tree.html#cb63-88" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;path:&quot;</span>, path, <span class="st">&quot;   entropy:&quot;</span>, entropy, <span class="st">&quot;  col:&quot;</span>, col, <span class="st">&quot;   val:&quot;</span>, val, <span class="st">&quot;  rows:&quot;</span>, <span class="bu">len</span>(df))</span>
+<span id="cb63-89"><a href="decision-tree.html#cb63-89" aria-hidden="true" tabindex="-1"></a>    leafs <span class="op">=</span> make_node_and_leafs( df.loc[df[col] <span class="op">&gt;</span> val, df.columns <span class="op">!=</span> col], decision_on, round_at, path<span class="op">+</span><span class="st">&quot;-R&quot;</span>, condition<span class="op">+</span>col<span class="op">+</span><span class="st">&quot; &gt; &quot;</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">float</span>(<span class="bu">round</span>(val)))<span class="op">+</span><span class="st">&quot; and &quot;</span>, min_size, max_depth, leafs, entropy <span class="op">*</span> np.<span class="bu">sum</span>(df[col] <span class="op">&gt;</span> val))</span>
+<span id="cb63-90"><a href="decision-tree.html#cb63-90" aria-hidden="true" tabindex="-1"></a>    leafs <span class="op">=</span> make_node_and_leafs( df.loc[df[col] <span class="op">&lt;=</span> val, df.columns <span class="op">!=</span> col], decision_on, round_at, path <span class="op">+</span> <span class="st">&quot;-L&quot;</span>, condition<span class="op">+</span>col<span class="op">+</span><span class="st">&quot; &lt;= &quot;</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">float</span>(<span class="bu">round</span>(val,<span class="dv">4</span>)))<span class="op">+</span><span class="st">&quot; and &quot;</span>, min_size, max_depth, leafs, entropy <span class="op">*</span> np.<span class="bu">sum</span>(df[col] <span class="op">&lt;=</span> val))</span>
+<span id="cb63-91"><a href="decision-tree.html#cb63-91" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(leafs)</span>
+<span id="cb63-92"><a href="decision-tree.html#cb63-92" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-93"><a href="decision-tree.html#cb63-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-94"><a href="decision-tree.html#cb63-94" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb63-95"><a href="decision-tree.html#cb63-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-96"><a href="decision-tree.html#cb63-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-97"><a href="decision-tree.html#cb63-97" aria-hidden="true" tabindex="-1"></a>leafs <span class="op">=</span> make_node_and_leafs(df<span class="op">=</span>data, decision_on <span class="op">=</span> <span class="st">&quot;loan_status&quot;</span>, round_at <span class="op">=</span> <span class="dv">5</span>, path <span class="op">=</span> <span class="st">&quot;I&quot;</span>, min_size <span class="op">=</span> <span class="dv">1000</span>, max_depth <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb63-98"><a href="decision-tree.html#cb63-98" aria-hidden="true" tabindex="-1"></a>leafs[<span class="st">&quot;entropy&quot;</span>] <span class="op">=</span> leafs[<span class="st">&quot;entropy&quot;</span>]<span class="op">/</span><span class="bu">len</span>(data)</span>
+<span id="cb63-99"><a href="decision-tree.html#cb63-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-100"><a href="decision-tree.html#cb63-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-101"><a href="decision-tree.html#cb63-101" aria-hidden="true" tabindex="-1"></a>data_temp <span class="op">=</span> data.copy()</span>
+<span id="cb63-102"><a href="decision-tree.html#cb63-102" aria-hidden="true" tabindex="-1"></a>data_temp[<span class="st">&quot;ID&quot;</span>] <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(data_temp)))</span>
+<span id="cb63-103"><a href="decision-tree.html#cb63-103" aria-hidden="true" tabindex="-1"></a>conditions <span class="op">=</span> <span class="bu">list</span>(leafs.loc[leafs[<span class="st">&quot;P_of_no_default&quot;</span>] <span class="op">&lt;</span> np.<span class="bu">sum</span>(data[<span class="st">&quot;loan_status&quot;</span>])<span class="op">/</span><span class="bu">len</span>(data), leafs.columns <span class="op">==</span> <span class="st">&quot;condition&quot;</span>][<span class="st">&quot;condition&quot;</span>].replace(<span class="st">&quot;and&quot;</span>,<span class="st">&quot;&amp;&quot;</span>))</span>
+<span id="cb63-104"><a href="decision-tree.html#cb63-104" aria-hidden="true" tabindex="-1"></a>data_temp <span class="op">=</span> data_temp.query(<span class="st">&quot; | &quot;</span>.join(conditions))</span>
+<span id="cb63-105"><a href="decision-tree.html#cb63-105" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.zeros(<span class="bu">len</span>(data))</span>
+<span id="cb63-106"><a href="decision-tree.html#cb63-106" aria-hidden="true" tabindex="-1"></a>X[<span class="bu">list</span>(data_temp[<span class="st">&quot;ID&quot;</span>])] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb63-107"><a href="decision-tree.html#cb63-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-108"><a href="decision-tree.html#cb63-108" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> data.loc[:, data.columns <span class="op">==</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy()[:,<span class="dv">0</span>]</span>
+<span id="cb63-109"><a href="decision-tree.html#cb63-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-110"><a href="decision-tree.html#cb63-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Wrong answers of the decission tree: &quot;</span>,np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(Y<span class="op">-</span>X))<span class="op">/</span><span class="bu">len</span>(Y) <span class="op">*</span> <span class="dv">100</span>, <span class="st">&quot;%&quot;</span>)</span>
+<span id="cb63-111"><a href="decision-tree.html#cb63-111" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y,X)</span></code></pre></div>
+<pre><code>## path: I    entropy: 0.7455900076028872   col: loan_percent_income    val: 0.32551562499999975   rows: 32581
+## path: I-R    entropy: 0.593586546307872   col: loan_int_rate    val: 11.027105468750014   rows: 3121
+## path: I-R-R    entropy: 0.5153940388516043   col: person_age    val: 25.9921875   rows: 1560
+## path: I-R-L    entropy: 0.678968976010838   col: person_age    val: 25.9921875   rows: 1561
+## path: I-L    entropy: 0.6492466210526019   col: person_age    val: 136.25   rows: 29460
+## path: I-L-L    entropy: 0.7678651507141935   col: loan_int_rate    val: 0.2902499999999978   rows: 29457
+## path: I-L-L-R    entropy: 0.8011264843068373   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 26638
+## path: I-L-L-L    entropy: 0.7904675553963384   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 2819
+## Wrong answers of the decission tree:  28.71612289371106 %
+## array([[20942,  4531],
+##        [ 4825,  2283]], dtype=int64)</code></pre>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="class-mlp.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/cjvanlissa/gitbook-demo/edit/master/07_Decision_Tree.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["gitbook-demo.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

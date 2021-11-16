@@ -135,7 +135,7 @@ X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_
 Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
 
 
-mlp = MLP(X_train, Y_train, X_test, Y_test, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 2000, batch_size = 2000)
-mlp.train()
+# mlp = MLP(X_train, Y_train, X_test, Y_test, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 2000, batch_size = 2000)
+# mlp.train()
 
 ```

@@ -279,7 +279,7 @@ def train(X, Y, hidden_layer_neurons, alpha, epochs):
 
 
 
-W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 20000)
+W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 10000)
 
 
 def mean_square_error(error):

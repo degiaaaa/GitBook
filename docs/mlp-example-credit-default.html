@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-14" />
+<meta name="date" content="2021-11-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,6 +174,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
+<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision tree</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -330,7 +331,7 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 <span id="cb38-30"><a href="mlp-example-credit-default.html#cb38-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(X_test)</span></code></pre></div>
 <p>The <code>train()</code> function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given <code>X_train</code> and <code>Y_train</code>. The <code>test()</code> function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.<br />
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="mlp-example-credit-default.html#cb39-1" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="mlp-example-credit-default.html#cb39-1" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span></code></pre></div>
 <p>The return contains multiple values, that are assigned with the <code>a, b = fun_that_returns_2_vals()</code> pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="mlp-example-credit-default.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
 <span id="cb40-2"><a href="mlp-example-credit-default.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
@@ -465,7 +466,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb47-87"><a href="mlp-example-credit-default.html#cb47-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-88"><a href="mlp-example-credit-default.html#cb47-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-89"><a href="mlp-example-credit-default.html#cb47-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-90"><a href="mlp-example-credit-default.html#cb47-90" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> np.array([<span class="dv">11</span>,<span class="dv">4</span>]), alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span>
+<span id="cb47-90"><a href="mlp-example-credit-default.html#cb47-90" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span>
 <span id="cb47-91"><a href="mlp-example-credit-default.html#cb47-91" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-92"><a href="mlp-example-credit-default.html#cb47-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-93"><a href="mlp-example-credit-default.html#cb47-93" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
