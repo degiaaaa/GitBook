@@ -5,10 +5,10 @@ editor_options:
 ---
 
 # Decision Tree
-The Decision Trees and Neuronal Netwoks aim for the same goal, analyzing the data and giving answers to never seen data. Nevertheless do they have huge differences in working with each of these methods. For this reason do i link [here](https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html) an very good comparison of these two methods. The result is that Decision Trees are much simpler than Neuronal Networks with the additional fact that its easier to interpret the way of giving a certain answer. In comparison to this, can Neuronal Networks process very huge datasets with ease and you can adjust the behavior of learning strongly by the selected hyper-parameter, which can lead to very high accuracy. If you take all in consideration, its useful to think about Decision Trees, before you create a Neuronal Network, because its a simpler approach. If your data is more complex or large you should definitely go with the Neuronal Networks. In very complex situation they often will use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy (for example [Neural-Backed Decision Trees](https://bair.berkeley.edu/blog/2020/04/23/decisions/)).  
+The Decision Trees (DT) and Neuronal Netwoks (NN) aim for the same goal, analyzing the data and giving answers to never seen data. Nevertheless do they have huge differences in working with each of these methods. For this reason do i link [here](https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html) an very good comparison of these two methods. The result is that Decision Trees are much simpler than Neuronal Networks with the additional fact that its easier to interpret the way of giving a certain answer. In comparison to this, can Neuronal Networks process very huge datasets with ease and you can adjust the behavior of learning strongly by the selected hyper-parameter, which can lead to very high accuracy. If you take all in consideration, its useful to think about Decision Trees, before you create a Neuronal Network, because its a simpler approach. If your data is more complex or large you should definitely go with the Neuronal Networks. In very complex situation they often will use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy (for example [Neural-Backed Decision Trees](https://bair.berkeley.edu/blog/2020/04/23/decisions/)).  
 
 ## Entropy
-Entropy measures the impurity of the given data. Low impurity leads to better classification and higher accuracy. The goal of Decision Trees is to split the data at each node with the highest gain of purity. The purity of the given dataset can be calculated with the Entropy-Formula:
+Entropy measures the impurity of the given data. Low impurity leads to better classification and higher accuracy. The goal of Decision Trees is to split the data at each node with the highest gain of purity. The purity of the given dataset can be calculated with the [concave](https://en.wikipedia.org/wiki/Concave_function) Entropy-Formula:
 $$
   E = -p \cdot log_2(p) - (1-p) \cdot log_2(1-p) 
 $$
@@ -65,12 +65,245 @@ For example can we split the dataset by column `loan_percent_income` and value $
 entropy_of_splitted_data = calc_splitted_entropy(df=data, col="loan_percent_income", val=0.3, decision_on = "loan_status")
 print("Splitted Inpurity/Entropy of data: ", entropy_of_splitted_data)
 ```
-This split results in a decrease of `r round(entropy_of_data-entropy_of_splitted_data,5)` in the overall Entropy.  
+This split results in a decrease of `python round(entropy_of_data-entropy_of_splitted_data,5)` in the overall Entropy.  
 
 ## Constructing the Tree
+First of all do we need to find the column and the value that results in the highest decrease of Entropy and splitt the dataset by it. Afterwards do we pass the resulting subsets into the same function (recursion). We will save the given conditions for the splitting. If the given subset contains less than `min_size` of rows or reached the `max_depth` it will turn into a leaf. We need to analyze the function properties to find the minimal value for the optimal splitting. The `calc_splitted_entropy` function is concave ("[The Entropy is concave in the probability mass function](https://en.wikipedia.org/wiki/Entropy_(information_theory))"). We can use this property to write a simple minimiza that checks if the next evaluation is smaller than the previous and steps along the input value. If the evaluation is bigger, it will change the direction and decrease the step distance. It repeats this process until the change in the evaluation is stagnating.
+```{python}
+def find_minima(df, col, decision_on = "loan_status", round_at = 5):
+  direction = 1
+  step = (df[col].max()-df[col].min()) * 0.1
+  val = df[col].min() + step
+  best_entropy = 1
+  stagnation = 0
+  
+  while stagnation <= 15:
+    temp = calc_splitted_entropy(df, col, val)
+    if temp > best_entropy:
+      direction = -direction
+      step = 0.5 * step
+      stagnation += 1
+    elif round(temp,round_at) < round(best_entropy,round_at):
+      stagnation = 0
+    else:
+      stagnation += 1
+    best_entropy = temp
+    val = val + direction * step
+    
+  return best_entropy, val
+```
+This minimizer is written by my self and it only works for convex functions. I dont know if there do exist better approaches, but this one works.  
+
+Now do we need to find the best decrase in Entropy of all columns with the next function:
+```{python}
+def find_best_col(df, decision_on = "loan_status", round_at = 5):
+  cols = list(df.columns[df.columns != decision_on])
+  entropys = np.ones(len(cols))
+  vals = np.ones(len(cols))
+  
+  for i in range(len(cols)):
+    entropys[i], vals[i] = find_minima(df, col=cols[i], decision_on = "loan_status", round_at = 5)
+  
+  best_i = int(np.where(entropys == min(entropys))[0][0])
+  return cols[best_i], entropys[best_i], vals[best_i]
+```
+For example would the output for the initial dataste be:
+```{python}
+find_best_col(data)
+```
+
+Now its time to construct the tree and save all data that ends in a leaf:
+```{python}
+def make_node_and_leafs(df, decision_on = "loan_status", round_at = 5, path = "I", condition = "", min_size = 1000, max_depth = 4, leafs = pd.DataFrame(columns=["path", "condition", "rows", "P_of_no_default", "entropy"])):
+  if len(df) < min_size or (path.count("-")-1) >= max_depth or len(df.columns) <= 1:
+    leafs = leafs.append({"path":path+"}", "condition":condition[0:(len(condition)-5)], "rows":len(df), "P_of_no_default":np.sum(df[decision_on] == 0)/len(df), "entropy":calc_entropy(df)}, ignore_index=True)
+  else:
+    col, entropy, val = find_best_col(df, decision_on, round_at)
+    print("path:", path, "   entropy:", entropy, "  col:", col, "   val:", val, "  rows:", len(df))
+    leafs = make_node_and_leafs( df.loc[df[col] > val, df.columns != col], decision_on, round_at, path+"-R", condition+col+" > "+str(float(round(val,5)))+" and ", min_size, max_depth, leafs)
+    leafs = make_node_and_leafs( df.loc[df[col] <= val, df.columns != col], decision_on, round_at, path + "-L", condition+col+" <= "+str(float(round(val,5)))+" and ", min_size, max_depth, leafs)
+  return(leafs)
+
+leafs = make_node_and_leafs(df=data, decision_on = "loan_status", round_at = 5, min_size = 1000, max_depth = 4)
+leafs["entropy"] = (leafs["entropy"]*leafs["rows"])/len(data)
+
+print("Entropy in data: ", calc_entropy(data))
+print("Entropy in all leafs: ", np.sum(leafs["entropy"]))
+```
+We can see that the Entropy of all leafs is significantly smaller than the initial Entropy.  
+
+## Forcast Credit Defaults with DT
+We need to define a limit that splits all leafs in default and none default. Here do we choose the limit 0.65, that means that leafs with a probability of none default smaller than 65% will be classified as defaults. We can get this rows by using the conditions column in the `leafs`. The resulting analysis shows the quality of the forecast:
+```{python}
+data_temp = data.copy()
+data_temp["ID"] = list(range(len(data_temp)))
+conditions = "("+ ") | (".join(list(leafs.loc[leafs["P_of_no_default"] < 0.65, leafs.columns == "condition"]["condition"].replace("and","&")))+")"
+data_temp = data_temp.query(conditions)
+X = np.zeros(len(data))
+X[list(data_temp["ID"])] = 1
+
+Y = data.loc[:, data.columns == 'loan_status'].to_numpy()[:,0]
+
+print("Wrong answers of the decission tree: ",np.sum(np.abs(Y-X))/len(Y) * 100, "%")
+confusion_matrix(Y,X)
+```
+
+We can compare the results to the previews created NN:
+```{python}
+import numpy as np
+import matplotlib.pyplot as pyplot
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import math as ma
+np.random.seed(0)
+
+
+def NormalizeData(np_arr):
+  for i in range(np_arr.shape[1]):
+    np_arr[:,i] = (np_arr[:,i] - np.min(np_arr[:,i])) / (np.max(np_arr[:,i]) - np.min(np_arr[:,i]))
+  return(np_arr)
+
+data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
+data = data.replace({"Y": 1, "N":0})
+data = data.loc[:, ["person_age", "loan_percent_income", "loan_int_rate", "cb_person_default_on_file" ,"loan_status"]]
+
+X = NormalizeData( data.loc[:, data.columns != 'loan_status'].to_numpy() )
+Y = data.loc[:, data.columns == 'loan_status'].to_numpy()
+
+
+def generate_weights(n_input, n_output, hidden_layer_neurons):
+  W = []
+  for i in range(len(hidden_layer_neurons)+1):
+    if i == 0: # first layer
+      W.append(np.random.random((n_input+1, hidden_layer_neurons[i])))
+    elif i == len(hidden_layer_neurons): # last layer
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, n_output)))
+    else: # middle layers
+      W.append(np.random.random((hidden_layer_neurons[i-1]+1, hidden_layer_neurons[i])))
+  return(W)
+
+def add_ones_to_input(x):
+  return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))
 
 
 
+def sigmoid(x):
+  return 1.0 / (1.0 + np.exp(-x))
+
+def deriv_sigmoid(x):
+  return x * (1 - x)
+
+
+def forward(x, w):
+  return( sigmoid(x @ w) )
+
+def backward(IN, OUT, W, Y, grad, k):
+  if k == len(grad)-1:
+    grad[k] = deriv_sigmoid(OUT[k]) * (Y-OUT[k])
+  else:
+    grad[k] = deriv_sigmoid(OUT[k]) *(grad[k+1] @ W[k+1][0:len(W[k+1])-1].T)
+  return(grad)
+
+def generate_random_batches(batch_size, full_batch_size):
+  batches = np.arange(full_batch_size)
+  np.random.shuffle(batches)
+  return(np.array_split(batches, ma.ceil(full_batch_size/batch_size)))
+
+def train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):
+  n_input = len(X[0])
+  n_output = len(Y[0])
+  W = generate_weights(n_input, n_output, hidden_layer_neurons)
+  errors = []
+  batches = generate_random_batches(batch_size, full_batch_size = len(X))
+  for i in range(epochs):
+    error_temp = np.array([])
+    for z in range(len(batches)):
+      IN = []
+      OUT = []
+      grad = [None]*len(W)
+      for k in range(len(W)):
+        if k==0:
+          IN.append(add_ones_to_input(X[batches[z],:]))
+        else:
+          IN.append(add_ones_to_input(OUT[k-1]))
+        OUT.append(forward(x=IN[k], w=W[k]))
+        
+      error_temp = np.append(error_temp, Y[batches[z],:] - OUT[-1])
+        
+      for k in range(len(W)-1,-1, -1):
+        grad = backward(IN, OUT, W, Y[batches[z],:], grad, k) 
+        
+      for k in range(len(W)):
+        W[k] = W[k] + alpha * (IN[k].T @ grad[k])
+    errors.append(error_temp)
+    
+  return W, errors
+
+np.random.seed(0)
+W, errors = train(X, Y, hidden_layer_neurons = [4,4], alpha = 0.01, epochs = 500, batch_size = 2000)
+
+
+def mean_square_error(error):
+  return( 0.5 * np.sum(error ** 2) )
+
+ms_errors = np.array(list(map(mean_square_error, errors)))
+
+def plot_error(errors, title):
+  x = list(range(len(errors)))
+  y = np.array(errors)
+  pyplot.figure(figsize=(6,6))
+  pyplot.plot(x, y, "g", linewidth=1)
+  pyplot.xlabel("Iterations", fontsize = 16)
+  pyplot.ylabel("Mean Square Error", fontsize = 16)
+  pyplot.title(title)
+  pyplot.ylim(0,max(errors)*1.1)
+  pyplot.show()
+  
+plot_error(ms_errors, "MLP Credit Default")
+
+
+
+def test(X_test, W):
+  for i in range(len(W)):
+    X_test = forward(add_ones_to_input(X_test), W[i])
+  return(X_test)
+  
+
+result = test(X, W)
+print("Mean Square error over all testdata: ", mean_square_error(Y - result))
+
+
+def classify(Y_approx):
+  return( np.round(Y_approx,0) )
+
+classified_error = Y - classify(result)
+print("Mean Square error over all classified testdata: ", mean_square_error(classified_error))
+
+print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error)) / len(classified_error) * 100, 2), "%" )
+print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
+
+
+confusion_matrix(Y, classify(result))
+
+```
+
+## Extern Packages
+There do exist some packages to create DTs for example sklearn, but i wasnt able to get the data like in my own code:
+```{python}
+from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz, export_text
+X = data.drop('loan_status',axis=1)
+y = data['loan_status']
+clf = DecisionTreeClassifier(criterion='entropy',max_depth=4,min_samples_split=1000,min_samples_leaf=200,random_state=0)
+clf = clf.fit(X,y)
+pyplot.figure(figsize=(16,8))
+plot_tree(clf, filled=True, feature_names=X.columns, proportion=False, fontsize=6)
+pyplot.show()
+
+r = export_text(clf, feature_names=list(X.columns))
+print(r)
+```
+
+## Appendix (complete code)
 
 ```{python}
 import numpy as np
@@ -171,22 +404,6 @@ print("Wrong answers of the decission tree: ",np.sum(np.abs(Y-X))/len(Y) * 100, 
 confusion_matrix(Y,X)
 
 
-
-
-
-from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz, export_text
-X = data.drop('loan_status',axis=1)
-y = data['loan_status']
-clf = DecisionTreeClassifier(criterion='entropy',max_depth=4,min_samples_split=1000,min_samples_leaf=200,random_state=0)
-clf = clf.fit(X,y)
-pyplot.figure(figsize=(16,8))
-plot_tree(clf, filled=True, feature_names=X.columns, proportion=False, fontsize=6)
-pyplot.show()
-
-r = export_text(clf, feature_names=list(X.columns))
-print(r)
-
-#(13179*0.334+8257*0.502+488*0.878+2075*0.619+706*0.83+1542*0.974+1746*0.995+754*0.995+767*0.98+628*0.924+227*0.8+1000*0.9)/len(data)
 ```
 
 

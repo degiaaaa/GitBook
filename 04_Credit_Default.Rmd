@@ -134,7 +134,7 @@ def test(X_test, W):
 The `train()` function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given `X_train` and `Y_train`. The `test()` function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.   
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:
 ```{python}
-W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 20000)
+W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 10000)
 ```
 
 The return contains multiple values, that are assigned with the `a, b = fun_that_returns_2_vals()` pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:
@@ -252,8 +252,8 @@ def backward(IN, OUT, W, Y, grad, k):
   return(grad)
 
 def train(X, Y, hidden_layer_neurons, alpha, epochs):
-  n_input = len(X_train[0])
-  n_output = len(Y_train[0])
+  n_input = len(X[0])
+  n_output = len(Y[0])
   W = generate_weights(n_input, n_output, hidden_layer_neurons)
   errors = []
   for i in range(epochs):

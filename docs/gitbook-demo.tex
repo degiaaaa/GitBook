@@ -7,7 +7,7 @@
 \title{My First Steps in Neuronal Networks\\
 (Beginners Guide)}
 \author{Axel Roth}
-\date{2021-11-16}
+\date{2021-11-18}
 
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
@@ -706,13 +706,13 @@ Additionaly will we choose the XOR-Gate as training dataset and generate random 
 
 \begin{verbatim}
 ## W[0]: 
-##  [[0.4083369  0.51715803]
-##  [0.35281224 0.9199224 ]
-##  [0.84210554 0.35074139]]
+##  [[0.14794463 0.60589798]
+##  [0.1222518  0.24566548]
+##  [0.21042758 0.78354843]]
 ## W[1]: 
-##  [[0.14372665]
-##  [0.18697907]
-##  [0.43388429]]
+##  [[0.55751946]
+##  [0.58140618]
+##  [0.37242424]]
 \end{verbatim}
 
 The input and output layer neurons are calculated from the training dataset and the neurons for the hidden layers are generated with the \texttt{hidden\_layer\_neurons} list. For example, can we generate two hidden layers with 4 and 2 neurons by \texttt{hidden\_layer\_neurons\ =\ {[}4,2{]}}. I didnt explicitly choose the bias because it gets corrected anyway.\\
@@ -760,10 +760,10 @@ Now we have everything to calculate the forward pass of the NN from above with t
 \end{Shaded}
 
 \begin{verbatim}
-## array([[-0.6556695 ],
-##        [ 0.33398515],
-##        [ 0.33686308],
-##        [-0.67122048]])
+## array([[-0.74640098],
+##        [ 0.24499462],
+##        [ 0.23757443],
+##        [-0.76914212]])
 \end{verbatim}
 
 Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)
@@ -813,15 +813,15 @@ Now you can look, for example, at the gradient of the last layer and in which di
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.6556695 ]
-##  [0.66601485]
-##  [0.66313692]
-##  [0.67122048]]
+##  [[0.74640098]
+##  [0.75500538]
+##  [0.76242557]
+##  [0.76914212]]
 ## grad: 
-##  [[-0.14802854]
-##  [ 0.07429134]
-##  [ 0.07525061]
-##  [-0.14812732]]
+##  [[-0.14128367]
+##  [ 0.04531721]
+##  [ 0.04303253]
+##  [-0.13657081]]
 \end{verbatim}
 
 You can see that the gradient shows in the direction that would drift the output \(OUT\) closer to the desired output \(Y\). That is exactly what the gradient descent algorithm is doing.\\
@@ -1143,7 +1143,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X\_train, Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ [}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{], alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{20000}\NormalTok{)}
+\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X\_train, Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ [}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{], alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{10000}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1183,7 +1183,7 @@ In the next step its time to test the NN on the never seen \texttt{X\_test} and 
 \end{Shaded}
 
 \begin{verbatim}
-## Mean Square error over all testdata:  2135.358966722297
+## Mean Square error over all testdata:  2012.1713984629632
 \end{verbatim}
 
 Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
@@ -1202,9 +1202,9 @@ Because the Mean Square Error is hard to interpret, we will classify the output 
 \end{Shaded}
 
 \begin{verbatim}
-## Mean Square error over all classified testdata:  2458.5
-## Probability of a wrong output:  16.08 %
-## Probability of a correct output:  83.92 %
+## Mean Square error over all classified testdata:  2457.0
+## Probability of a wrong output:  16.07 %
+## Probability of a correct output:  83.93 %
 \end{verbatim}
 
 An incredible tool to qualify the result is the \href{https://en.wikipedia.org/wiki/Confusion_matrix}{confusion matrix} from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
@@ -1220,8 +1220,8 @@ For example is \texttt{TP} short for True-Positiv which means that the predictio
 \end{Shaded}
 
 \begin{verbatim}
-## array([[21463,  2843],
-##        [ 2074,  4201]], dtype=int64)
+## array([[21164,  3142],
+##        [ 1772,  4503]], dtype=int64)
 \end{verbatim}
 
 \hypertarget{appendix-complete-code-3}{%
@@ -1291,8 +1291,8 @@ For example is \texttt{TP} short for True-Positiv which means that the predictio
   \ControlFlowTok{return}\NormalTok{(grad)}
 
 \KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs):}
-\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X\_train[}\DecValTok{0}\NormalTok{])}
-\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y[}\DecValTok{0}\NormalTok{])}
 \NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
 \NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
   \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(epochs):}
@@ -1318,7 +1318,7 @@ For example is \texttt{TP} short for True-Positiv which means that the predictio
 
 
 
-\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X\_train, Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ [}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{], alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{20000}\NormalTok{)}
+\NormalTok{W\_train, errors\_train }\OperatorTok{=}\NormalTok{ train(X\_train, Y\_train, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ [}\DecValTok{11}\NormalTok{,}\DecValTok{4}\NormalTok{], alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{10000}\NormalTok{)}
 
 
 \KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
@@ -1368,12 +1368,12 @@ For example is \texttt{TP} short for True-Positiv which means that the predictio
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-16-11.pdf}
 
 \begin{verbatim}
-## Mean Square error over all testdata:  2135.358966722297
-## Mean Square error over all classified testdata:  2458.5
-## Probability of a wrong output:  16.08 %
-## Probability of a right output:  83.92 %
-## array([[21463,  2843],
-##        [ 2074,  4201]], dtype=int64)
+## Mean Square error over all testdata:  2012.1713984629632
+## Mean Square error over all classified testdata:  2457.0
+## Probability of a wrong output:  16.07 %
+## Probability of a right output:  83.93 %
+## array([[21164,  3142],
+##        [ 1772,  4503]], dtype=int64)
 \end{verbatim}
 
 \hypertarget{effect-of-batch-size}{%
@@ -1423,8 +1423,8 @@ Now do we need to adjust the \texttt{train()} function to iterate over all batch
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs, batch\_size):}
-\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X\_train[}\DecValTok{0}\NormalTok{])}
-\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y[}\DecValTok{0}\NormalTok{])}
 \NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
 \NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
 \NormalTok{  batches }\OperatorTok{=}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X))}
@@ -1563,7 +1563,7 @@ Everything is loaded and set up. Now can we compare the time and the error for d
 \end{Shaded}
 
 \begin{verbatim}
-## Time to train the NN:  12.582584142684937
+## Time to train the NN:  8.402838945388794
 \end{verbatim}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-20-13.pdf}
@@ -1604,7 +1604,7 @@ Everything is loaded and set up. Now can we compare the time and the error for d
 \end{Shaded}
 
 \begin{verbatim}
-## Time to train the NN:  21.57978844642639
+## Time to train the NN:  22.90388250350952
 \end{verbatim}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-21-15.pdf}
@@ -1694,8 +1694,8 @@ We can see that the full batch size is much faster than the smaller one, but the
   \ControlFlowTok{return}\NormalTok{(np.array\_split(batches, ma.ceil(full\_batch\_size}\OperatorTok{/}\NormalTok{batch\_size)))}
 
 \KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs, batch\_size):}
-\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X\_train[}\DecValTok{0}\NormalTok{])}
-\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y\_train[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y[}\DecValTok{0}\NormalTok{])}
 \NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
 \NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
 \NormalTok{  batches }\OperatorTok{=}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X))}
@@ -1928,7 +1928,444 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 \end{Shaded}
 
 \hypertarget{decision-tree}{%
-\chapter{Decision tree}\label{decision-tree}}
+\chapter{Decision Tree}\label{decision-tree}}
+
+The Decision Trees (DT) and Neuronal Netwoks (NN) aim for the same goal, analyzing the data and giving answers to never seen data. Nevertheless do they have huge differences in working with each of these methods. For this reason do i link \href{https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html}{here} an very good comparison of these two methods. The result is that Decision Trees are much simpler than Neuronal Networks with the additional fact that its easier to interpret the way of giving a certain answer. In comparison to this, can Neuronal Networks process very huge datasets with ease and you can adjust the behavior of learning strongly by the selected hyper-parameter, which can lead to very high accuracy. If you take all in consideration, its useful to think about Decision Trees, before you create a Neuronal Network, because its a simpler approach. If your data is more complex or large you should definitely go with the Neuronal Networks. In very complex situation they often will use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy (for example \href{https://bair.berkeley.edu/blog/2020/04/23/decisions/}{Neural-Backed Decision Trees}).
+
+\hypertarget{entropy}{%
+\section{Entropy}\label{entropy}}
+
+Entropy measures the impurity of the given data. Low impurity leads to better classification and higher accuracy. The goal of Decision Trees is to split the data at each node with the highest gain of purity. The purity of the given dataset can be calculated with the \href{https://en.wikipedia.org/wiki/Concave_function}{concave} Entropy-Formula:
+\[
+  E = -p \cdot log_2(p) - (1-p) \cdot log_2(1-p) 
+\]
+
+with \(p\) as the probability of having no default in the credit default dataset. The Entropy increases to 1 if the dataset contains 50\% of defaults and 50\% of no default and decreases to 0 if the dataset contains only defaults or only no defaults. The python function is the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ calc\_entropy(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{):}
+  \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(df)}\OperatorTok{==}\DecValTok{0}\NormalTok{:}
+    \ControlFlowTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{  p }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
+  \ControlFlowTok{if}\NormalTok{ p }\OperatorTok{==} \DecValTok{0} \KeywordTok{or}\NormalTok{ p }\OperatorTok{==} \DecValTok{1}\NormalTok{:}
+    \ControlFlowTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{  result }\OperatorTok{=} \OperatorTok{{-}}\NormalTok{p }\OperatorTok{*}\NormalTok{ ma.log(p,}\DecValTok{2}\NormalTok{) }\OperatorTok{{-}}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p)}\OperatorTok{*}\NormalTok{ma.log(}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p,}\DecValTok{2}\NormalTok{)}
+  \ControlFlowTok{return}\NormalTok{ result}
+\end{Highlighting}
+\end{Shaded}
+
+Now can we calculate the initial Entropy of the credit default dataset as shown in the next code snippet:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ math }\ImportTok{as}\NormalTok{ ma}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+
+\NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.replace(\{}\StringTok{"Y"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"N"}\NormalTok{:}\DecValTok{0}\NormalTok{\})}
+
+\NormalTok{entropy\_of\_data }\OperatorTok{=}\NormalTok{ calc\_entropy(df}\OperatorTok{=}\NormalTok{data)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Initial Inpurity/Entropy of data: "}\NormalTok{, entropy\_of\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Initial Inpurity/Entropy of data:  0.7568007498467375
+\end{verbatim}
+
+Sadly do we have the same problem with categorical data as the NN. We could transform categorical data to numerical as shown in the Credit Default chapter, but i want to drop these columns to make it easier to understand. Additional will we select only 4 columns plus the answer, to make it more interpretable and manageable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.loc[:, [}\StringTok{"person\_age"}\NormalTok{, }\StringTok{"loan\_percent\_income"}\NormalTok{, }\StringTok{"loan\_int\_rate"}\NormalTok{, }\StringTok{"cb\_person\_default\_on\_file"}\NormalTok{ ,}\StringTok{"loan\_status"}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+Now do we need to create the nodes of the tree based on decisions that lead to the lowest Entropy. The resulting purity by splitting the data in 2 subsets by a condition of one column (value \(z\)), can be calculated as:
+\[
+  p_1(z) = \text{proportion of column-value} > z \\
+  p_2(z) = \text{proportion of no default and column-value} > z \\
+  p_3(z) = \text{proportion of no default and column-value} \leq z \\
+  E_{split} = p_1(z) \cdot [-p_2(z) \cdot log_2(p_2(z)) - (1-p_2(z)) \cdot log_2(1-p_2(z))] \\
+  +(1-p_1(z)) \cdot [-p_3(z) \cdot log_2(p_3(z)) - (1-p_3(z)) \cdot log_2(1-p_3(z))]
+\]
+
+and in python can we use the \texttt{calc\_entropy} function to make it even simpler:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ calc\_splitted\_entropy(df, col, val, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{):}
+\NormalTok{  w }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
+\NormalTok{  result }\OperatorTok{=}\NormalTok{ w }\OperatorTok{*}\NormalTok{ calc\_entropy(df.loc[df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val], decision\_on) }\OperatorTok{+}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{w) }\OperatorTok{*}\NormalTok{ calc\_entropy(df.loc[df[col] }\OperatorTok{\textless{}=}\NormalTok{ val], decision\_on)}
+  \ControlFlowTok{return}\NormalTok{ result}
+\end{Highlighting}
+\end{Shaded}
+
+For example can we split the dataset by column \texttt{loan\_percent\_income} and value \(z=0.3\) to archive an decrease in Entropy:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{entropy\_of\_splitted\_data }\OperatorTok{=}\NormalTok{ calc\_splitted\_entropy(df}\OperatorTok{=}\NormalTok{data, col}\OperatorTok{=}\StringTok{"loan\_percent\_income"}\NormalTok{, val}\OperatorTok{=}\FloatTok{0.3}\NormalTok{, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Splitted Inpurity/Entropy of data: "}\NormalTok{, entropy\_of\_splitted\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Splitted Inpurity/Entropy of data:  0.648938734265563
+\end{verbatim}
+
+This split results in a decrease of \texttt{python\ round(entropy\_of\_data-entropy\_of\_splitted\_data,5)} in the overall Entropy.
+
+\hypertarget{constructing-the-tree}{%
+\section{Constructing the Tree}\label{constructing-the-tree}}
+
+First of all do we need to find the column and the value that results in the highest decrease of Entropy and splitt the dataset by it. Afterwards do we pass the resulting subsets into the same function (recursion). We will save the given conditions for the splitting. If the given subset contains less than \texttt{min\_size} of rows or reached the \texttt{max\_depth} it will turn into a leaf. We need to analyze the function properties to find the minimal value for the optimal splitting. The \texttt{calc\_splitted\_entropy} function is concave (``\href{https://en.wikipedia.org/wiki/Entropy_(information_theory)}{The Entropy is concave in the probability mass function}''). We can use this property to write a simple minimiza that checks if the next evaluation is smaller than the previous and steps along the input value. If the evaluation is bigger, it will change the direction and decrease the step distance. It repeats this process until the change in the evaluation is stagnating.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ find\_minima(df, col, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{):}
+\NormalTok{  direction }\OperatorTok{=} \DecValTok{1}
+\NormalTok{  step }\OperatorTok{=}\NormalTok{ (df[col].}\BuiltInTok{max}\NormalTok{()}\OperatorTok{{-}}\NormalTok{df[col].}\BuiltInTok{min}\NormalTok{()) }\OperatorTok{*} \FloatTok{0.1}
+\NormalTok{  val }\OperatorTok{=}\NormalTok{ df[col].}\BuiltInTok{min}\NormalTok{() }\OperatorTok{+}\NormalTok{ step}
+\NormalTok{  best\_entropy }\OperatorTok{=} \DecValTok{1}
+\NormalTok{  stagnation }\OperatorTok{=} \DecValTok{0}
+  
+  \ControlFlowTok{while}\NormalTok{ stagnation }\OperatorTok{\textless{}=} \DecValTok{15}\NormalTok{:}
+\NormalTok{    temp }\OperatorTok{=}\NormalTok{ calc\_splitted\_entropy(df, col, val)}
+    \ControlFlowTok{if}\NormalTok{ temp }\OperatorTok{\textgreater{}}\NormalTok{ best\_entropy:}
+\NormalTok{      direction }\OperatorTok{=} \OperatorTok{{-}}\NormalTok{direction}
+\NormalTok{      step }\OperatorTok{=} \FloatTok{0.5} \OperatorTok{*}\NormalTok{ step}
+\NormalTok{      stagnation }\OperatorTok{+=} \DecValTok{1}
+    \ControlFlowTok{elif} \BuiltInTok{round}\NormalTok{(temp,round\_at) }\OperatorTok{\textless{}} \BuiltInTok{round}\NormalTok{(best\_entropy,round\_at):}
+\NormalTok{      stagnation }\OperatorTok{=} \DecValTok{0}
+    \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{      stagnation }\OperatorTok{+=} \DecValTok{1}
+\NormalTok{    best\_entropy }\OperatorTok{=}\NormalTok{ temp}
+\NormalTok{    val }\OperatorTok{=}\NormalTok{ val }\OperatorTok{+}\NormalTok{ direction }\OperatorTok{*}\NormalTok{ step}
+    
+  \ControlFlowTok{return}\NormalTok{ best\_entropy, val}
+\end{Highlighting}
+\end{Shaded}
+
+This minimizer is written by my self and it only works for convex functions. I dont know if there do exist better approaches, but this one works.
+
+Now do we need to find the best decrase in Entropy of all columns with the next function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ find\_best\_col(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{):}
+\NormalTok{  cols }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(df.columns[df.columns }\OperatorTok{!=}\NormalTok{ decision\_on])}
+\NormalTok{  entropys }\OperatorTok{=}\NormalTok{ np.ones(}\BuiltInTok{len}\NormalTok{(cols))}
+\NormalTok{  vals }\OperatorTok{=}\NormalTok{ np.ones(}\BuiltInTok{len}\NormalTok{(cols))}
+  
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(cols)):}
+\NormalTok{    entropys[i], vals[i] }\OperatorTok{=}\NormalTok{ find\_minima(df, col}\OperatorTok{=}\NormalTok{cols[i], decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{)}
+  
+\NormalTok{  best\_i }\OperatorTok{=} \BuiltInTok{int}\NormalTok{(np.where(entropys }\OperatorTok{==} \BuiltInTok{min}\NormalTok{(entropys))[}\DecValTok{0}\NormalTok{][}\DecValTok{0}\NormalTok{])}
+  \ControlFlowTok{return}\NormalTok{ cols[best\_i], entropys[best\_i], vals[best\_i]}
+\end{Highlighting}
+\end{Shaded}
+
+For example would the output for the initial dataste be:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{find\_best\_col(data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## ('loan_percent_income', 0.6564119496913492, 0.29990234374999997)
+\end{verbatim}
+
+Now its time to construct the tree and save all data that ends in a leaf:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ make\_node\_and\_leafs(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, path }\OperatorTok{=} \StringTok{"I"}\NormalTok{, condition }\OperatorTok{=} \StringTok{""}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{, leafs }\OperatorTok{=}\NormalTok{ pd.DataFrame(columns}\OperatorTok{=}\NormalTok{[}\StringTok{"path"}\NormalTok{, }\StringTok{"condition"}\NormalTok{, }\StringTok{"rows"}\NormalTok{, }\StringTok{"P\_of\_no\_default"}\NormalTok{, }\StringTok{"entropy"}\NormalTok{])):}
+  \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(df) }\OperatorTok{\textless{}}\NormalTok{ min\_size }\KeywordTok{or}\NormalTok{ (path.count(}\StringTok{"{-}"}\NormalTok{)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{) }\OperatorTok{\textgreater{}=}\NormalTok{ max\_depth }\KeywordTok{or} \BuiltInTok{len}\NormalTok{(df.columns) }\OperatorTok{\textless{}=} \DecValTok{1}\NormalTok{:}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ leafs.append(\{}\StringTok{"path"}\NormalTok{:path}\OperatorTok{+}\StringTok{"\}"}\NormalTok{, }\StringTok{"condition"}\NormalTok{:condition[}\DecValTok{0}\NormalTok{:(}\BuiltInTok{len}\NormalTok{(condition)}\OperatorTok{{-}}\DecValTok{5}\NormalTok{)], }\StringTok{"rows"}\NormalTok{:}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"P\_of\_no\_default"}\NormalTok{:np.}\BuiltInTok{sum}\NormalTok{(df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"entropy"}\NormalTok{:calc\_entropy(df)\}, ignore\_index}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+  \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{    col, entropy, val }\OperatorTok{=}\NormalTok{ find\_best\_col(df, decision\_on, round\_at)}
+    \BuiltInTok{print}\NormalTok{(}\StringTok{"path:"}\NormalTok{, path, }\StringTok{"   entropy:"}\NormalTok{, entropy, }\StringTok{"  col:"}\NormalTok{, col, }\StringTok{"   val:"}\NormalTok{, val, }\StringTok{"  rows:"}\NormalTok{, }\BuiltInTok{len}\NormalTok{(df))}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path}\OperatorTok{+}\StringTok{"{-}R"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textgreater{} "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val,}\DecValTok{5}\NormalTok{)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs)}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textless{}=}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path }\OperatorTok{+} \StringTok{"{-}L"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textless{}= "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val,}\DecValTok{5}\NormalTok{)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs)}
+  \ControlFlowTok{return}\NormalTok{(leafs)}
+
+\NormalTok{leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs(df}\OperatorTok{=}\NormalTok{data, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{)}
+\NormalTok{leafs[}\StringTok{"entropy"}\NormalTok{] }\OperatorTok{=}\NormalTok{ (leafs[}\StringTok{"entropy"}\NormalTok{]}\OperatorTok{*}\NormalTok{leafs[}\StringTok{"rows"}\NormalTok{])}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(data)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Entropy in data: "}\NormalTok{, calc\_entropy(data))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Entropy in all leafs: "}\NormalTok{, np.}\BuiltInTok{sum}\NormalTok{(leafs[}\StringTok{"entropy"}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## path: I    entropy: 0.6564119496913492   col: loan_percent_income    val: 0.29990234374999997   rows: 32581
+## path: I-R    entropy: 0.9103981172376336   col: loan_int_rate    val: 14.01635546875   rows: 4285
+## path: I-R-L    entropy: 0.9607335396537932   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 3361
+## path: I-R-L-L    entropy: 0.9648046914552115   col: person_age    val: 34.296875   rows: 2977
+## path: I-L    entropy: 0.531844917392527   col: loan_int_rate    val: 14.280073242187505   rows: 28296
+## path: I-L-R    entropy: 0.998669387657678   col: person_age    val: 22.3046875   rows: 4057
+## path: I-L-R-R    entropy: 0.9992350724472542   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 3488
+## path: I-L-L    entropy: 0.44498607709157834   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 24239
+## path: I-L-L-R    entropy: 0.704963233218175   col: person_age    val: 33.9921875   rows: 2838
+## path: I-L-L-L    entropy: 0.40973705382045866   col: person_age    val: 21.840624999999967   rows: 21401
+## Entropy in data:  0.7568007498467375
+## Entropy in all leafs:  0.574488597974446
+\end{verbatim}
+
+We can see that the Entropy of all leafs is significantly smaller than the initial Entropy.
+
+\hypertarget{forcast-credit-defaults-with-dt}{%
+\section{Forcast Credit Defaults with DT}\label{forcast-credit-defaults-with-dt}}
+
+We need to define a limit that splits all leafs in default and none default. Here do we choose the limit 0.65, that means that leafs with a probability of none default smaller than 65\% will be classified as defaults. We can get this rows by using the conditions column in the \texttt{leafs}. The resulting analysis shows the quality of the forecast:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_temp }\OperatorTok{=}\NormalTok{ data.copy()}
+\NormalTok{data\_temp[}\StringTok{"ID"}\NormalTok{] }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(data\_temp)))}
+\NormalTok{conditions }\OperatorTok{=} \StringTok{"("}\OperatorTok{+} \StringTok{") | ("}\NormalTok{.join(}\BuiltInTok{list}\NormalTok{(leafs.loc[leafs[}\StringTok{"P\_of\_no\_default"}\NormalTok{] }\OperatorTok{\textless{}} \FloatTok{0.65}\NormalTok{, leafs.columns }\OperatorTok{==} \StringTok{"condition"}\NormalTok{][}\StringTok{"condition"}\NormalTok{].replace(}\StringTok{"and"}\NormalTok{,}\StringTok{"\&"}\NormalTok{)))}\OperatorTok{+}\StringTok{")"}
+\NormalTok{data\_temp }\OperatorTok{=}\NormalTok{ data\_temp.query(conditions)}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ np.zeros(}\BuiltInTok{len}\NormalTok{(data))}
+\NormalTok{X[}\BuiltInTok{list}\NormalTok{(data\_temp[}\StringTok{"ID"}\NormalTok{])] }\OperatorTok{=} \DecValTok{1}
+
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ data.loc[:, data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()[:,}\DecValTok{0}\NormalTok{]}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Wrong answers of the decission tree: "}\NormalTok{,np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(Y}\OperatorTok{{-}}\NormalTok{X))}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(Y) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\StringTok{"\%"}\NormalTok{)}
+\NormalTok{confusion\_matrix(Y,X)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Wrong answers of the decission tree:  17.94911144532089 %
+## array([[21932,  3541],
+##        [ 2307,  4801]], dtype=int64)
+\end{verbatim}
+
+We can compare the results to the previews created NN:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ pyplot}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\ImportTok{from}\NormalTok{ sklearn.metrics }\ImportTok{import}\NormalTok{ confusion\_matrix}
+\ImportTok{import}\NormalTok{ math }\ImportTok{as}\NormalTok{ ma}
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+
+
+\KeywordTok{def}\NormalTok{ NormalizeData(np\_arr):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(np\_arr.shape[}\DecValTok{1}\NormalTok{]):}
+\NormalTok{    np\_arr[:,i] }\OperatorTok{=}\NormalTok{ (np\_arr[:,i] }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i])) }\OperatorTok{/}\NormalTok{ (np.}\BuiltInTok{max}\NormalTok{(np\_arr[:,i]) }\OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{min}\NormalTok{(np\_arr[:,i]))}
+  \ControlFlowTok{return}\NormalTok{(np\_arr)}
+
+\NormalTok{data }\OperatorTok{=}\NormalTok{ pd.read\_csv(}\StringTok{"example\_data/credit\_risk\_dataset.csv"}\NormalTok{).fillna(}\DecValTok{0}\NormalTok{)}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.replace(\{}\StringTok{"Y"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"N"}\NormalTok{:}\DecValTok{0}\NormalTok{\})}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ data.loc[:, [}\StringTok{"person\_age"}\NormalTok{, }\StringTok{"loan\_percent\_income"}\NormalTok{, }\StringTok{"loan\_int\_rate"}\NormalTok{, }\StringTok{"cb\_person\_default\_on\_file"}\NormalTok{ ,}\StringTok{"loan\_status"}\NormalTok{]]}
+
+\NormalTok{X }\OperatorTok{=}\NormalTok{ NormalizeData( data.loc[:, data.columns }\OperatorTok{!=} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy() )}
+\NormalTok{Y }\OperatorTok{=}\NormalTok{ data.loc[:, data.columns }\OperatorTok{==} \StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{].to\_numpy()}
+
+
+\KeywordTok{def}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons):}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ []}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons)}\OperatorTok{+}\DecValTok{1}\NormalTok{):}
+    \ControlFlowTok{if}\NormalTok{ i }\OperatorTok{==} \DecValTok{0}\NormalTok{: }\CommentTok{\# first layer}
+\NormalTok{      W.append(np.random.random((n\_input}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+    \ControlFlowTok{elif}\NormalTok{ i }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(hidden\_layer\_neurons): }\CommentTok{\# last layer}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, n\_output)))}
+    \ControlFlowTok{else}\NormalTok{: }\CommentTok{\# middle layers}
+\NormalTok{      W.append(np.random.random((hidden\_layer\_neurons[i}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]}\OperatorTok{+}\DecValTok{1}\NormalTok{, hidden\_layer\_neurons[i])))}
+  \ControlFlowTok{return}\NormalTok{(W)}
+
+\KeywordTok{def}\NormalTok{ add\_ones\_to\_input(x):}
+  \ControlFlowTok{return}\NormalTok{(np.append(x, np.array([np.ones(}\BuiltInTok{len}\NormalTok{(x))]).T, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{))}
+
+
+
+\KeywordTok{def}\NormalTok{ sigmoid(x):}
+  \ControlFlowTok{return} \FloatTok{1.0} \OperatorTok{/}\NormalTok{ (}\FloatTok{1.0} \OperatorTok{+}\NormalTok{ np.exp(}\OperatorTok{{-}}\NormalTok{x))}
+
+\KeywordTok{def}\NormalTok{ deriv\_sigmoid(x):}
+  \ControlFlowTok{return}\NormalTok{ x }\OperatorTok{*}\NormalTok{ (}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ x)}
+
+
+\KeywordTok{def}\NormalTok{ forward(x, w):}
+  \ControlFlowTok{return}\NormalTok{( sigmoid(x }\OperatorTok{@}\NormalTok{ w) )}
+
+\KeywordTok{def}\NormalTok{ backward(IN, OUT, W, Y, grad, k):}
+  \ControlFlowTok{if}\NormalTok{ k }\OperatorTok{==} \BuiltInTok{len}\NormalTok{(grad)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{ (Y}\OperatorTok{{-}}\NormalTok{OUT[k])}
+  \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{    grad[k] }\OperatorTok{=}\NormalTok{ deriv\_sigmoid(OUT[k]) }\OperatorTok{*}\NormalTok{(grad[k}\OperatorTok{+}\DecValTok{1}\NormalTok{] }\OperatorTok{@}\NormalTok{ W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{][}\DecValTok{0}\NormalTok{:}\BuiltInTok{len}\NormalTok{(W[k}\OperatorTok{+}\DecValTok{1}\NormalTok{])}\OperatorTok{{-}}\DecValTok{1}\NormalTok{].T)}
+  \ControlFlowTok{return}\NormalTok{(grad)}
+
+\KeywordTok{def}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size):}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ np.arange(full\_batch\_size)}
+\NormalTok{  np.random.shuffle(batches)}
+  \ControlFlowTok{return}\NormalTok{(np.array\_split(batches, ma.ceil(full\_batch\_size}\OperatorTok{/}\NormalTok{batch\_size)))}
+
+\KeywordTok{def}\NormalTok{ train(X, Y, hidden\_layer\_neurons, alpha, epochs, batch\_size):}
+\NormalTok{  n\_input }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  n\_output }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(Y[}\DecValTok{0}\NormalTok{])}
+\NormalTok{  W }\OperatorTok{=}\NormalTok{ generate\_weights(n\_input, n\_output, hidden\_layer\_neurons)}
+\NormalTok{  errors }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{  batches }\OperatorTok{=}\NormalTok{ generate\_random\_batches(batch\_size, full\_batch\_size }\OperatorTok{=} \BuiltInTok{len}\NormalTok{(X))}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(epochs):}
+\NormalTok{    error\_temp }\OperatorTok{=}\NormalTok{ np.array([])}
+    \ControlFlowTok{for}\NormalTok{ z }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(batches)):}
+\NormalTok{      IN }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      OUT }\OperatorTok{=}\NormalTok{ []}
+\NormalTok{      grad }\OperatorTok{=}\NormalTok{ [}\VariableTok{None}\NormalTok{]}\OperatorTok{*}\BuiltInTok{len}\NormalTok{(W)}
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+        \ControlFlowTok{if}\NormalTok{ k}\OperatorTok{==}\DecValTok{0}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(X[batches[z],:]))}
+        \ControlFlowTok{else}\NormalTok{:}
+\NormalTok{          IN.append(add\_ones\_to\_input(OUT[k}\OperatorTok{{-}}\DecValTok{1}\NormalTok{]))}
+\NormalTok{        OUT.append(forward(x}\OperatorTok{=}\NormalTok{IN[k], w}\OperatorTok{=}\NormalTok{W[k]))}
+        
+\NormalTok{      error\_temp }\OperatorTok{=}\NormalTok{ np.append(error\_temp, Y[batches[z],:] }\OperatorTok{{-}}\NormalTok{ OUT[}\OperatorTok{{-}}\DecValTok{1}\NormalTok{])}
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{,}\OperatorTok{{-}}\DecValTok{1}\NormalTok{, }\OperatorTok{{-}}\DecValTok{1}\NormalTok{):}
+\NormalTok{        grad }\OperatorTok{=}\NormalTok{ backward(IN, OUT, W, Y[batches[z],:], grad, k) }
+        
+      \ControlFlowTok{for}\NormalTok{ k }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{        W[k] }\OperatorTok{=}\NormalTok{ W[k] }\OperatorTok{+}\NormalTok{ alpha }\OperatorTok{*}\NormalTok{ (IN[k].T }\OperatorTok{@}\NormalTok{ grad[k])}
+\NormalTok{    errors.append(error\_temp)}
+    
+  \ControlFlowTok{return}\NormalTok{ W, errors}
+
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+\NormalTok{W, errors }\OperatorTok{=}\NormalTok{ train(X, Y, hidden\_layer\_neurons }\OperatorTok{=}\NormalTok{ [}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{], alpha }\OperatorTok{=} \FloatTok{0.01}\NormalTok{, epochs }\OperatorTok{=} \DecValTok{500}\NormalTok{, batch\_size }\OperatorTok{=} \DecValTok{2000}\NormalTok{)}
+
+
+\KeywordTok{def}\NormalTok{ mean\_square\_error(error):}
+  \ControlFlowTok{return}\NormalTok{( }\FloatTok{0.5} \OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(error }\OperatorTok{**} \DecValTok{2}\NormalTok{) )}
+
+\NormalTok{ms\_errors }\OperatorTok{=}\NormalTok{ np.array(}\BuiltInTok{list}\NormalTok{(}\BuiltInTok{map}\NormalTok{(mean\_square\_error, errors)))}
+
+\KeywordTok{def}\NormalTok{ plot\_error(errors, title):}
+\NormalTok{  x }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(errors)))}
+\NormalTok{  y }\OperatorTok{=}\NormalTok{ np.array(errors)}
+\NormalTok{  pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{6}\NormalTok{,}\DecValTok{6}\NormalTok{))}
+\NormalTok{  pyplot.plot(x, y, }\StringTok{"g"}\NormalTok{, linewidth}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{  pyplot.xlabel(}\StringTok{"Iterations"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.ylabel(}\StringTok{"Mean Square Error"}\NormalTok{, fontsize }\OperatorTok{=} \DecValTok{16}\NormalTok{)}
+\NormalTok{  pyplot.title(title)}
+\NormalTok{  pyplot.ylim(}\DecValTok{0}\NormalTok{,}\BuiltInTok{max}\NormalTok{(errors)}\OperatorTok{*}\FloatTok{1.1}\NormalTok{)}
+\NormalTok{  pyplot.show()}
+  
+\NormalTok{plot\_error(ms\_errors, }\StringTok{"MLP Credit Default"}\NormalTok{)}
+
+
+
+\KeywordTok{def}\NormalTok{ test(X\_test, W):}
+  \ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(W)):}
+\NormalTok{    X\_test }\OperatorTok{=}\NormalTok{ forward(add\_ones\_to\_input(X\_test), W[i])}
+  \ControlFlowTok{return}\NormalTok{(X\_test)}
+  
+
+\NormalTok{result }\OperatorTok{=}\NormalTok{ test(X, W)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all testdata: "}\NormalTok{, mean\_square\_error(Y }\OperatorTok{{-}}\NormalTok{ result))}
+
+
+\KeywordTok{def}\NormalTok{ classify(Y\_approx):}
+  \ControlFlowTok{return}\NormalTok{( np.}\BuiltInTok{round}\NormalTok{(Y\_approx,}\DecValTok{0}\NormalTok{) )}
+
+\NormalTok{classified\_error }\OperatorTok{=}\NormalTok{ Y }\OperatorTok{{-}}\NormalTok{ classify(result)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Mean Square error over all classified testdata: "}\NormalTok{, mean\_square\_error(classified\_error))}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a wrong output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{(np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error) }\OperatorTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{), }\StringTok{"\%"}\NormalTok{ )}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Probability of a right output: "}\NormalTok{, np.}\BuiltInTok{round}\NormalTok{((}\DecValTok{1} \OperatorTok{{-}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(np.}\BuiltInTok{abs}\NormalTok{(classified\_error)) }\OperatorTok{/} \BuiltInTok{len}\NormalTok{(classified\_error))}\OperatorTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{2}\NormalTok{),}\StringTok{"\%"}\NormalTok{ )}
+
+
+\NormalTok{confusion\_matrix(Y, classify(result))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-35-19.pdf}
+
+\begin{verbatim}
+## Mean Square error over all testdata:  1975.0983073152067
+## Mean Square error over all classified testdata:  2704.0
+## Probability of a wrong output:  16.6 %
+## Probability of a right output:  83.4 %
+## array([[23290,  2183],
+##        [ 3225,  3883]], dtype=int64)
+\end{verbatim}
+
+\hypertarget{extern-packages}{%
+\section{Extern Packages}\label{extern-packages}}
+
+There do exist some packages to create DTs for example sklearn, but i wasnt able to get the data like in my own code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ sklearn.tree }\ImportTok{import}\NormalTok{ DecisionTreeClassifier, plot\_tree, export\_graphviz, export\_text}
+\NormalTok{X }\OperatorTok{=}\NormalTok{ data.drop(}\StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{,axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{y }\OperatorTok{=}\NormalTok{ data[}\StringTok{\textquotesingle{}loan\_status\textquotesingle{}}\NormalTok{]}
+\NormalTok{clf }\OperatorTok{=}\NormalTok{ DecisionTreeClassifier(criterion}\OperatorTok{=}\StringTok{\textquotesingle{}entropy\textquotesingle{}}\NormalTok{,max\_depth}\OperatorTok{=}\DecValTok{4}\NormalTok{,min\_samples\_split}\OperatorTok{=}\DecValTok{1000}\NormalTok{,min\_samples\_leaf}\OperatorTok{=}\DecValTok{200}\NormalTok{,random\_state}\OperatorTok{=}\DecValTok{0}\NormalTok{)}
+\NormalTok{clf }\OperatorTok{=}\NormalTok{ clf.fit(X,y)}
+\NormalTok{pyplot.figure(figsize}\OperatorTok{=}\NormalTok{(}\DecValTok{16}\NormalTok{,}\DecValTok{8}\NormalTok{))}
+\NormalTok{plot\_tree(clf, filled}\OperatorTok{=}\VariableTok{True}\NormalTok{, feature\_names}\OperatorTok{=}\NormalTok{X.columns, proportion}\OperatorTok{=}\VariableTok{False}\NormalTok{, fontsize}\OperatorTok{=}\DecValTok{6}\NormalTok{)}
+\NormalTok{pyplot.show()}
+
+\NormalTok{r }\OperatorTok{=}\NormalTok{ export\_text(clf, feature\_names}\OperatorTok{=}\BuiltInTok{list}\NormalTok{(X.columns))}
+\BuiltInTok{print}\NormalTok{(r)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-36-21.pdf}
+
+\begin{verbatim}
+## |--- loan_percent_income <= 0.31
+## |   |--- loan_int_rate <= 14.03
+## |   |   |--- cb_person_default_on_file <= 0.50
+## |   |   |   |--- loan_percent_income <= 0.16
+## |   |   |   |   |--- class: 0
+## |   |   |   |--- loan_percent_income >  0.16
+## |   |   |   |   |--- class: 0
+## |   |   |--- cb_person_default_on_file >  0.50
+## |   |   |   |--- loan_int_rate <= 10.97
+## |   |   |   |   |--- class: 0
+## |   |   |   |--- loan_int_rate >  10.97
+## |   |   |   |   |--- class: 0
+## |   |--- loan_int_rate >  14.03
+## |   |   |--- loan_int_rate <= 15.28
+## |   |   |   |--- loan_int_rate <= 14.37
+## |   |   |   |   |--- class: 0
+## |   |   |   |--- loan_int_rate >  14.37
+## |   |   |   |   |--- class: 0
+## |   |   |--- loan_int_rate >  15.28
+## |   |   |   |--- loan_int_rate <= 16.85
+## |   |   |   |   |--- class: 1
+## |   |   |   |--- loan_int_rate >  16.85
+## |   |   |   |   |--- class: 1
+## |--- loan_percent_income >  0.31
+## |   |--- loan_int_rate <= 12.76
+## |   |   |--- loan_int_rate <= 9.97
+## |   |   |   |--- loan_percent_income <= 0.38
+## |   |   |   |   |--- class: 1
+## |   |   |   |--- loan_percent_income >  0.38
+## |   |   |   |   |--- class: 1
+## |   |   |--- loan_int_rate >  9.97
+## |   |   |   |--- person_age <= 22.50
+## |   |   |   |   |--- class: 1
+## |   |   |   |--- person_age >  22.50
+## |   |   |   |   |--- class: 1
+## |   |--- loan_int_rate >  12.76
+## |   |   |--- loan_int_rate <= 14.31
+## |   |   |   |--- class: 1
+## |   |   |--- loan_int_rate >  14.31
+## |   |   |   |--- class: 1
+\end{verbatim}
+
+\hypertarget{appendix-complete-code-5}{%
+\section{Appendix (complete code)}\label{appendix-complete-code-5}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1945,36 +2382,18 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 
 
 
+\KeywordTok{def}\NormalTok{ calc\_entropy(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{):}
+  \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(df)}\OperatorTok{==}\DecValTok{0}\NormalTok{:}
+    \ControlFlowTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{  p }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
+  \ControlFlowTok{if}\NormalTok{ p }\OperatorTok{==} \DecValTok{0} \KeywordTok{or}\NormalTok{ p }\OperatorTok{==} \DecValTok{1}\NormalTok{:}
+    \ControlFlowTok{return}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{  result }\OperatorTok{=} \OperatorTok{{-}}\NormalTok{p }\OperatorTok{*}\NormalTok{ ma.log(p,}\DecValTok{2}\NormalTok{) }\OperatorTok{{-}}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p)}\OperatorTok{*}\NormalTok{ma.log(}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p,}\DecValTok{2}\NormalTok{)}
+  \ControlFlowTok{return}\NormalTok{ result}
 
-\CommentTok{\# from sklearn.tree import DecisionTreeClassifier, plot\_tree, export\_graphviz, export\_text}
-\CommentTok{\# X = data.drop(\textquotesingle{}loan\_status\textquotesingle{},axis=1)}
-\CommentTok{\# y = data[\textquotesingle{}loan\_status\textquotesingle{}]}
-\CommentTok{\# clf = DecisionTreeClassifier(criterion=\textquotesingle{}entropy\textquotesingle{},max\_depth=4,min\_samples\_split=1000,min\_samples\_leaf=200,random\_state=0)}
-\CommentTok{\# clf = clf.fit(X,y)}
-\CommentTok{\# \#fig, ax = pyplot.subplots(figsize=(40, 30))}
-\CommentTok{\# plot\_tree(clf, filled=True, feature\_names=X.columns, proportion=False)}
-\CommentTok{\# pyplot.tight\_layout()}
-\CommentTok{\# pyplot.show()}
-\CommentTok{\# }
-\CommentTok{\# r = export\_text(clf, feature\_names=list(X.columns))}
-\CommentTok{\# print(r)}
-
-
-
-
-
-
-
-
-\KeywordTok{def}\NormalTok{ calc\_entropy(df, col, val, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{):}
-\NormalTok{  p1 }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
-\NormalTok{  p2 }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{((df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val) }\OperatorTok{\&}\NormalTok{ (df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{))}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
-\NormalTok{  p3 }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{((df[col] }\OperatorTok{\textless{}=}\NormalTok{ val) }\OperatorTok{\&}\NormalTok{ (df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{))}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
-  
-  \ControlFlowTok{if} \BuiltInTok{any}\NormalTok{([p1 }\OperatorTok{==} \DecValTok{0}\NormalTok{, p2 }\OperatorTok{==} \DecValTok{0}\NormalTok{, p3 }\OperatorTok{==} \DecValTok{0}\NormalTok{]):}
-    \ControlFlowTok{return} \DecValTok{1}
-  
-\NormalTok{  result }\OperatorTok{=}\NormalTok{ p1 }\OperatorTok{*}\NormalTok{ (}\OperatorTok{{-}}\NormalTok{p2 }\OperatorTok{*}\NormalTok{ ma.log(p2,}\DecValTok{2}\NormalTok{) }\OperatorTok{{-}}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p2)}\OperatorTok{*}\NormalTok{ma.log(}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p2,}\DecValTok{2}\NormalTok{)) }\OperatorTok{+}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p1)}\OperatorTok{*}\NormalTok{(}\OperatorTok{{-}}\NormalTok{p3}\OperatorTok{*}\NormalTok{ma.log(p3,}\DecValTok{2}\NormalTok{)}\OperatorTok{{-}}\NormalTok{(}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p3)}\OperatorTok{*}\NormalTok{ma.log(}\DecValTok{1}\OperatorTok{{-}}\NormalTok{p3,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{def}\NormalTok{ calc\_splitted\_entropy(df, col, val, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{):}
+\NormalTok{  w }\OperatorTok{=}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df)}
+\NormalTok{  result }\OperatorTok{=}\NormalTok{ w }\OperatorTok{*}\NormalTok{ calc\_entropy(df.loc[df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val], decision\_on) }\OperatorTok{+}\NormalTok{ (}\DecValTok{1}\OperatorTok{{-}}\NormalTok{w) }\OperatorTok{*}\NormalTok{ calc\_entropy(df.loc[df[col] }\OperatorTok{\textless{}=}\NormalTok{ val], decision\_on)}
   \ControlFlowTok{return}\NormalTok{ result}
 
 \KeywordTok{def}\NormalTok{ find\_minima(df, col, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{):}
@@ -1985,7 +2404,7 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 \NormalTok{  stagnation }\OperatorTok{=} \DecValTok{0}
   
   \ControlFlowTok{while}\NormalTok{ stagnation }\OperatorTok{\textless{}=} \DecValTok{15}\NormalTok{:}
-\NormalTok{    temp }\OperatorTok{=}\NormalTok{ calc\_entropy(df, col, val)}
+\NormalTok{    temp }\OperatorTok{=}\NormalTok{ calc\_splitted\_entropy(df, col, val)}
     \ControlFlowTok{if}\NormalTok{ temp }\OperatorTok{\textgreater{}}\NormalTok{ best\_entropy:}
 \NormalTok{      direction }\OperatorTok{=} \OperatorTok{{-}}\NormalTok{direction}
 \NormalTok{      step }\OperatorTok{=} \FloatTok{0.5} \OperatorTok{*}\NormalTok{ step}
@@ -2014,28 +2433,31 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 
 
 
-\KeywordTok{def}\NormalTok{ make\_node\_and\_leafs(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, path }\OperatorTok{=} \StringTok{""}\NormalTok{, condition }\OperatorTok{=} \StringTok{""}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{, leafs }\OperatorTok{=}\NormalTok{ pd.DataFrame(columns}\OperatorTok{=}\NormalTok{[}\StringTok{"path"}\NormalTok{, }\StringTok{"condition"}\NormalTok{, }\StringTok{"rows"}\NormalTok{, }\StringTok{"P\_of\_no\_default"}\NormalTok{, }\StringTok{"entropy"}\NormalTok{]), pass\_entropy }\OperatorTok{=} \DecValTok{0}\NormalTok{):}
+\KeywordTok{def}\NormalTok{ make\_node\_and\_leafs(df, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, path }\OperatorTok{=} \StringTok{"I"}\NormalTok{, condition }\OperatorTok{=} \StringTok{""}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{, leafs }\OperatorTok{=}\NormalTok{ pd.DataFrame(columns}\OperatorTok{=}\NormalTok{[}\StringTok{"path"}\NormalTok{, }\StringTok{"condition"}\NormalTok{, }\StringTok{"rows"}\NormalTok{, }\StringTok{"P\_of\_no\_default"}\NormalTok{, }\StringTok{"entropy"}\NormalTok{])):}
   \ControlFlowTok{if} \BuiltInTok{len}\NormalTok{(df) }\OperatorTok{\textless{}}\NormalTok{ min\_size }\KeywordTok{or}\NormalTok{ (path.count(}\StringTok{"{-}"}\NormalTok{)}\OperatorTok{{-}}\DecValTok{1}\NormalTok{) }\OperatorTok{\textgreater{}=}\NormalTok{ max\_depth }\KeywordTok{or} \BuiltInTok{len}\NormalTok{(df.columns) }\OperatorTok{\textless{}=} \DecValTok{1}\NormalTok{:}
-\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ leafs.append(\{}\StringTok{"path"}\NormalTok{:path}\OperatorTok{+}\StringTok{"\}"}\NormalTok{, }\StringTok{"condition"}\NormalTok{:condition[}\DecValTok{0}\NormalTok{:(}\BuiltInTok{len}\NormalTok{(condition)}\OperatorTok{{-}}\DecValTok{5}\NormalTok{)], }\StringTok{"rows"}\NormalTok{:}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"P\_of\_no\_default"}\NormalTok{:np.}\BuiltInTok{sum}\NormalTok{(df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"entropy"}\NormalTok{:pass\_entropy\}, ignore\_index}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ leafs.append(\{}\StringTok{"path"}\NormalTok{:path}\OperatorTok{+}\StringTok{"\}"}\NormalTok{, }\StringTok{"condition"}\NormalTok{:condition[}\DecValTok{0}\NormalTok{:(}\BuiltInTok{len}\NormalTok{(condition)}\OperatorTok{{-}}\DecValTok{5}\NormalTok{)], }\StringTok{"rows"}\NormalTok{:}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"P\_of\_no\_default"}\NormalTok{:np.}\BuiltInTok{sum}\NormalTok{(df[decision\_on] }\OperatorTok{==} \DecValTok{0}\NormalTok{)}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(df), }\StringTok{"entropy"}\NormalTok{:calc\_entropy(df)\}, ignore\_index}\OperatorTok{=}\VariableTok{True}\NormalTok{)}
   \ControlFlowTok{else}\NormalTok{:}
 \NormalTok{    col, entropy, val }\OperatorTok{=}\NormalTok{ find\_best\_col(df, decision\_on, round\_at)}
     \BuiltInTok{print}\NormalTok{(}\StringTok{"path:"}\NormalTok{, path, }\StringTok{"   entropy:"}\NormalTok{, entropy, }\StringTok{"  col:"}\NormalTok{, col, }\StringTok{"   val:"}\NormalTok{, val, }\StringTok{"  rows:"}\NormalTok{, }\BuiltInTok{len}\NormalTok{(df))}
-\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path}\OperatorTok{+}\StringTok{"{-}R"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textgreater{} "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs, entropy }\OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val))}
-\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textless{}=}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path }\OperatorTok{+} \StringTok{"{-}L"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textless{}= "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val,}\DecValTok{4}\NormalTok{)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs, entropy }\OperatorTok{*}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(df[col] }\OperatorTok{\textless{}=}\NormalTok{ val))}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textgreater{}}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path}\OperatorTok{+}\StringTok{"{-}R"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textgreater{} "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val,}\DecValTok{5}\NormalTok{)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs)}
+\NormalTok{    leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs( df.loc[df[col] }\OperatorTok{\textless{}=}\NormalTok{ val, df.columns }\OperatorTok{!=}\NormalTok{ col], decision\_on, round\_at, path }\OperatorTok{+} \StringTok{"{-}L"}\NormalTok{, condition}\OperatorTok{+}\NormalTok{col}\OperatorTok{+}\StringTok{" \textless{}= "}\OperatorTok{+}\BuiltInTok{str}\NormalTok{(}\BuiltInTok{float}\NormalTok{(}\BuiltInTok{round}\NormalTok{(val,}\DecValTok{5}\NormalTok{)))}\OperatorTok{+}\StringTok{" and "}\NormalTok{, min\_size, max\_depth, leafs)}
   \ControlFlowTok{return}\NormalTok{(leafs)}
   
   
   
 
 
-\NormalTok{leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs(df}\OperatorTok{=}\NormalTok{data, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, path }\OperatorTok{=} \StringTok{"I"}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{)}
-\NormalTok{leafs[}\StringTok{"entropy"}\NormalTok{] }\OperatorTok{=}\NormalTok{ leafs[}\StringTok{"entropy"}\NormalTok{]}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(data)}
+\NormalTok{leafs }\OperatorTok{=}\NormalTok{ make\_node\_and\_leafs(df}\OperatorTok{=}\NormalTok{data, decision\_on }\OperatorTok{=} \StringTok{"loan\_status"}\NormalTok{, round\_at }\OperatorTok{=} \DecValTok{5}\NormalTok{, min\_size }\OperatorTok{=} \DecValTok{1000}\NormalTok{, max\_depth }\OperatorTok{=} \DecValTok{4}\NormalTok{)}
+\NormalTok{leafs[}\StringTok{"entropy"}\NormalTok{] }\OperatorTok{=}\NormalTok{ (leafs[}\StringTok{"entropy"}\NormalTok{]}\OperatorTok{*}\NormalTok{leafs[}\StringTok{"rows"}\NormalTok{])}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(data)}
+
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Entropy in data: "}\NormalTok{, calc\_entropy(data))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Entropy in all leafs: "}\NormalTok{, np.}\BuiltInTok{sum}\NormalTok{(leafs[}\StringTok{"entropy"}\NormalTok{]))}
 
 
 \NormalTok{data\_temp }\OperatorTok{=}\NormalTok{ data.copy()}
 \NormalTok{data\_temp[}\StringTok{"ID"}\NormalTok{] }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(}\BuiltInTok{range}\NormalTok{(}\BuiltInTok{len}\NormalTok{(data\_temp)))}
-\NormalTok{conditions }\OperatorTok{=} \BuiltInTok{list}\NormalTok{(leafs.loc[leafs[}\StringTok{"P\_of\_no\_default"}\NormalTok{] }\OperatorTok{\textless{}}\NormalTok{ np.}\BuiltInTok{sum}\NormalTok{(data[}\StringTok{"loan\_status"}\NormalTok{])}\OperatorTok{/}\BuiltInTok{len}\NormalTok{(data), leafs.columns }\OperatorTok{==} \StringTok{"condition"}\NormalTok{][}\StringTok{"condition"}\NormalTok{].replace(}\StringTok{"and"}\NormalTok{,}\StringTok{"\&"}\NormalTok{))}
-\NormalTok{data\_temp }\OperatorTok{=}\NormalTok{ data\_temp.query(}\StringTok{" | "}\NormalTok{.join(conditions))}
+\NormalTok{conditions }\OperatorTok{=} \StringTok{"("}\OperatorTok{+} \StringTok{") | ("}\NormalTok{.join(}\BuiltInTok{list}\NormalTok{(leafs.loc[leafs[}\StringTok{"P\_of\_no\_default"}\NormalTok{] }\OperatorTok{\textless{}} \FloatTok{0.65}\NormalTok{, leafs.columns }\OperatorTok{==} \StringTok{"condition"}\NormalTok{][}\StringTok{"condition"}\NormalTok{].replace(}\StringTok{"and"}\NormalTok{,}\StringTok{"\&"}\NormalTok{)))}\OperatorTok{+}\StringTok{")"}
+\NormalTok{data\_temp }\OperatorTok{=}\NormalTok{ data\_temp.query(conditions)}
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.zeros(}\BuiltInTok{len}\NormalTok{(data))}
 \NormalTok{X[}\BuiltInTok{list}\NormalTok{(data\_temp[}\StringTok{"ID"}\NormalTok{])] }\OperatorTok{=} \DecValTok{1}
 
@@ -2047,17 +2469,21 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 \end{Shaded}
 
 \begin{verbatim}
-## path: I    entropy: 0.7455900076028872   col: loan_percent_income    val: 0.32551562499999975   rows: 32581
-## path: I-R    entropy: 0.593586546307872   col: loan_int_rate    val: 11.027105468750014   rows: 3121
-## path: I-R-R    entropy: 0.5153940388516043   col: person_age    val: 25.9921875   rows: 1560
-## path: I-R-L    entropy: 0.678968976010838   col: person_age    val: 25.9921875   rows: 1561
-## path: I-L    entropy: 0.6492466210526019   col: person_age    val: 136.25   rows: 29460
-## path: I-L-L    entropy: 0.7678651507141935   col: loan_int_rate    val: 0.2902499999999978   rows: 29457
-## path: I-L-L-R    entropy: 0.8011264843068373   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 26638
-## path: I-L-L-L    entropy: 0.7904675553963384   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 2819
-## Wrong answers of the decission tree:  28.71612289371106 %
-## array([[20942,  4531],
-##        [ 4825,  2283]], dtype=int64)
+## path: I    entropy: 0.6564119496913492   col: loan_percent_income    val: 0.29990234374999997   rows: 32581
+## path: I-R    entropy: 0.9103981172376336   col: loan_int_rate    val: 14.01635546875   rows: 4285
+## path: I-R-L    entropy: 0.9607335396537932   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 3361
+## path: I-R-L-L    entropy: 0.9648046914552115   col: person_age    val: 34.296875   rows: 2977
+## path: I-L    entropy: 0.531844917392527   col: loan_int_rate    val: 14.280073242187505   rows: 28296
+## path: I-L-R    entropy: 0.998669387657678   col: person_age    val: 22.3046875   rows: 4057
+## path: I-L-R-R    entropy: 0.9992350724472542   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 3488
+## path: I-L-L    entropy: 0.44498607709157834   col: cb_person_default_on_file    val: 0.14999999999999947   rows: 24239
+## path: I-L-L-R    entropy: 0.704963233218175   col: person_age    val: 33.9921875   rows: 2838
+## path: I-L-L-L    entropy: 0.40973705382045866   col: person_age    val: 21.840624999999967   rows: 21401
+## Entropy in data:  0.7568007498467375
+## Entropy in all leafs:  0.574488597974446
+## Wrong answers of the decission tree:  17.94911144532089 %
+## array([[21932,  3541],
+##        [ 2307,  4801]], dtype=int64)
 \end{verbatim}
 
   \bibliography{book.bib,packages.bib}

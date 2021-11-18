@@ -32,8 +32,8 @@ generate_random_batches(3, 10)
 Now do we need to adjust the `train()` function to iterate over all batches:
 ```{python}
 def train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):
-  n_input = len(X_train[0])
-  n_output = len(Y_train[0])
+  n_input = len(X[0])
+  n_output = len(Y[0])
   W = generate_weights(n_input, n_output, hidden_layer_neurons)
   errors = []
   batches = generate_random_batches(batch_size, full_batch_size = len(X))
@@ -264,8 +264,8 @@ def generate_random_batches(batch_size, full_batch_size):
   return(np.array_split(batches, ma.ceil(full_batch_size/batch_size)))
 
 def train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):
-  n_input = len(X_train[0])
-  n_output = len(Y_train[0])
+  n_input = len(X[0])
+  n_output = len(Y[0])
   W = generate_weights(n_input, n_output, hidden_layer_neurons)
   errors = []
   batches = generate_random_batches(batch_size, full_batch_size = len(X))

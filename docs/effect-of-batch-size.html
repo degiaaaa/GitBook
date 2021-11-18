@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-16" />
+<meta name="date" content="2021-11-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,7 +174,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
-<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision tree</a></li>
+<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision Tree</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="decision-tree.html"><a href="decision-tree.html#entropy"><i class="fa fa-check"></i><b>8.1</b> Entropy</a></li>
+<li class="chapter" data-level="8.2" data-path="decision-tree.html"><a href="decision-tree.html#constructing-the-tree"><i class="fa fa-check"></i><b>8.2</b> Constructing the Tree</a></li>
+<li class="chapter" data-level="8.3" data-path="decision-tree.html"><a href="decision-tree.html#forcast-credit-defaults-with-dt"><i class="fa fa-check"></i><b>8.3</b> Forcast Credit Defaults with DT</a></li>
+<li class="chapter" data-level="8.4" data-path="decision-tree.html"><a href="decision-tree.html#extern-packages"><i class="fa fa-check"></i><b>8.4</b> Extern Packages</a></li>
+<li class="chapter" data-level="8.5" data-path="decision-tree.html"><a href="decision-tree.html#appendix-complete-code-5"><i class="fa fa-check"></i><b>8.5</b> Appendix (complete code)</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -225,8 +232,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [array([0, 8, 9]), array([4, 1, 5]), array([6, 2]), array([3, 7])]</code></pre>
 <p>Now do we need to adjust the <code>train()</code> function to iterate over all batches:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="effect-of-batch-size.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):</span>
-<span id="cb51-2"><a href="effect-of-batch-size.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X_train[<span class="dv">0</span>])</span>
-<span id="cb51-3"><a href="effect-of-batch-size.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y_train[<span class="dv">0</span>])</span>
+<span id="cb51-2"><a href="effect-of-batch-size.html#cb51-2" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X[<span class="dv">0</span>])</span>
+<span id="cb51-3"><a href="effect-of-batch-size.html#cb51-3" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y[<span class="dv">0</span>])</span>
 <span id="cb51-4"><a href="effect-of-batch-size.html#cb51-4" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> generate_weights(n_input, n_output, hidden_layer_neurons)</span>
 <span id="cb51-5"><a href="effect-of-batch-size.html#cb51-5" aria-hidden="true" tabindex="-1"></a>  errors <span class="op">=</span> []</span>
 <span id="cb51-6"><a href="effect-of-batch-size.html#cb51-6" aria-hidden="true" tabindex="-1"></a>  batches <span class="op">=</span> generate_random_batches(batch_size, full_batch_size <span class="op">=</span> <span class="bu">len</span>(X))</span>
@@ -349,7 +356,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb53-19"><a href="effect-of-batch-size.html#cb53-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-20"><a href="effect-of-batch-size.html#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-21"><a href="effect-of-batch-size.html#cb53-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  7.906833648681641</code></pre>
+<pre><code>## Time to train the NN:  8.421871185302734</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-20-13.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2402.2283244767077
 ## Mean Square error over all classified testdata:  2932.0
@@ -378,7 +385,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb56-19"><a href="effect-of-batch-size.html#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-20"><a href="effect-of-batch-size.html#cb56-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-21"><a href="effect-of-batch-size.html#cb56-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  21.776628971099854</code></pre>
+<pre><code>## Time to train the NN:  24.241447687149048</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-21-15.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2210.3693145823286
 ## Mean Square error over all classified testdata:  2559.5
@@ -459,8 +466,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb59-67"><a href="effect-of-batch-size.html#cb59-67" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(np.array_split(batches, ma.ceil(full_batch_size<span class="op">/</span>batch_size)))</span>
 <span id="cb59-68"><a href="effect-of-batch-size.html#cb59-68" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-69"><a href="effect-of-batch-size.html#cb59-69" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(X, Y, hidden_layer_neurons, alpha, epochs, batch_size):</span>
-<span id="cb59-70"><a href="effect-of-batch-size.html#cb59-70" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X_train[<span class="dv">0</span>])</span>
-<span id="cb59-71"><a href="effect-of-batch-size.html#cb59-71" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y_train[<span class="dv">0</span>])</span>
+<span id="cb59-70"><a href="effect-of-batch-size.html#cb59-70" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X[<span class="dv">0</span>])</span>
+<span id="cb59-71"><a href="effect-of-batch-size.html#cb59-71" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y[<span class="dv">0</span>])</span>
 <span id="cb59-72"><a href="effect-of-batch-size.html#cb59-72" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> generate_weights(n_input, n_output, hidden_layer_neurons)</span>
 <span id="cb59-73"><a href="effect-of-batch-size.html#cb59-73" aria-hidden="true" tabindex="-1"></a>  errors <span class="op">=</span> []</span>
 <span id="cb59-74"><a href="effect-of-batch-size.html#cb59-74" aria-hidden="true" tabindex="-1"></a>  batches <span class="op">=</span> generate_random_batches(batch_size, full_batch_size <span class="op">=</span> <span class="bu">len</span>(X))</span>

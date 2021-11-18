@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-16" />
+<meta name="date" content="2021-11-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -174,7 +174,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="effect-of-batch-size.html"><a href="effect-of-batch-size.html#appendix-complete-code-4"><i class="fa fa-check"></i><b>6.2</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="class-mlp.html"><a href="class-mlp.html"><i class="fa fa-check"></i><b>7</b> Class MLP</a></li>
-<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision tree</a></li>
+<li class="chapter" data-level="8" data-path="decision-tree.html"><a href="decision-tree.html"><i class="fa fa-check"></i><b>8</b> Decision Tree</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="decision-tree.html"><a href="decision-tree.html#entropy"><i class="fa fa-check"></i><b>8.1</b> Entropy</a></li>
+<li class="chapter" data-level="8.2" data-path="decision-tree.html"><a href="decision-tree.html#constructing-the-tree"><i class="fa fa-check"></i><b>8.2</b> Constructing the Tree</a></li>
+<li class="chapter" data-level="8.3" data-path="decision-tree.html"><a href="decision-tree.html#forcast-credit-defaults-with-dt"><i class="fa fa-check"></i><b>8.3</b> Forcast Credit Defaults with DT</a></li>
+<li class="chapter" data-level="8.4" data-path="decision-tree.html"><a href="decision-tree.html#extern-packages"><i class="fa fa-check"></i><b>8.4</b> Extern Packages</a></li>
+<li class="chapter" data-level="8.5" data-path="decision-tree.html"><a href="decision-tree.html#appendix-complete-code-5"><i class="fa fa-check"></i><b>8.5</b> Appendix (complete code)</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -331,7 +338,7 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 <span id="cb38-30"><a href="mlp-example-credit-default.html#cb38-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(X_test)</span></code></pre></div>
 <p>The <code>train()</code> function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given <code>X_train</code> and <code>Y_train</code>. The <code>test()</code> function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.<br />
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="mlp-example-credit-default.html#cb39-1" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="mlp-example-credit-default.html#cb39-1" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">10000</span>)</span></code></pre></div>
 <p>The return contains multiple values, that are assigned with the <code>a, b = fun_that_returns_2_vals()</code> pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="mlp-example-credit-default.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
 <span id="cb40-2"><a href="mlp-example-credit-default.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
@@ -354,7 +361,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <p>In the next step its time to test the NN on the never seen <code>X_test</code> and <code>Y_test</code> dataset.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="mlp-example-credit-default.html#cb41-1" aria-hidden="true" tabindex="-1"></a>result_test <span class="op">=</span> test(X_test, W_train)</span>
 <span id="cb41-2"><a href="mlp-example-credit-default.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Mean Square error over all testdata: &quot;</span>, mean_square_error(Y_test <span class="op">-</span> result_test))</span></code></pre></div>
-<pre><code>## Mean Square error over all testdata:  2135.358966722297</code></pre>
+<pre><code>## Mean Square error over all testdata:  2012.1713984629632</code></pre>
 <p>Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="mlp-example-credit-default.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify(Y_approx):</span>
 <span id="cb43-2"><a href="mlp-example-credit-default.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.<span class="bu">round</span>(Y_approx,<span class="dv">0</span>) )</span>
@@ -364,16 +371,16 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb43-6"><a href="mlp-example-credit-default.html#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-7"><a href="mlp-example-credit-default.html#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Probability of a wrong output: &quot;</span>, np.<span class="bu">round</span>(np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(classified_error)) <span class="op">/</span> <span class="bu">len</span>(classified_error) <span class="op">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">&quot;%&quot;</span> )</span>
 <span id="cb43-8"><a href="mlp-example-credit-default.html#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Probability of a correct output: &quot;</span>, np.<span class="bu">round</span>((<span class="dv">1</span> <span class="op">-</span> np.<span class="bu">sum</span>(np.<span class="bu">abs</span>(classified_error)) <span class="op">/</span> <span class="bu">len</span>(classified_error))<span class="op">*</span><span class="dv">100</span>,<span class="dv">2</span>),<span class="st">&quot;%&quot;</span> )</span></code></pre></div>
-<pre><code>## Mean Square error over all classified testdata:  2458.5
-## Probability of a wrong output:  16.08 %
-## Probability of a correct output:  83.92 %</code></pre>
+<pre><code>## Mean Square error over all classified testdata:  2457.0
+## Probability of a wrong output:  16.07 %
+## Probability of a correct output:  83.93 %</code></pre>
 <p>An incredible tool to qualify the result is the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a> from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 <img src="img/confusion_matrix.png" style="width:50.0%" alt="https://en.wikipedia.org/wiki/Confusion_matrix" /><br></p>
 <p>For example is <code>TP</code> short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="mlp-example-credit-default.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb45-2"><a href="mlp-example-credit-default.html#cb45-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## array([[21463,  2843],
-##        [ 2074,  4201]], dtype=int64)</code></pre>
+<pre><code>## array([[21164,  3142],
+##        [ 1772,  4503]], dtype=int64)</code></pre>
 </div>
 <div id="appendix-complete-code-3" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Appendix (complete code)</h2>
@@ -439,8 +446,8 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb47-60"><a href="mlp-example-credit-default.html#cb47-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(grad)</span>
 <span id="cb47-61"><a href="mlp-example-credit-default.html#cb47-61" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-62"><a href="mlp-example-credit-default.html#cb47-62" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(X, Y, hidden_layer_neurons, alpha, epochs):</span>
-<span id="cb47-63"><a href="mlp-example-credit-default.html#cb47-63" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X_train[<span class="dv">0</span>])</span>
-<span id="cb47-64"><a href="mlp-example-credit-default.html#cb47-64" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y_train[<span class="dv">0</span>])</span>
+<span id="cb47-63"><a href="mlp-example-credit-default.html#cb47-63" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X[<span class="dv">0</span>])</span>
+<span id="cb47-64"><a href="mlp-example-credit-default.html#cb47-64" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y[<span class="dv">0</span>])</span>
 <span id="cb47-65"><a href="mlp-example-credit-default.html#cb47-65" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> generate_weights(n_input, n_output, hidden_layer_neurons)</span>
 <span id="cb47-66"><a href="mlp-example-credit-default.html#cb47-66" aria-hidden="true" tabindex="-1"></a>  errors <span class="op">=</span> []</span>
 <span id="cb47-67"><a href="mlp-example-credit-default.html#cb47-67" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
@@ -466,7 +473,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb47-87"><a href="mlp-example-credit-default.html#cb47-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-88"><a href="mlp-example-credit-default.html#cb47-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-89"><a href="mlp-example-credit-default.html#cb47-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-90"><a href="mlp-example-credit-default.html#cb47-90" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">20000</span>)</span>
+<span id="cb47-90"><a href="mlp-example-credit-default.html#cb47-90" aria-hidden="true" tabindex="-1"></a>W_train, errors_train <span class="op">=</span> train(X_train, Y_train, hidden_layer_neurons <span class="op">=</span> [<span class="dv">11</span>,<span class="dv">4</span>], alpha <span class="op">=</span> <span class="fl">0.01</span>, epochs <span class="op">=</span> <span class="dv">10000</span>)</span>
 <span id="cb47-91"><a href="mlp-example-credit-default.html#cb47-91" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-92"><a href="mlp-example-credit-default.html#cb47-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-93"><a href="mlp-example-credit-default.html#cb47-93" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
@@ -511,12 +518,12 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb47-132"><a href="mlp-example-credit-default.html#cb47-132" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-133"><a href="mlp-example-credit-default.html#cb47-133" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-16-11.png" width="576" /></p>
-<pre><code>## Mean Square error over all testdata:  2135.358966722297
-## Mean Square error over all classified testdata:  2458.5
-## Probability of a wrong output:  16.08 %
-## Probability of a right output:  83.92 %
-## array([[21463,  2843],
-##        [ 2074,  4201]], dtype=int64)</code></pre>
+<pre><code>## Mean Square error over all testdata:  2012.1713984629632
+## Mean Square error over all classified testdata:  2457.0
+## Probability of a wrong output:  16.07 %
+## Probability of a right output:  83.93 %
+## array([[21164,  3142],
+##        [ 1772,  4503]], dtype=int64)</code></pre>
 
 </div>
 </div>
