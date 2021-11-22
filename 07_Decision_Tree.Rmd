@@ -148,8 +148,8 @@ print("Wrong answers of the decission tree: ",np.sum(np.abs(Y-X))/len(Y) * 100, 
 confusion_matrix(Y,X)
 ```
 
-We can compare the results to the previews created NN:
-```{python}
+We can compare the results to the previews created NN (with `hidden_layer_neurons = [4,4], alpha = 0.01, epochs = 500, batch_size = 2000`):
+```{python, include=FALSE}
 import numpy as np
 import matplotlib.pyplot as pyplot
 import pandas as pd
