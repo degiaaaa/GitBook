@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,9 +147,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.1" data-path="single-perceptron.html"><a href="single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
 <li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
-<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> Backward pass</a></li>
 <li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#why-does-it-work"><i class="fa fa-check"></i><b>2.5</b> Why does it work?</a></li>
+<li class="chapter" data-level="2.6" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.6</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
 <ul>
@@ -158,8 +159,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
 <li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
@@ -237,7 +238,7 @@ x_i,_1 &amp; x_i,_2 &amp; y_i \\
 \end{array}
 \right]
 \]</span>
-The provided training dataset contains the <code>X</code> matrix with two inputs for each scenario and the <code>Y</code> matrix with the correct output (each row contains the input and output of one scenario). If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.</p>
+The provided training dataset contains the <code>X</code> matrix with two inputs for each scenario and the <code>Y</code> matrix with the correct output (each row contains the input and output of one scenario). If your looking closely, you can see that this is the OR-Gate. Later you will understand, why these type of problems are the only suitable things to do with a single neuron.</p>
 <p>The needed python imports are the following:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="single-perceptron.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="single-perceptron.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span></code></pre></div>
@@ -317,7 +318,7 @@ and <span class="math inline">\(Y_i,_0\)</span> is the approximated output of th
 <p>And these are all the generated outputs of our NN over all scenarios. Now do we need to calculate the error and adjust the weights accordingly.</p>
 </div>
 <div id="backward-pass" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> backward pass</h2>
+<h2><span class="header-section-number">2.3</span> Backward pass</h2>
 <p>We need the Delta-Rule to adjust the weights in a single Perceptron:
 <span class="math display">\[
   W(t+1) = W(t) + \Delta W(t)
@@ -397,8 +398,14 @@ or as python code:</p>
 <p><img src="gitbook-demo_files/figure-html/0_9-1.png" width="576" /></p>
 <p>If you survived until now, you have learned how to program a single Perceptron!</p>
 </div>
-<div id="appendix-complete-code" class="section level2" number="2.5">
-<h2><span class="header-section-number">2.5</span> Appendix (complete code)</h2>
+<div id="why-does-it-work" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Why does it work?</h2>
+<p>A single Perceptron with the heavyside activationfunction defines a classifier with the outputs 0 and 1. To find the correct solution, it needs to define a combination of weights and bias so that the inputs can be transferred to the groups <span class="math inline">\(X \cdot W \geq \beta\)</span> or <span class="math inline">\(X \cdot W &lt; \beta\)</span>. The single Perceptron only converges to the given results, if the inputs could be splitted into groups by a straight line in the graph. For example the OR-Gate:</p>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-4-3.png" width="288" /></p>
+<p>You can see that its possible to split up the red points (equals <span class="math inline">\(Y_i=1\)</span>) and the black point (equals <span class="math inline">\(Y_i=0\)</span>) by a straight line. If this isnt possible, like in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform good results. This is the reason why we need more layers, that is explanied in the Multy-Layer-perceptron chapter. <a href="https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7">Here</a> can you find a good source with more explanation.</p>
+</div>
+<div id="appendix-complete-code" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Appendix (complete code)</h2>
 <div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="single-perceptron.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb14-2"><a href="single-perceptron.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> pyplot</span>
 <span id="cb14-3"><a href="single-perceptron.html#cb14-3" aria-hidden="true" tabindex="-1"></a></span>

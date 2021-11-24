@@ -1,9 +1,9 @@
 
 # Effect of batch size
 First of all do we need to differentiate between the following definitions that i found [here](https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks):  
-* one epoch := one forward pass and backward pass of all the training examples.  
-* batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.  
-* number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).   
+- one epoch := one forward pass and backward pass of all the training examples.
+- batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.
+- number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).
 
 In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?  
 

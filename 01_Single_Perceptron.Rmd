@@ -39,7 +39,7 @@ $$
 \end{array}
 \right]
 $$
-The provided training dataset contains the `X` matrix with two inputs for each scenario and the `Y` matrix with the correct output (each row contains the input and output of one scenario). If your looking exactly you can see that this is the OR-Gate. Later you will see why these type of problems are the only suitable things to do with a single neuron.  
+The provided training dataset contains the `X` matrix with two inputs for each scenario and the `Y` matrix with the correct output (each row contains the input and output of one scenario). If your looking closely, you can see that this is the OR-Gate. Later you will understand, why these type of problems are the only suitable things to do with a single neuron.  
 
 The needed python imports are the following:
 ```{python 0_0}
@@ -128,7 +128,7 @@ print(Y_approx)
 ```
 And these are all the generated outputs of our NN over all scenarios. Now do we need to calculate the error and adjust the weights accordingly.
 
-## backward pass
+## Backward pass
 We need the Delta-Rule to adjust the weights in a single Perceptron:
 $$
   W(t+1) = W(t) + \Delta W(t)
@@ -220,6 +220,22 @@ plot_error(mean_square_errors, "Single Perceptron")
 ```
 
 If you survived until now, you have learned how to program a single Perceptron!
+
+## Why does it work?
+A single Perceptron with the heavyside activationfunction defines a classifier with the outputs 0 and 1. To find the correct solution, it needs to define a combination of weights and bias so that the inputs can be transferred to the groups $X \cdot W \geq \beta$ or $X \cdot W < \beta$. The single Perceptron only converges to the given results, if the inputs could be splitted into groups by a straight line in the graph. For example the OR-Gate:  
+
+```{python, echo=FALSE}
+x1 = np.arange(-0.1, 1.1, 0.01)
+x2 = -x1 + 0.6
+
+pyplot.figure(figsize=(3,3))
+pyplot.plot(x1, x2, "g", linewidth=2)
+pyplot.plot([0],[0],"ko")
+pyplot.plot([0,1,1],[1,0,1],"ro")
+pyplot.show()
+```
+
+You can see that its possible to split up the red points (equals $Y_i=1$) and the black point (equals $Y_i=0$) by a straight line. If this isnt possible, like in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform good results. This is the reason why we need more layers, that is explanied in the Multy-Layer-perceptron chapter. [Here](https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7) can you find a good source with more explanation.
 
 ## Appendix (complete code)
 ```{python 0_10, eval=FALSE}

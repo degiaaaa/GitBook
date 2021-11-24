@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,9 +147,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.1" data-path="single-perceptron.html"><a href="single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
 <li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
-<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> Backward pass</a></li>
 <li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#why-does-it-work"><i class="fa fa-check"></i><b>2.5</b> Why does it work?</a></li>
+<li class="chapter" data-level="2.6" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.6</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
 <ul>
@@ -158,8 +159,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
 <li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
@@ -206,9 +207,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="effect-of-batch-size" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Effect of batch size</h1>
 <p>First of all do we need to differentiate between the following definitions that i found <a href="https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks">here</a>:<br />
-* one epoch := one forward pass and backward pass of all the training examples.<br />
-* batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.<br />
-* number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).</p>
+- one epoch := one forward pass and backward pass of all the training examples.<br />
+- batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.<br />
+- number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).</p>
 <p>In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?</p>
 <p>Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior <a href="https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu">here</a>. The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found <a href="https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e">here</a>. He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.</p>
 <p>All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.</p>
@@ -356,8 +357,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb53-19"><a href="effect-of-batch-size.html#cb53-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-20"><a href="effect-of-batch-size.html#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-21"><a href="effect-of-batch-size.html#cb53-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  8.421871185302734</code></pre>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-20-13.png" width="576" /></p>
+<pre><code>## Time to train the NN:  8.68296504020691</code></pre>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-21-15.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2402.2283244767077
 ## Mean Square error over all classified testdata:  2932.0
 ## Probability of a wrong output:  19.18 %
@@ -385,8 +386,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb56-19"><a href="effect-of-batch-size.html#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-20"><a href="effect-of-batch-size.html#cb56-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-21"><a href="effect-of-batch-size.html#cb56-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  24.241447687149048</code></pre>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-21-15.png" width="576" /></p>
+<pre><code>## Time to train the NN:  22.47386336326599</code></pre>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-22-17.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2210.3693145823286
 ## Mean Square error over all classified testdata:  2559.5
 ## Probability of a wrong output:  16.74 %
@@ -541,7 +542,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb59-142"><a href="effect-of-batch-size.html#cb59-142" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-143"><a href="effect-of-batch-size.html#cb59-143" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-144"><a href="effect-of-batch-size.html#cb59-144" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-22-17.png" width="576" /></p>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-23-19.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2330.8698549481937
 ## Mean Square error over all classified testdata:  2940.0
 ## Probability of a wrong output:  19.23 %

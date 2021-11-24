@@ -67,7 +67,7 @@ def add_ones_to_input(x):
 ```
 
 
-## forward pass
+## Forward pass
 The structur of the new forward function looks exactly like in the single Perceptron:
 ```{python 2_4}
 def forward(x, w):
@@ -94,7 +94,7 @@ Y-OUT[-1]
 ```
 Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)  
 
-## backward pass
+## Backward pass
 We will adjust the weights with the backpropagation algorithm that is a special case of the descent gradient algorithm. In the output layer is it done by calculating the sensitives of the outputs according to the activation function multiplied with the error that occurred. On all other layers its calculated by passing backwards the earlier calculated gradient, splitted up on each neuron by the previews weights and multiplied by the sensitivity of the outputs of that layer according to the activation function. The formula is the following: 
 $$
   grad^i= 

@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,9 +147,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="2.1" data-path="single-perceptron.html"><a href="single-perceptron.html#neural-network-basics"><i class="fa fa-check"></i><b>2.1</b> Neural Network Basics</a></li>
 <li class="chapter" data-level="2.2" data-path="single-perceptron.html"><a href="single-perceptron.html#forward-pass"><i class="fa fa-check"></i><b>2.2</b> Forward pass</a></li>
-<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> backward pass</a></li>
+<li class="chapter" data-level="2.3" data-path="single-perceptron.html"><a href="single-perceptron.html#backward-pass"><i class="fa fa-check"></i><b>2.3</b> Backward pass</a></li>
 <li class="chapter" data-level="2.4" data-path="single-perceptron.html"><a href="single-perceptron.html#single-perceptron-1"><i class="fa fa-check"></i><b>2.4</b> Single Perceptron</a></li>
-<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.5</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="2.5" data-path="single-perceptron.html"><a href="single-perceptron.html#why-does-it-work"><i class="fa fa-check"></i><b>2.5</b> Why does it work?</a></li>
+<li class="chapter" data-level="2.6" data-path="single-perceptron.html"><a href="single-perceptron.html#appendix-complete-code"><i class="fa fa-check"></i><b>2.6</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html"><i class="fa fa-check"></i><b>3</b> Adding trainable Bias</a>
 <ul>
@@ -158,8 +159,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> backward pass</a></li>
+<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
 <li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
@@ -242,7 +243,7 @@ The important column is <code>load_status</code> that determinates the customers
 ##        [&lt;AxesSubplot:title={&#39;center&#39;:&#39;loan_percent_income&#39;}&gt;,
 ##         &lt;AxesSubplot:title={&#39;center&#39;:&#39;cb_person_cred_hist_length&#39;}&gt;,
 ##         &lt;AxesSubplot:&gt;]], dtype=object)</code></pre>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-5-7.png" width="768" />
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-6-9.png" width="768" />
 All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found <a href="https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/">here</a>). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="mlp-example-credit-default.html#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace({<span class="st">&quot;Y&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;N&quot;</span>:<span class="dv">0</span>})</span>
 <span id="cb33-2"><a href="mlp-example-credit-default.html#cb33-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;person_home_ownership&quot;</span>] <span class="op">=</span> data[<span class="st">&quot;person_home_ownership&quot;</span>].replace({<span class="st">&#39;OWN&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;RENT&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;MORTGAGE&#39;</span>:<span class="dv">3</span>, <span class="st">&#39;OTHER&#39;</span>:<span class="dv">4</span>})</span>
@@ -357,7 +358,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb40-15"><a href="mlp-example-credit-default.html#cb40-15" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
 <span id="cb40-16"><a href="mlp-example-credit-default.html#cb40-16" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb40-17"><a href="mlp-example-credit-default.html#cb40-17" aria-hidden="true" tabindex="-1"></a>plot_error(ms_errors_train, <span class="st">&quot;MLP Credit Default&quot;</span>)</span></code></pre></div>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-12-9.png" width="576" /></p>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-13-11.png" width="576" /></p>
 <p>In the next step its time to test the NN on the never seen <code>X_test</code> and <code>Y_test</code> dataset.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="mlp-example-credit-default.html#cb41-1" aria-hidden="true" tabindex="-1"></a>result_test <span class="op">=</span> test(X_test, W_train)</span>
 <span id="cb41-2"><a href="mlp-example-credit-default.html#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Mean Square error over all testdata: &quot;</span>, mean_square_error(Y_test <span class="op">-</span> result_test))</span></code></pre></div>
@@ -517,7 +518,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 <span id="cb47-131"><a href="mlp-example-credit-default.html#cb47-131" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-132"><a href="mlp-example-credit-default.html#cb47-132" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-133"><a href="mlp-example-credit-default.html#cb47-133" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-16-11.png" width="576" /></p>
+<p><img src="gitbook-demo_files/figure-html/unnamed-chunk-17-13.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2012.1713984629632
 ## Mean Square error over all classified testdata:  2457.0
 ## Probability of a wrong output:  16.07 %
