@@ -12,8 +12,9 @@ import matplotlib.pyplot as pyplot
 A multi layer Perceptron contains multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalize some definitions, to support this behavior. What we want to do is the NN of the following picture:    
 ![https://app.diagrams.net/](./img/NN_03_new.png){ width=100% }<br>  
 
-It is my own definition of layers, because i thought, it would be better to display layers like shown in the picture, to take the step from $n$ to $n+1$ hidden layers more easy. You can see that each layer has the same process in the forward pass by evaluating $f(IN^{layer} \cdot W^{layer}) = OUT^{layer}$ and just passing the result to the next layer like $OUT^{layer} = IN^{layer+1}$, with $f$ as the chosen activation function.  
-We will choose the sigmoid function as the activation function $f$, because it has an easy deviation $f^`$ for the backward pass and its very close to the behavior of the heavyside function with an output between 0 and 1.  
+It's my own definition of layers since I believed it would be easier to transition from $n$ to $n+1$ hidden layers if they were displayed as indicated in the image. By evaluating $f(IN^{layer} \cdot W^{layer}) = OUT^{layer}$ and just transferring the result to the next layer like $OUT^{layer} = IN^{layer+1}$, with $f$ as the chosen activation function, you can see that each layer has the identical procedure in the forward pass.
+We'll choose the sigmoid function as the activation function $f$ because it has a simple deviation $f'$ which is used for the backward pass and behaves similarly to the heavyside function with an output between 0 and 1.
+
 ```{python 2_1}
 def sigmoid(x):
   return 1.0 / (1.0 + np.exp(-x))
@@ -59,8 +60,9 @@ W = generate_weights(n_input, n_output, hidden_layer_neurons)
 print("W[0]: \n", W[0])
 print("W[1]: \n", W[1])
 ```
-The input and output layer neurons are calculated from the training dataset and the neurons for the hidden layers are generated with the `hidden_layer_neurons` list. For example, can we generate two hidden layers with 4 and 2 neurons by `hidden_layer_neurons = [4,2]`. I didnt explicitly choose the bias because it gets corrected anyway.  
-Now do we need to define a helper function to add the biases, on the last column of the inputs, with:
+
+The neurons for the hidden layers are generated using the `hidden_layer_neurons` list, while the input and output layer neurons are calculated from the training dataset. `hidden_layer_neurons = [4,2]`, for example, can construct two hidden layers with 4 and 2 neurons. I didn't choose the bias because it is automatically rectified.
+Is it now necessary to construct a helper function to add the biases to the last column of the inputs, like follows:
 ```{python 2_3}
 def add_ones_to_input(x):
   return(np.append(x, np.array([np.ones(len(x))]).T, axis=1))

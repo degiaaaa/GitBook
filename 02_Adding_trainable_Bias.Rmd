@@ -17,10 +17,10 @@ step(s)=
     0,& s < \beta
 \end{cases}
 $$
-with $\beta = 1$ and that is just the right $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $-5$ to the $X$ matrix? Now it will never find the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldnt be intelligent to search for each dataset the optimal $\beta$ by hand. 
+with $\beta = 1$. It is the perfect $\beta$ for the given training dataset. But what happens if you shift the training data for example adding $-5$ to the $X$ matrix? Now it will never find the correct answer. That is because you need to select the $\beta$ accordingly. But this wouldn't be intelligent to search for each dataset the optimal $\beta$ by hand. 
 
 ## Generalising the Bias
-First of all do we need to generalise the use of the bias, stating with the generalisation of the activation function:
+First of all do we need to generalise the use of the bias, stating with the generalization of the activation function:
 $$ 
 step(s)= 
 \begin{cases}

@@ -5,8 +5,7 @@ editor_options:
 ---
 
 # Single Perceptron
-In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.  
-First of all do we start with the necessary parameters, that are explained later:
+Throughout this chapter, I will show you how to program a single Perceptron in Python using only the numpy package. Numpy uses a vectorizable math structure, which allows you to easily perform normal matrix multiplications with just an expression (i always interpret vectors as one dimensional matrices!). In most cases, it is just a matter of translating mathematical formulas into python code without altering their structure. Before we begin, let's identify the necessary parameters, which will be explained later:  
 
 Number of iterations over all the training dataset := `epochs`    
 Learning rate := $\alpha =$ `alpha`  
@@ -19,7 +18,7 @@ step(s)=
     0,& s < \beta
 \end{cases}
 $$
-This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the bias $\beta$, it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.
+This function is named the heavyside-function and should be the easiest activation function to understand. If the weighted sum is smaller than the bias $\beta$, it will send the value zero to the next neuron. It is the same in the brain. If there is not enough electricity, the neuron will not activate, and the next does not receive electricity.
 
 The training dataset is the following:
 $$
@@ -187,7 +186,7 @@ for i in range(epochs):
   W = backward(W, X, Y, alpha, Y_approx)
 ```
 
-The KNN is trained. In the next step do we analyze the errors of each epoch. The best way to consider all the errors of each scenario is to measure the mean-square-error with the following formula:
+The KNN is trained. In the next step, we will analyze the errors of each epoch. The best way to do so is to measure the mean-square-error with the following formula:
 $$
   Errors = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 $$
@@ -235,7 +234,8 @@ pyplot.plot([0,1,1],[1,0,1],"ro")
 pyplot.show()
 ```
 
-You can see that its possible to split up the red points (equals $Y_i=1$) and the black point (equals $Y_i=0$) by a straight line. If this isnt possible, like in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform good results. This is the reason why we need more layers, that is explanied in the Multy-Layer-perceptron chapter. [Here](https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7) can you find a good source with more explanation.
+The red points (equals $Y_i=1$) and the black points (equals $Y_i=0$) can be split up with a straight line. If this isn't possible, as in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform well. This explains why we need atleast multiple layers, as described in the chapter on multilayer Perceptrons. [Here](https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7) can you find a good source with more explanation.
+
 
 ## Appendix (complete code)
 ```{python 0_10, eval=FALSE}

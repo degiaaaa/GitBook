@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-24" />
+<meta name="date" content="2021-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -208,25 +208,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 class="title"><div class="line-block">My First Steps in Neuronal Networks<br />
 (Beginners Guide)</div></h1>
 <p class="author"><em>Axel Roth</em></p>
-<p class="date"><em>2021-11-24</em></p>
+<p class="date"><em>2021-11-25</em></p>
 </div>
 <div id="about" class="section level1" number="1">
 <h1><span class="header-section-number">Chapter 1</span> About</h1>
 <div id="me" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Me</h2>
-<p>Hello, my name is Axel Roth and im studding math at a master degree in germany and working half-time in the finance field as something between a data-analyst and a full stack developer. I already got a lot of experience in coding with R and all its features, but i never wrote a line of code in python and i never touched Neuronal Networks bevor. So Why do i want to write a beginners guide in the field of Neuronal Networks in python?<br />
-Its simple, at the moment im having a lecture in that we learn how to program a Neuronal Network from scratch with basic packages from python and i want to share my experience. Additionally i learned all i know from free sources of the internet and thats why i want to give something back. Furthermore its a good use-case to write my first things in english and test the fancy Bookdown and GitBook features.</p>
+<p>Hello, my name is Axel Roth, and I’m pursuing a master’s degree in mathematics in Germany while working part-time in finance as something between a data analyst and a full stack developer. I have a lot of experience with R and all of its features, but I have never written a line of Python code or worked with Neuronal Networks before. So, why am I writing a Python Beginner’s Guide to Neuronal Networks in the first place? It’s simple. I’m currently attending a lecture in which we’re learning how to program a Neuronal Network from scratch using basic Python packages, and I’d like to share my experience. Furthermore, I learned everything I know from free internet sources, which is why I want to give something back. It’s also a good use-case for me to write my first things in English.</p>
 </div>
 <div id="the-book" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> The Book</h2>
-<p>This Book will be more or the less the documentation of my lecture in that we learn to program a simple Perceptron (the simplest Neuronal Network) and then we will continue with a multi layer Perceptron and finish with a slight insight into decision trees. On this journey, we will test the Neuronal Network in different examples that are easy to reproduce. Because these are my first steps in this field, i need to appolagice for my terrible spelling and cant guarantee you the best quality, but maybe this is the best way to educate and attract unexperienced readers to have a look into this field.</p>
+<p>This book will essentially be a transcript of my lecture, in which we will learn to program a simple Perceptron (the most basic Neuronal Network), then progress to a multilayer Perceptron, and finally to a brief overview of decision trees. On this journey, we’ll put the Neuronal Network to the test in a variety of scenarios that are simple to replicate. Because these are my first steps in this field, I apologize for my terrible spelling and cannot guarantee the highest quality, but this may be the best way to educate and attract uninitiated readers to take a look.</p>
 </div>
 <div id="how-it-works" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> How it works</h2>
-<p>Im coding this book in the IDE R-Studio with the framework of Bookdown and embed python code that is made possible by the reticulate package. This is the reason, why i need to load the python interpreter in the following R-chunk:</p>
+<p>I’m writing this book in the R-Studio IDE, using the Bookdown framework, and using the reticulate package to embed python code. This is why I need to load the Python interpreter in the R-chunk below:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
 <span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">RETICULATE_PYTHON =</span> <span class="st">&quot;D:</span><span class="sc">\\</span><span class="st">WinPython2</span><span class="sc">\\</span><span class="st">WPy64-3950</span><span class="sc">\\</span><span class="st">python-3.9.5.amd64</span><span class="sc">\\</span><span class="st">&quot;</span>)</span></code></pre></div>
-<p>Additionaly im using a fully portable version of R-Studio, R and python. Its nice to have if you want to switch for example between university PCs and your own. R-Studio supports it and python can be downloaded via WinPython to be fully portable. All the Neural Network pictures are handmade by me with draw.io, its a free to use website. If you are new to python and never used R i would recommend to use jupyter lab or PyCharm.</p>
+<p>In addition, I use R-Studio, R, and Python in a portable manner. It comes in handy when you need to switch between university and home computers, for example. Python can be downloaded through WinPython to be fully portable, and R-Studio supports it. I created all of the Neural Network images using the free website draw.io and im using QuillBot to compensate for my poor spelling skills. I would recommend jupyter lab or PyCharm if you are new to Python and have never used R.</p>
 
 </div>
 </div>

@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-24" />
+<meta name="date" content="2021-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -206,8 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="single-perceptron" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Single Perceptron</h1>
-<p>In this chapter i will teach you how to code a single Perceptron in python with only the numpy package. Numpy uses a vectorizible math structure in which you can easily calculate elementwise or do stuff like normal matrix multiplications with just a symbol (i always interpret vectors as one dimensional matrices!). At the most of the time, its just translating math formulas into python code without changing its structure.<br />
-First of all do we start with the necessary parameters, that are explained later:</p>
+<p>Throughout this chapter, I will show you how to program a single Perceptron in Python using only the numpy package. Numpy uses a vectorizable math structure, which allows you to easily perform normal matrix multiplications with just an expression (i always interpret vectors as one dimensional matrices!). In most cases, it is just a matter of translating mathematical formulas into python code without altering their structure. Before we begin, let’s identify the necessary parameters, which will be explained later:</p>
 <p>Number of iterations over all the training dataset := <code>epochs</code><br />
 Learning rate := <span class="math inline">\(\alpha =\)</span> <code>alpha</code><br />
 Bias value := <span class="math inline">\(\beta =\)</span> <code>bias</code>
@@ -219,7 +218,7 @@ step(s)=
     0,&amp; s &lt; \beta
 \end{cases}
 \]</span>
-This function is named the heavyside-function and should be the easiest activation function to start with. If the weighted sum is smaller than the bias <span class="math inline">\(\beta\)</span>, it will send the value zero to the next neuron. Our brain works with the same behavior. If the electricity is too small, the neuron will not activate and the next one dosent get any electricity.</p>
+This function is named the heavyside-function and should be the easiest activation function to understand. If the weighted sum is smaller than the bias <span class="math inline">\(\beta\)</span>, it will send the value zero to the next neuron. It is the same in the brain. If there is not enough electricity, the neuron will not activate, and the next does not receive electricity.</p>
 <p>The training dataset is the following:
 <span class="math display">\[
 \left[
@@ -372,7 +371,7 @@ and <span class="math inline">\(\hat{Y}\)</span> is the output of the NN. Transl
 <span id="cb10-23"><a href="single-perceptron.html#cb10-23" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
 <span id="cb10-24"><a href="single-perceptron.html#cb10-24" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
 <span id="cb10-25"><a href="single-perceptron.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span></code></pre></div>
-<p>The KNN is trained. In the next step do we analyze the errors of each epoch. The best way to consider all the errors of each scenario is to measure the mean-square-error with the following formula:
+<p>The KNN is trained. In the next step, we will analyze the errors of each epoch. The best way to do so is to measure the mean-square-error with the following formula:
 <span class="math display">\[
   Errors = \frac{1}{2} \cdot \sum(Y-\hat{Y})^2
 \]</span>
@@ -402,7 +401,7 @@ or as python code:</p>
 <h2><span class="header-section-number">2.5</span> Why does it work?</h2>
 <p>A single Perceptron with the heavyside activationfunction defines a classifier with the outputs 0 and 1. To find the correct solution, it needs to define a combination of weights and bias so that the inputs can be transferred to the groups <span class="math inline">\(X \cdot W \geq \beta\)</span> or <span class="math inline">\(X \cdot W &lt; \beta\)</span>. The single Perceptron only converges to the given results, if the inputs could be splitted into groups by a straight line in the graph. For example the OR-Gate:</p>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-4-3.png" width="288" /></p>
-<p>You can see that its possible to split up the red points (equals <span class="math inline">\(Y_i=1\)</span>) and the black point (equals <span class="math inline">\(Y_i=0\)</span>) by a straight line. If this isnt possible, like in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform good results. This is the reason why we need more layers, that is explanied in the Multy-Layer-perceptron chapter. <a href="https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7">Here</a> can you find a good source with more explanation.</p>
+<p>The red points (equals <span class="math inline">\(Y_i=1\)</span>) and the black points (equals <span class="math inline">\(Y_i=0\)</span>) can be split up with a straight line. If this isn’t possible, as in the XOR-Gate, the single Perceptron will never find a combination of bias and weights to perform well. This explains why we need atleast multiple layers, as described in the chapter on multilayer Perceptrons. <a href="https://towardsdatascience.com/how-neural-networks-solve-the-xor-problem-59763136bdd7">Here</a> can you find a good source with more explanation.</p>
 </div>
 <div id="appendix-complete-code" class="section level2" number="2.6">
 <h2><span class="header-section-number">2.6</span> Appendix (complete code)</h2>

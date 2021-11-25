@@ -24,7 +24,7 @@
 <meta name="author" content="Axel Roth" />
 
 
-<meta name="date" content="2021-11-24" />
+<meta name="date" content="2021-11-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -214,10 +214,10 @@ step(s)=
     0,&amp; s &lt; \beta
 \end{cases}
 \]</span>
-with <span class="math inline">\(\beta = 1\)</span> and that is just the right <span class="math inline">\(\beta\)</span> for the given training dataset. But what happens if you shift the training data for example adding <span class="math inline">\(-5\)</span> to the <span class="math inline">\(X\)</span> matrix? Now it will never find the correct answer. That is because you need to select the <span class="math inline">\(\beta\)</span> accordingly. But this wouldnt be intelligent to search for each dataset the optimal <span class="math inline">\(\beta\)</span> by hand.</p>
+with <span class="math inline">\(\beta = 1\)</span>. It is the perfect <span class="math inline">\(\beta\)</span> for the given training dataset. But what happens if you shift the training data for example adding <span class="math inline">\(-5\)</span> to the <span class="math inline">\(X\)</span> matrix? Now it will never find the correct answer. That is because you need to select the <span class="math inline">\(\beta\)</span> accordingly. But this wouldn’t be intelligent to search for each dataset the optimal <span class="math inline">\(\beta\)</span> by hand.</p>
 <div id="generalising-the-bias" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Generalising the Bias</h2>
-<p>First of all do we need to generalise the use of the bias, stating with the generalisation of the activation function:
+<p>First of all do we need to generalise the use of the bias, stating with the generalization of the activation function:
 <span class="math display">\[ 
 step(s)= 
 \begin{cases}
