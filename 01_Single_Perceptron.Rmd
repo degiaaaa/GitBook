@@ -142,7 +142,7 @@ def backward(W, X, Y, alpha, Y_approx):
     return(W + alpha * X.T @ (Y - Y_approx))
 ```
 
-With the result of the forward pass and and the correct outputs, do we have the following:
+With the result of the forward pass and and the correct outputs, do we have the following:  
 ```{python 0_5}
 Y = np.array([
   [0],
