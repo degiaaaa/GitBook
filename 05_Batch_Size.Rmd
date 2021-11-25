@@ -1,15 +1,16 @@
 
 # Effect of batch size
-First of all do we need to differentiate between the following definitions that i found [here](https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks):  
+First and foremost, do we need to distinguish between the following definitions that I discovered [here](https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks):  
 - one epoch := one forward pass and backward pass of all the training examples.
 - batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.
 - number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).
 
-In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?  
+I noted in the first chapter that the standard method for defining a NN is to cycle over all training data by selecting a random scenario until all possibilities have been used, resulting in one epoch. To make it easier, I changed it to pick all scenarios at once (full batch size). But what happens if the batch size is equal to the number of rows in the training dataset?  
 
-Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior [here](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu). The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found [here](https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e). He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.   
 
-All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.  
+Unfortunately, there is no solid proof for the differences, but I did find a neat post that tries to explain it [here](https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu). As a result, optimizing with the full batch size yields sharper minimaz, whereas optimizing with a lesser batch size yields to flatter minimaz. More information about the issue of speed vs. accuracy via batch size selection may be found [here](https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e). He clearly outlines the issues and how switching to a dynamically growing batch size could be a smart option.  
+
+The underlying data determines the ideal hyperparameters like as bias, alpha, batch size, hidden neurons, and so on, according to what I've found so far. As a result, modifying the underlying dataset affects all of the ideal hyperparameters. Perhaps it would be more useful to test some hyperparameters on our Credit Default dataset and compare the outcomes.  
 
 ## Impact of diffrent hyperparameters
 First of all do we add a `batch_size` parameter to the preview `train()` function and generate random batches that all contain distinct random integers in each batch. We will use the following function to generate the random batches:
@@ -188,8 +189,7 @@ confusion_matrix(Y_test, classify(result_test))
 ```
 
 
-We can see that the full batch size is much faster than the smaller one, but the smaller batch size has a smaller error. Maybe the perfect batch size depends on the problem itself. If you have a low dimensional input matrix and need to get a fast solution, its better to go with full batch size. If you have high dimensional input its not possible to use a full batch size, because your ram is jumping off. I think its the best to analyze the underlying data and select a suitable batch size for it. Maybe some situations will need a dynamic batch size, that shrinks over time, to get the best results, like in the blog post i mentioned at the start of the chapter.
-
+The full batch size is clearly faster than the smaller batch size, yet the smaller batch size has a lower error. Perhaps the ideal batch size is determined by the problem itself. If you have a low-dimensional input matrix and need a quick answer, full batch size is the way to go. If your dimensional input is large, you won't be able to use a complete batch size since your RAM will jump off. I believe it is important to study the underlying data and choose a batch size that is appropriate for it. For example, in the blog article I cited at the beginning of the chapter, some situations may require a dynamic batch size that lowers over time to provide the best outcomes.
 
 
 ## Appendix (complete code)

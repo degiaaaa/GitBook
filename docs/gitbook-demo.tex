@@ -215,17 +215,17 @@ Now that we have all the needed parameters and settings, i can give you a quick 
 \hypertarget{neural-network-basics}{%
 \section{Neural Network Basics}\label{neural-network-basics}}
 
-In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass do we calculate the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass do we analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life\ldots{}\\
-Ahh no no ok we have a deeper look into it :)
+The forward pass and the backward pass are the two primary parts of a NN. To calculate the output, we calculate the weighted sum of each input neuron with the layer's weights and evaluate the activation function with in the forward pass. We analyze the inaccuracy in the backward pass and modify the weights accordingly. That's it! That is exactly what a Neuronal Network is doing. Everything was explained to you. Enjoy your life\ldots{}
+No, no, no, we'll take a closer look:)
 
-What exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario of the training dataset, the following:
+In a single Perceptron, what is the forward pass? It's just like I mentioned, evaluating the activation function using the weighted sum, so for one scenario of the training dataset, you have:
 \[
   step(W \cdot x^T_i) = y_i
 \]
-This is the normal approach to use this formula to iterate over all scenarios in the training dataset\ldots{}\\
-But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios at the same time.
+Using this formula to iterate over all scenarios in the training dataset is the standard approach\ldots{}
+But I don't think that's the best way to put it because it's difficult to interpret it for all scenarios at the same time.
 
-My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all do we need to interpret the new dimensions of \(W\) and \(X\).\\
+My next strategy is to use a single formula to account for all scenarios in the training dataset. If your data isn't too large, this is also a much faster method. First and foremost, we must interpret the new \(W\) and \(X\) dimensions.
 We have \(X\) as:
 \[
   X = \left[
@@ -583,6 +583,8 @@ The complete code is the following:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{np.random.seed(}\DecValTok{0}\NormalTok{)}
+
 \NormalTok{X }\OperatorTok{=}\NormalTok{ np.array([}
 \NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{],}
 \NormalTok{  [}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{],}
@@ -651,10 +653,10 @@ The complete code is the following:
 
 \includegraphics{gitbook-demo_files/figure-latex/1_2-5.pdf}
 
-\hypertarget{multi-layer-perceptrons-mlp}{%
-\chapter{Multi Layer Perceptrons (MLP)}\label{multi-layer-perceptrons-mlp}}
+\hypertarget{multilayer-perceptrons-mlp}{%
+\chapter{Multilayer Perceptrons (MLP)}\label{multilayer-perceptrons-mlp}}
 
-A multi layer Perceptron contains multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalize some definitions, to support this behavior. What we want to do is the NN of the following picture:\\
+Multiple layers of neurons make up a multilayer Perceptron. As a result, we must calculate the forward pass several times, as well as the backward pass. First and foremost, do we need to broaden some definitions in order to support this behavior? The NN of the following image is what we want to do:\\
 \includegraphics[width=1\textwidth,height=\textheight]{./img/NN_03_new.png}
 
 It's my own definition of layers since I believed it would be easier to transition from \(n\) to \(n+1\) hidden layers if they were displayed as indicated in the image. By evaluating \(f(IN^{layer} \cdot W^{layer}) = OUT^{layer}\) and just transferring the result to the next layer like \(OUT^{layer} = IN^{layer+1}\), with \(f\) as the chosen activation function, you can see that each layer has the identical procedure in the forward pass.
@@ -713,13 +715,13 @@ Additionaly will we choose the XOR-Gate as training dataset and generate random 
 
 \begin{verbatim}
 ## W[0]: 
-##  [[0.60136064 0.43288031]
-##  [0.33505774 0.7272638 ]
-##  [0.8422646  0.34953117]]
+##  [[0.5488135  0.71518937]
+##  [0.60276338 0.54488318]
+##  [0.4236548  0.64589411]]
 ## W[1]: 
-##  [[0.45000163]
-##  [0.54777406]
-##  [0.72498472]]
+##  [[0.43758721]
+##  [0.891773  ]
+##  [0.96366276]]
 \end{verbatim}
 
 The neurons for the hidden layers are generated using the \texttt{hidden\_layer\_neurons} list, while the input and output layer neurons are calculated from the training dataset. \texttt{hidden\_layer\_neurons\ =\ {[}4,2{]}}, for example, can construct two hidden layers with 4 and 2 neurons. I didn't choose the bias because it is automatically rectified.
@@ -767,18 +769,18 @@ Now we have everything to calculate the forward pass of the NN from above with t
 \end{Shaded}
 
 \begin{verbatim}
-## array([[-0.79588666],
-##        [ 0.18579425],
-##        [ 0.18771517],
-##        [-0.82615389]])
+## array([[-0.85974823],
+##        [ 0.12242041],
+##        [ 0.12015376],
+##        [-0.89115202]])
 \end{verbatim}
 
-Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)
+Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multilayer Perceptron :)
 
 \hypertarget{backward-pass-1}{%
 \section{Backward pass}\label{backward-pass-1}}
 
-We will adjust the weights with the backpropagation algorithm that is a special case of the descent gradient algorithm. In the output layer is it done by calculating the sensitives of the outputs according to the activation function multiplied with the error that occurred. On all other layers its calculated by passing backwards the earlier calculated gradient, splitted up on each neuron by the previews weights and multiplied by the sensitivity of the outputs of that layer according to the activation function. The formula is the following:
+The weights will be adjusted using the backpropagation algorithm, which is a variant of the descent gradient algorithm. Calculating the sensitives of the outputs according to the activation function multiplied by the error that occurred is done in the output layer. On all other layers, it's calculated by reversing the previously calculated gradient, splitting it up on each neuron by the previews weights, and multiplying the sensitivity of that layer's outputs by the activation function's sensitivity. The following is the formula:
 \[
   grad^i= 
 \begin{cases}
@@ -786,8 +788,8 @@ We will adjust the weights with the backpropagation algorithm that is a special 
     f^`(OUT^i) \cdot (grad^{i+1} * \widetilde{W}^{i+1\ T}),& \text{else}
 \end{cases}
 \]
-with \(\widetilde{W}\) as the weights of the layer \(i\) without the connection to the bias neuron, because it has no connection to the previews neurons. In our datastructur its done by removing the last row.\\
-With the example from above, it can be done with:
+with \(\widetilde{W}\) as the weights of the layer \(i\), without the connection to the bias neuron. You can calculate \(\widetilde{W}\) in our datastructure by removing the last row.\\
+The gradients for the backward pass are calculated using the following code:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -803,7 +805,7 @@ With the example from above, it can be done with:
 \end{Highlighting}
 \end{Shaded}
 
-Now you can look, for example, at the gradient of the last layer and in which direction it is shown:
+You can now examine the gradient of the last layer and the direction in which it is displayed:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -820,23 +822,23 @@ Now you can look, for example, at the gradient of the last layer and in which di
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.79588666]
-##  [0.81420575]
-##  [0.81228483]
-##  [0.82615389]]
+##  [[0.85974823]
+##  [0.87757959]
+##  [0.87984624]
+##  [0.89115202]]
 ## grad: 
-##  [[-0.12929265]
-##  [ 0.02810598]
-##  [ 0.02862247]
-##  [-0.11865523]]
+##  [[-0.10366948]
+##  [ 0.01315207]
+##  [ 0.01270227]
+##  [-0.08644184]]
 \end{verbatim}
 
-You can see that the gradient shows in the direction that would drift the output \(OUT\) closer to the desired output \(Y\). That is exactly what the gradient descent algorithm is doing.\\
-In the next step do we need to adjust the weights with the gradients and the learningrate \(\alpha\) according to the direction of the gradients with the following formula:
+The gradient appears to be pointing in the direction of drifting the output \(OUT\) closer to the desired output \(Y\). The gradient descent algorithm accomplishes exactly that.
+The weights with the gradients and the learningrate \(\alpha\) must then be adjusted according to the direction of the gradients using the following formula:
 \[
   W^i_{new} = W^i_{old} + \alpha \cdot ( IN^{i\ T} * grad^i) 
 \]
-In the example from above do we have the following results for the adjusted weights after the first epoch:
+After the first epoch, we get the following results for the adjusted weights in the example above:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -847,7 +849,7 @@ In the example from above do we have the following results for the adjusted weig
 \end{Highlighting}
 \end{Shaded}
 
-This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons and one output neuron. It is simple to use the given code from above to create a more generic NN for dynamic number of hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
+This was the forward and backward pass process in a multilayer Perceptron with two input neurons, two hidden layer neurons, and one output neuron for one epoch. It's simple to use the above code to make a more generic NN with a variable number of hidden layers and variable training datasets for a given number of epochs, as shown in the appendix below.
 
 \hypertarget{appendix-complete-code-2}{%
 \section{Appendix (complete code)}\label{appendix-complete-code-2}}
@@ -992,7 +994,7 @@ First all do we need to load the csv via pandas and analyse it:
 ## 4          24          54400                  RENT               8.00     MEDICAL          C      35000          14.27            1                 0.55                         Y                           4
 \end{verbatim}
 
-You can find the detailed information about the columns on kaggle, additionaly to the next table:\\
+You can find the more details about the columns on kaggle, additionaly to the next table:\\
 \includegraphics[width=1\textwidth,height=\textheight]{./img/credit_default_kaggle_data_info.png}
 The important column is \texttt{load\_status} that determinates the customers credit default and is used as the correct outputs \(Y\). All other columns are considered as the input matrix \(X\). First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:
 
@@ -1020,6 +1022,8 @@ The important column is \texttt{load\_status} that determinates the customers cr
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-6-9.pdf}
 All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found \href{https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/}{here}). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
 
+All other input columns are categorical, and Neuronal Networks cannot process them. Fortunately, there are some methods for converting categories to numbers, such as Ordinal Encoding, One-hot Encoding, and Embedding (more information can be found \href{https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/}{here}). Because it is the easiest way, I will use Ordinal Encoding for our dataset. Ordinal Encoding simply converts numbers into categories. The best technique would be to organize each column's categories in a meaningful way before assigning numbers to them, as seen in the code below:
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{data }\OperatorTok{=}\NormalTok{ data.replace(\{}\StringTok{"Y"}\NormalTok{: }\DecValTok{1}\NormalTok{, }\StringTok{"N"}\NormalTok{:}\DecValTok{0}\NormalTok{\})}
@@ -1040,9 +1044,9 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 ## 4          24          54400                      2               8.00            3           3      35000          14.27            1                 0.55                          1                           4
 \end{verbatim}
 
-Its definitely not the best way to encode the categorical data but its the simplest method and it dosent increase the size of the input matrix.
+It's not the most precise method for encoding categorical data, but it's the simplest and doesn't add to the input matrix's size.
 
-Additionaly its important to normalize the data which leads to more stability and speed for the learning process (for more \href{https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/}{information}). We will normalize the data to the interval \([0,1]\) because we are using the sigmoid function. The following function will do the trick for the whole numpy array you are putting in:
+It's also crucial to standardize the data, which improves the learning process's stability and speed (for more \href{https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/}{information}). Because we're using the sigmoid function, we'll normalize the data to the interval \([0,1]\). The following function will work for the entire numpy array you've entered:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1053,7 +1057,7 @@ Additionaly its important to normalize the data which leads to more stability an
 \end{Highlighting}
 \end{Shaded}
 
-Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:
+Now we must divide the data into a training and a test dataset, convert the pandas dataframe to a numpy array, and normalize it:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1066,7 +1070,7 @@ Now do we need to split the given data in a training dataset and a test dataset,
 \end{Highlighting}
 \end{Shaded}
 
-Its time to load the created functions from the previews chapters.
+It's now time to load the functions that were created in the preview chapters.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1108,7 +1112,7 @@ Its time to load the created functions from the previews chapters.
 \hypertarget{train-and-test-phase}{%
 \section{Train and test phase}\label{train-and-test-phase}}
 
-We are creating a simple wrapper for the training and the test phase.
+For the training and testing phases, we're making a simple wrapper:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1217,7 +1221,7 @@ Because the Mean Square Error is hard to interpret, we will classify the output 
 An incredible tool to qualify the result is the \href{https://en.wikipedia.org/wiki/Confusion_matrix}{confusion matrix} from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 \includegraphics[width=0.5\textwidth,height=\textheight]{./img/confusion_matrix.png}
 
-For example is \texttt{TP} short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
+For instance, `TP' stands for True-Positiv, which means that the prediction was True=1 and the actual result was Positiv=1, indicating that the prediction was correct. For the classified result of the test phase, we have the following confusion matrix in our example:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1386,16 +1390,16 @@ For example is \texttt{TP} short for True-Positiv which means that the predictio
 \hypertarget{effect-of-batch-size}{%
 \chapter{Effect of batch size}\label{effect-of-batch-size}}
 
-First of all do we need to differentiate between the following definitions that i found \href{https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks}{here}:\\
+First and foremost, do we need to distinguish between the following definitions that I discovered \href{https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks}{here}:\\
 - one epoch := one forward pass and backward pass of all the training examples.
 - batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.
 - number of iterations := number of passes, each pass using {[}batch size{]} number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).
 
-In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?
+I noted in the first chapter that the standard method for defining a NN is to cycle over all training data by selecting a random scenario until all possibilities have been used, resulting in one epoch. To make it easier, I changed it to pick all scenarios at once (full batch size). But what happens if the batch size is equal to the number of rows in the training dataset?
 
-Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior \href{https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu}{here}. The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found \href{https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e}{here}. He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.
+Unfortunately, there is no solid proof for the differences, but I did find a neat post that tries to explain it \href{https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu}{here}. As a result, optimizing with the full batch size yields sharper minimaz, whereas optimizing with a lesser batch size yields to flatter minimaz. More information about the issue of speed vs.~accuracy via batch size selection may be found \href{https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e}{here}. He clearly outlines the issues and how switching to a dynamically growing batch size could be a smart option.
 
-All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.
+The underlying data determines the ideal hyperparameters like as bias, alpha, batch size, hidden neurons, and so on, according to what I've found so far. As a result, modifying the underlying dataset affects all of the ideal hyperparameters. Perhaps it would be more useful to test some hyperparameters on our Credit Default dataset and compare the outcomes.
 
 \hypertarget{impact-of-diffrent-hyperparameters}{%
 \section{Impact of diffrent hyperparameters}\label{impact-of-diffrent-hyperparameters}}
@@ -1570,7 +1574,7 @@ Everything is loaded and set up. Now can we compare the time and the error for d
 \end{Shaded}
 
 \begin{verbatim}
-## Time to train the NN:  10.723796129226685
+## Time to train the NN:  8.540212631225586
 \end{verbatim}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-21-15.pdf}
@@ -1611,7 +1615,7 @@ Everything is loaded and set up. Now can we compare the time and the error for d
 \end{Shaded}
 
 \begin{verbatim}
-## Time to train the NN:  23.007314682006836
+## Time to train the NN:  22.481854915618896
 \end{verbatim}
 
 \includegraphics{gitbook-demo_files/figure-latex/unnamed-chunk-22-17.pdf}
@@ -1625,7 +1629,7 @@ Everything is loaded and set up. Now can we compare the time and the error for d
 ##        [ 2209,  4066]], dtype=int64)
 \end{verbatim}
 
-We can see that the full batch size is much faster than the smaller one, but the smaller batch size has a smaller error. Maybe the perfect batch size depends on the problem itself. If you have a low dimensional input matrix and need to get a fast solution, its better to go with full batch size. If you have high dimensional input its not possible to use a full batch size, because your ram is jumping off. I think its the best to analyze the underlying data and select a suitable batch size for it. Maybe some situations will need a dynamic batch size, that shrinks over time, to get the best results, like in the blog post i mentioned at the start of the chapter.
+The full batch size is clearly faster than the smaller batch size, yet the smaller batch size has a lower error. Perhaps the ideal batch size is determined by the problem itself. If you have a low-dimensional input matrix and need a quick answer, full batch size is the way to go. If your dimensional input is large, you won't be able to use a complete batch size since your RAM will jump off. I believe it is important to study the underlying data and choose a batch size that is appropriate for it. For example, in the blog article I cited at the beginning of the chapter, some situations may require a dynamic batch size that lowers over time to provide the best outcomes.
 
 \hypertarget{appendix-complete-code-4}{%
 \section{Appendix (complete code)}\label{appendix-complete-code-4}}
@@ -1793,7 +1797,7 @@ We can see that the full batch size is much faster than the smaller one, but the
 \hypertarget{class-mlp}{%
 \chapter{Class MLP}\label{class-mlp}}
 
-Finally its time to create a class \texttt{MLP} that contains all functions from the previews chapters. You can use this class to play arround with some settings and make your own discoveries about the datasets of your choice.
+Finally, can we create a `MLP' class that contains all of the functions from the preview chapters. You can use this class to play around with different settings and learn new things about the datasets you've chosen.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1937,17 +1941,17 @@ Finally its time to create a class \texttt{MLP} that contains all functions from
 \hypertarget{decision-tree}{%
 \chapter{Decision Tree}\label{decision-tree}}
 
-The Decision Trees (DT) and Neuronal Netwoks (NN) aim for the same goal, analyzing the data and giving answers to never seen data. Nevertheless do they have huge differences in working with each of these methods. For this reason do i link \href{https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html}{here} an very good comparison of these two methods. The result is that Decision Trees are much simpler than Neuronal Networks with the additional fact that its easier to interpret the way of giving a certain answer. In comparison to this, can Neuronal Networks process very huge datasets with ease and you can adjust the behavior of learning strongly by the selected hyper-parameter, which can lead to very high accuracy. If you take all in consideration, its useful to think about Decision Trees, before you create a Neuronal Network, because its a simpler approach. If your data is more complex or large you should definitely go with the Neuronal Networks. In very complex situation they often will use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy (for example \href{https://bair.berkeley.edu/blog/2020/04/23/decisions/}{Neural-Backed Decision Trees}).
+The goal of Decision Trees (DT) and Neuronal Netwoks (NN) is the same: to analyze data and provide answers to previously unknown data. Nonetheless, there are significant differences in working with each of these methods. As a result, I've included a link to a thorough \href{https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html}{comparison} of these two approaches. As a result, Decision Trees are much simpler than Neuronal Networks, with the added benefit of being easier to interpret the way a certain answer is given. In comparison, Neuronal Networks can easily process large datasets, and you can fine-tune the learning behavior using the hyper-parameter you choose, resulting in high accuracy. If you consider everything, it's better to consider Decision Trees before creating a Neuronal Network because it's a simpler approach. If your data is more complicated or large, Neuronal Networks are the way to go. They frequently use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy in very complex situations (for example \href{https://bair.berkeley.edu/blog/2020/04/23/decisions/}{Neural-Backed Decision Trees}).
 
 \hypertarget{entropy}{%
 \section{Entropy}\label{entropy}}
 
-Entropy measures the impurity of the given data. Low impurity leads to better classification and higher accuracy. The goal of Decision Trees is to split the data at each node with the highest gain of purity. The purity of the given dataset can be calculated with the \href{https://en.wikipedia.org/wiki/Concave_function}{concave} Entropy-Formula:
+The impurity of the data is measured by entropy. Low impurity results in improved classification and accuracy. The goal of Decision Trees is to split the data with the highest purity gain at each node. The \href{https://en.wikipedia.org/wiki/Concave_function}{concave} Entropy-Formula can be used to calculate the purity of a dataset:
 \[
   E = -p \cdot log_2(p) - (1-p) \cdot log_2(1-p) 
 \]
 
-with \(p\) as the probability of having no default in the credit default dataset. The Entropy increases to 1 if the dataset contains 50\% of defaults and 50\% of no default and decreases to 0 if the dataset contains only defaults or only no defaults. The python function is the following:
+with \(p\) as the probability of having no default in the credit default dataset. If the dataset contains 50\% defaults and 50\% no defaults, the Entropy increases to 1, and it decreases to 0 if the dataset contains only defaults or only no defaults. The following is the python function:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1982,7 +1986,7 @@ Now can we calculate the initial Entropy of the credit default dataset as shown 
 ## Initial Inpurity/Entropy of data:  0.7568007498467375
 \end{verbatim}
 
-Sadly do we have the same problem with categorical data as the NN. We could transform categorical data to numerical as shown in the Credit Default chapter, but i want to drop these columns to make it easier to understand. Additional will we select only 4 columns plus the answer, to make it more interpretable and manageable.
+Unfortunately, do we face the same problem with categorical data as we had with the NN. We could convert categorical data to numerical as shown in the Credit Default chapter, but I'd like to remove these columns to make things easier. We'll also limit it to four columns plus the answer to make it more readable and understandable.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1990,7 +1994,7 @@ Sadly do we have the same problem with categorical data as the NN. We could tran
 \end{Highlighting}
 \end{Shaded}
 
-Now do we need to create the nodes of the tree based on decisions that lead to the lowest Entropy. The resulting purity by splitting the data in 2 subsets by a condition of one column (value \(z\)), can be calculated as:
+Now we must create the tree's nodes based on the decisions that result in the lowest Entropy. The purity obtained by splitting the data into two subsets by a single column condition (value \(z\)) can be calculated as follows:
 \[
   p_1(z) = \text{proportion of column-value} > z \\
   p_2(z) = \text{proportion of no default and column-value} > z \\
@@ -2058,7 +2062,7 @@ First of all do we need to find the column and the value that results in the hig
 
 This minimizer is written by my self and it only works for convex functions. I dont know if there do exist better approaches, but this one works.
 
-Now do we need to find the best decrase in Entropy of all columns with the next function:
+Now do we need to find the best decease in Entropy of all columns with the next function:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2075,7 +2079,7 @@ Now do we need to find the best decrase in Entropy of all columns with the next 
 \end{Highlighting}
 \end{Shaded}
 
-For example would the output for the initial dataste be:
+The following is an example of the output for the initial dataste:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2087,7 +2091,7 @@ For example would the output for the initial dataste be:
 ## ('loan_percent_income', 0.6564119496913492, 0.29990234374999997)
 \end{verbatim}
 
-Now its time to construct the tree and save all data that ends in a leaf:
+It's now time to build the tree and save everything that ends in a leaf:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2124,12 +2128,12 @@ Now its time to construct the tree and save all data that ends in a leaf:
 ## Entropy in all leafs:  0.574488597974446
 \end{verbatim}
 
-We can see that the Entropy of all leafs is significantly smaller than the initial Entropy.
+We can observe that the Entropy of all leafs is significantly smaller than the initial Entropy.
 
 \hypertarget{forcast-credit-defaults-with-dt}{%
 \section{Forcast Credit Defaults with DT}\label{forcast-credit-defaults-with-dt}}
 
-We need to define a limit that splits all leafs in default and none default. Here do we choose the limit 0.65, that means that leafs with a probability of none default smaller than 65\% will be classified as defaults. We can get this rows by using the conditions column in the \texttt{leafs}. The resulting analysis shows the quality of the forecast:
+We must set a limit that divides all leafs by default and none default. We've set the restriction at 0.65, which indicates that leaves with a chance of none default of less than 65 percent are considered as defaults. The conditions column in the \texttt{leafs} table can be used to acquire these rows. The following analysis demonstrates the forecast's accuracy:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2158,7 +2162,7 @@ We can compare the results to the previews created NN (with \texttt{hidden\_laye
 \hypertarget{extern-packages}{%
 \section{Extern Packages}\label{extern-packages}}
 
-There do exist some packages to create DTs for example sklearn, but i wasnt able to get the data like in my own code:
+There do exist some packages to create DTs for example sklearn, but i wasnt able to get the conditions out of it like in my own code:
 
 \begin{Shaded}
 \begin{Highlighting}[]

@@ -50,17 +50,17 @@ import matplotlib.pyplot as pyplot
 Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.
 
 ## Neural Network Basics
-In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass do we calculate the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass do we analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life...  
-Ahh no no ok we have a deeper look into it :)  
+The forward pass and the backward pass are the two primary parts of a NN. To calculate the output, we calculate the weighted sum of each input neuron with the layer's weights and evaluate the activation function with in the forward pass. We analyze the inaccuracy in the backward pass and modify the weights accordingly. That's it! That is exactly what a Neuronal Network is doing. Everything was explained to you. Enjoy your life...
+No, no, no, we'll take a closer look:)
 
-What exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario of the training dataset, the following:
+In a single Perceptron, what is the forward pass? It's just like I mentioned, evaluating the activation function using the weighted sum, so for one scenario of the training dataset, you have:
 $$
   step(W \cdot x^T_i) = y_i
 $$
-This is the normal approach to use this formula to iterate over all scenarios in the training dataset...  
-But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios at the same time.  
+Using this formula to iterate over all scenarios in the training dataset is the standard approach...
+But I don't think that's the best way to put it because it's difficult to interpret it for all scenarios at the same time.
   
-My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all do we need to interpret the new dimensions of $W$ and $X$.  
+My next strategy is to use a single formula to account for all scenarios in the training dataset. If your data isn't too large, this is also a much faster method. First and foremost, we must interpret the new $W$ and $X$ dimensions.
 We have $X$ as:
 $$
   X = \left[

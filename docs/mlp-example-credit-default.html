@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="multi-layer-perceptrons-mlp.html"/>
+<link rel="prev" href="multilayer-perceptrons-mlp.html"/>
 <link rel="next" href="effect-of-batch-size.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -157,11 +157,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
+<li class="chapter" data-level="4" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multilayer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
-<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="4.1" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
 <ul>
@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2          25           9600              MORTGAGE               1.00     MEDICAL          C       5500          12.87            1                 0.57                         N                           3
 ## 3          23          65500                  RENT               4.00     MEDICAL          C      35000          15.23            1                 0.53                         N                           2
 ## 4          24          54400                  RENT               8.00     MEDICAL          C      35000          14.27            1                 0.55                         Y                           4</code></pre>
-<p>You can find the detailed information about the columns on kaggle, additionaly to the next table:<br />
+<p>You can find the more details about the columns on kaggle, additionaly to the next table:<br />
 <img src="img/credit_default_kaggle_data_info.png" style="width:100.0%" alt="https://www.kaggle.com/laotse/credit-risk-dataset" /><br>
 The important column is <code>load_status</code> that determinates the customers credit default and is used as the correct outputs <span class="math inline">\(Y\)</span>. All other columns are considered as the input matrix <span class="math inline">\(X\)</span>. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="mlp-example-credit-default.html#cb31-1" aria-hidden="true" tabindex="-1"></a>l <span class="op">=</span> [<span class="st">&quot;person_age&quot;</span>, <span class="st">&quot;person_income&quot;</span>, <span class="st">&quot;person_emp_length&quot;</span>, <span class="st">&quot;loan_amnt&quot;</span>, <span class="st">&quot;loan_int_rate&quot;</span>, <span class="st">&quot;loan_status&quot;</span>, <span class="st">&quot;loan_percent_income&quot;</span>, <span class="st">&quot;cb_person_cred_hist_length&quot;</span>]</span>
@@ -245,6 +245,7 @@ The important column is <code>load_status</code> that determinates the customers
 ##         &lt;AxesSubplot:&gt;]], dtype=object)</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-6-9.png" width="768" />
 All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found <a href="https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/">here</a>). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:</p>
+<p>All other input columns are categorical, and Neuronal Networks cannot process them. Fortunately, there are some methods for converting categories to numbers, such as Ordinal Encoding, One-hot Encoding, and Embedding (more information can be found <a href="https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/">here</a>). Because it is the easiest way, I will use Ordinal Encoding for our dataset. Ordinal Encoding simply converts numbers into categories. The best technique would be to organize each column’s categories in a meaningful way before assigning numbers to them, as seen in the code below:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="mlp-example-credit-default.html#cb33-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace({<span class="st">&quot;Y&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;N&quot;</span>:<span class="dv">0</span>})</span>
 <span id="cb33-2"><a href="mlp-example-credit-default.html#cb33-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;person_home_ownership&quot;</span>] <span class="op">=</span> data[<span class="st">&quot;person_home_ownership&quot;</span>].replace({<span class="st">&#39;OWN&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;RENT&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;MORTGAGE&#39;</span>:<span class="dv">3</span>, <span class="st">&#39;OTHER&#39;</span>:<span class="dv">4</span>})</span>
 <span id="cb33-3"><a href="mlp-example-credit-default.html#cb33-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">&quot;loan_intent&quot;</span>] <span class="op">=</span> data[<span class="st">&quot;loan_intent&quot;</span>].replace({<span class="st">&#39;PERSONAL&#39;</span>:<span class="dv">1</span>, <span class="st">&#39;EDUCATION&#39;</span>:<span class="dv">2</span>, <span class="st">&#39;MEDICAL&#39;</span>:<span class="dv">3</span>, <span class="st">&#39;VENTURE&#39;</span>:<span class="dv">4</span>, <span class="st">&#39;HOMEIMPROVEMENT&#39;</span>:<span class="dv">5</span>,<span class="st">&#39;DEBTCONSOLIDATION&#39;</span>:<span class="dv">6</span>})</span>
@@ -257,20 +258,20 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 ## 2          25           9600                      3               1.00            3           3       5500          12.87            1                 0.57                          0                           3
 ## 3          23          65500                      2               4.00            3           3      35000          15.23            1                 0.53                          0                           2
 ## 4          24          54400                      2               8.00            3           3      35000          14.27            1                 0.55                          1                           4</code></pre>
-<p>Its definitely not the best way to encode the categorical data but its the simplest method and it dosent increase the size of the input matrix.</p>
-<p>Additionaly its important to normalize the data which leads to more stability and speed for the learning process (for more <a href="https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/">information</a>). We will normalize the data to the interval <span class="math inline">\([0,1]\)</span> because we are using the sigmoid function. The following function will do the trick for the whole numpy array you are putting in:</p>
+<p>It’s not the most precise method for encoding categorical data, but it’s the simplest and doesn’t add to the input matrix’s size.</p>
+<p>It’s also crucial to standardize the data, which improves the learning process’s stability and speed (for more <a href="https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/">information</a>). Because we’re using the sigmoid function, we’ll normalize the data to the interval <span class="math inline">\([0,1]\)</span>. The following function will work for the entire numpy array you’ve entered:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="mlp-example-credit-default.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NormalizeData(np_arr):</span>
 <span id="cb35-2"><a href="mlp-example-credit-default.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(np_arr.shape[<span class="dv">1</span>]):</span>
 <span id="cb35-3"><a href="mlp-example-credit-default.html#cb35-3" aria-hidden="true" tabindex="-1"></a>    np_arr[:,i] <span class="op">=</span> (np_arr[:,i] <span class="op">-</span> np.<span class="bu">min</span>(np_arr[:,i])) <span class="op">/</span> (np.<span class="bu">max</span>(np_arr[:,i]) <span class="op">-</span> np.<span class="bu">min</span>(np_arr[:,i]))</span>
 <span id="cb35-4"><a href="mlp-example-credit-default.html#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>(np_arr)</span></code></pre></div>
-<p>Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:</p>
+<p>Now we must divide the data into a training and a test dataset, convert the pandas dataframe to a numpy array, and normalize it:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="mlp-example-credit-default.html#cb36-1" aria-hidden="true" tabindex="-1"></a>training_n <span class="op">=</span> <span class="dv">2000</span></span>
 <span id="cb36-2"><a href="mlp-example-credit-default.html#cb36-2" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> NormalizeData( data.loc[<span class="dv">0</span>:(training_n<span class="op">-</span><span class="dv">1</span>), data.columns <span class="op">!=</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy() )</span>
 <span id="cb36-3"><a href="mlp-example-credit-default.html#cb36-3" aria-hidden="true" tabindex="-1"></a>Y_train <span class="op">=</span> data.loc[<span class="dv">0</span>:(training_n<span class="op">-</span><span class="dv">1</span>), data.columns <span class="op">==</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy()</span>
 <span id="cb36-4"><a href="mlp-example-credit-default.html#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-5"><a href="mlp-example-credit-default.html#cb36-5" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> NormalizeData( data.loc[training_n:, data.columns <span class="op">!=</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy() )</span>
 <span id="cb36-6"><a href="mlp-example-credit-default.html#cb36-6" aria-hidden="true" tabindex="-1"></a>Y_test <span class="op">=</span> data.loc[training_n:, data.columns <span class="op">==</span> <span class="st">&#39;loan_status&#39;</span>].to_numpy()</span></code></pre></div>
-<p>Its time to load the created functions from the previews chapters.</p>
+<p>It’s now time to load the functions that were created in the preview chapters.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="mlp-example-credit-default.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_weights(n_input, n_output, hidden_layer_neurons):</span>
 <span id="cb37-2"><a href="mlp-example-credit-default.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> []</span>
 <span id="cb37-3"><a href="mlp-example-credit-default.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(hidden_layer_neurons)<span class="op">+</span><span class="dv">1</span>):</span>
@@ -306,7 +307,7 @@ All other input columns are categorical that cant be processed by Neuronal Netwo
 </div>
 <div id="train-and-test-phase" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Train and test phase</h2>
-<p>We are creating a simple wrapper for the training and the test phase.</p>
+<p>For the training and testing phases, we’re making a simple wrapper:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="mlp-example-credit-default.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train(X, Y, hidden_layer_neurons, alpha, epochs):</span>
 <span id="cb38-2"><a href="mlp-example-credit-default.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  n_input <span class="op">=</span> <span class="bu">len</span>(X_train[<span class="dv">0</span>])</span>
 <span id="cb38-3"><a href="mlp-example-credit-default.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  n_output <span class="op">=</span> <span class="bu">len</span>(Y_train[<span class="dv">0</span>])</span>
@@ -377,7 +378,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
 ## Probability of a correct output:  83.93 %</code></pre>
 <p>An incredible tool to qualify the result is the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a> from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 <img src="img/confusion_matrix.png" style="width:50.0%" alt="https://en.wikipedia.org/wiki/Confusion_matrix" /><br></p>
-<p>For example is <code>TP</code> short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:</p>
+<p>For instance, ‘TP’ stands for True-Positiv, which means that the prediction was True=1 and the actual result was Positiv=1, indicating that the prediction was correct. For the classified result of the test phase, we have the following confusion matrix in our example:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="mlp-example-credit-default.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb45-2"><a href="mlp-example-credit-default.html#cb45-2" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
 <pre><code>## array([[21164,  3142],
@@ -533,7 +534,7 @@ Its time to train the NN with the first 2000 rows of the given data, 20000 epoch
           </div>
         </div>
       </div>
-<a href="multi-layer-perceptrons-mlp.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multilayer-perceptrons-mlp.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="effect-of-batch-size.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

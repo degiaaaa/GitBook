@@ -5,15 +5,16 @@ editor_options:
 ---
 
 # Decision Tree
-The Decision Trees (DT) and Neuronal Netwoks (NN) aim for the same goal, analyzing the data and giving answers to never seen data. Nevertheless do they have huge differences in working with each of these methods. For this reason do i link [here](https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html) an very good comparison of these two methods. The result is that Decision Trees are much simpler than Neuronal Networks with the additional fact that its easier to interpret the way of giving a certain answer. In comparison to this, can Neuronal Networks process very huge datasets with ease and you can adjust the behavior of learning strongly by the selected hyper-parameter, which can lead to very high accuracy. If you take all in consideration, its useful to think about Decision Trees, before you create a Neuronal Network, because its a simpler approach. If your data is more complex or large you should definitely go with the Neuronal Networks. In very complex situation they often will use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy (for example [Neural-Backed Decision Trees](https://bair.berkeley.edu/blog/2020/04/23/decisions/)).  
+The goal of Decision Trees (DT) and Neuronal Netwoks (NN) is the same: to analyze data and provide answers to previously unknown data. Nonetheless, there are significant differences in working with each of these methods. As a result, I've included a link to a thorough [comparison](https://www.kdnuggets.com/2019/06/random-forest-vs-neural-network.html) of these two approaches. As a result, Decision Trees are much simpler than Neuronal Networks, with the added benefit of being easier to interpret the way a certain answer is given. In comparison, Neuronal Networks can easily process large datasets, and you can fine-tune the learning behavior using the hyper-parameter you choose, resulting in high accuracy. If you consider everything, it's better to consider Decision Trees before creating a Neuronal Network because it's a simpler approach. If your data is more complicated or large, Neuronal Networks are the way to go. They frequently use hybrids of Decision Trees and Neuronal Networks to archive understandable results with high accuracy in very complex situations (for example [Neural-Backed Decision Trees](https://bair.berkeley.edu/blog/2020/04/23/decisions/)).
+
 
 ## Entropy
-Entropy measures the impurity of the given data. Low impurity leads to better classification and higher accuracy. The goal of Decision Trees is to split the data at each node with the highest gain of purity. The purity of the given dataset can be calculated with the [concave](https://en.wikipedia.org/wiki/Concave_function) Entropy-Formula:
+The impurity of the data is measured by entropy. Low impurity results in improved classification and accuracy. The goal of Decision Trees is to split the data with the highest purity gain at each node. The [concave](https://en.wikipedia.org/wiki/Concave_function) Entropy-Formula can be used to calculate the purity of a dataset:
 $$
   E = -p \cdot log_2(p) - (1-p) \cdot log_2(1-p) 
 $$
 
-with $p$ as the probability of having no default in the credit default dataset. The Entropy increases to 1 if the dataset contains 50% of defaults and 50% of no default and decreases to 0 if the dataset contains only defaults or only no defaults. The python function is the following:
+with $p$ as the probability of having no default in the credit default dataset. If the dataset contains 50% defaults and 50% no defaults, the Entropy increases to 1, and it decreases to 0 if the dataset contains only defaults or only no defaults. The following is the python function:
 ```{python}
 def calc_entropy(df, decision_on = "loan_status"):
   if len(df)==0:
@@ -38,12 +39,12 @@ entropy_of_data = calc_entropy(df=data)
 print("Initial Inpurity/Entropy of data: ", entropy_of_data)
 ```
 
-Sadly do we have the same problem with categorical data as the NN. We could transform categorical data to numerical as shown in the Credit Default chapter, but i want to drop these columns to make it easier to understand. Additional will we select only 4 columns plus the answer, to make it more interpretable and manageable.
+Unfortunately, do we face the same problem with categorical data as we had with the NN. We could convert categorical data to numerical as shown in the Credit Default chapter, but I'd like to remove these columns to make things easier. We'll also limit it to four columns plus the answer to make it more readable and understandable.
 ```{python}
 data = data.loc[:, ["person_age", "loan_percent_income", "loan_int_rate", "cb_person_default_on_file" ,"loan_status"]]
 ```
 
-Now do we need to create the nodes of the tree based on decisions that lead to the lowest Entropy. The resulting purity by splitting the data in 2 subsets by a condition of one column (value $z$), can be calculated as:
+Now we must create the tree's nodes based on the decisions that result in the lowest Entropy. The purity obtained by splitting the data into two subsets by a single column condition (value $z$) can be calculated as follows:
 $$
   p_1(z) = \text{proportion of column-value} > z \\
   p_2(z) = \text{proportion of no default and column-value} > z \\
@@ -94,7 +95,7 @@ def find_minima(df, col, decision_on = "loan_status", round_at = 5):
 ```
 This minimizer is written by my self and it only works for convex functions. I dont know if there do exist better approaches, but this one works.  
 
-Now do we need to find the best decrase in Entropy of all columns with the next function:
+Now do we need to find the best decease in Entropy of all columns with the next function:
 ```{python}
 def find_best_col(df, decision_on = "loan_status", round_at = 5):
   cols = list(df.columns[df.columns != decision_on])
@@ -107,12 +108,12 @@ def find_best_col(df, decision_on = "loan_status", round_at = 5):
   best_i = int(np.where(entropys == min(entropys))[0][0])
   return cols[best_i], entropys[best_i], vals[best_i]
 ```
-For example would the output for the initial dataste be:
+The following is an example of the output for the initial dataste:
 ```{python}
 find_best_col(data)
 ```
 
-Now its time to construct the tree and save all data that ends in a leaf:
+It's now time to build the tree and save everything that ends in a leaf:
 ```{python}
 def make_node_and_leafs(df, decision_on = "loan_status", round_at = 5, path = "I", condition = "", min_size = 1000, max_depth = 4, leafs = pd.DataFrame(columns=["path", "condition", "rows", "P_of_no_default", "entropy"])):
   if len(df) < min_size or (path.count("-")-1) >= max_depth or len(df.columns) <= 1:
@@ -130,10 +131,11 @@ leafs["entropy"] = (leafs["entropy"]*leafs["rows"])/len(data)
 print("Entropy in data: ", calc_entropy(data))
 print("Entropy in all leafs: ", np.sum(leafs["entropy"]))
 ```
-We can see that the Entropy of all leafs is significantly smaller than the initial Entropy.  
+We can observe that the Entropy of all leafs is significantly smaller than the initial Entropy.  
 
 ## Forcast Credit Defaults with DT
-We need to define a limit that splits all leafs in default and none default. Here do we choose the limit 0.65, that means that leafs with a probability of none default smaller than 65% will be classified as defaults. We can get this rows by using the conditions column in the `leafs`. The resulting analysis shows the quality of the forecast:
+We must set a limit that divides all leafs by default and none default. We've set the restriction at 0.65, which indicates that leaves with a chance of none default of less than 65 percent are considered as defaults. The conditions column in the `leafs` table can be used to acquire these rows. The following analysis demonstrates the forecast's accuracy:
+
 ```{python}
 data_temp = data.copy()
 data_temp["ID"] = list(range(len(data_temp)))
@@ -288,7 +290,7 @@ confusion_matrix(Y, classify(result))
 ```
 
 ## Extern Packages
-There do exist some packages to create DTs for example sklearn, but i wasnt able to get the data like in my own code:
+There do exist some packages to create DTs for example sklearn, but i wasnt able to get the conditions out of it like in my own code:
 ```{python}
 from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz, export_text
 X = data.drop('loan_status',axis=1)

@@ -21,7 +21,7 @@ data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
 data.shape
 data.head()
 ```
-You can find the detailed information about the columns on kaggle, additionaly to the next table:  
+You can find the more details about the columns on kaggle, additionaly to the next table:  
 ![https://www.kaggle.com/laotse/credit-risk-dataset](./img/credit_default_kaggle_data_info.png){ width=100% }<br>
 The important column is `load_status` that determinates the customers credit default and is used as the correct outputs $Y$. All other columns are considered as the input matrix $X$. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:
 
@@ -32,6 +32,8 @@ pyplot.tight_layout()
 pyplot.show()
 ```
 All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
+
+All other input columns are categorical, and Neuronal Networks cannot process them. Fortunately, there are some methods for converting categories to numbers, such as Ordinal Encoding, One-hot Encoding, and Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). Because it is the easiest way, I will use Ordinal Encoding for our dataset. Ordinal Encoding simply converts numbers into categories. The best technique would be to organize each column's categories in a meaningful way before assigning numbers to them, as seen in the code below:
 ```{python}
 data = data.replace({"Y": 1, "N":0})
 data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
@@ -40,9 +42,9 @@ data["loan_grade"] = data["loan_grade"].replace({'A':1, 'B':2, 'C':3, 'D':4, 'E'
 
 data.head()
 ```
-Its definitely not the best way to encode the categorical data but its the simplest method and it dosent increase the size of the input matrix.  
+It's not the most precise method for encoding categorical data, but it's the simplest and doesn't add to the input matrix's size.  
 
-Additionaly its important to normalize the data which leads to more stability and speed for the learning process (for more [information](https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/)). We will normalize the data to the interval $[0,1]$ because we are using the sigmoid function. The following function will do the trick for the whole numpy array you are putting in:
+It's also crucial to standardize the data, which improves the learning process's stability and speed (for more [information](https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/)). Because we're using the sigmoid function, we'll normalize the data to the interval $[0,1]$. The following function will work for the entire numpy array you've entered:
 ```{python}
 def NormalizeData(np_arr):
   for i in range(np_arr.shape[1]):
@@ -50,7 +52,7 @@ def NormalizeData(np_arr):
   return(np_arr)
 ```
 
-Now do we need to split the given data in a training dataset and a test dataset, convert the pandas dataframe to a numpy array and normalize it:
+Now we must divide the data into a training and a test dataset, convert the pandas dataframe to a numpy array, and normalize it:
 ```{python}
 training_n = 2000
 X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
@@ -60,7 +62,7 @@ X_test = NormalizeData( data.loc[training_n:, data.columns != 'loan_status'].to_
 Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
 ```
 
-Its time to load the created functions from the previews chapters.
+It's now time to load the functions that were created in the preview chapters.
 ```{python}
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -97,7 +99,7 @@ def backward(IN, OUT, W, Y, grad, k):
 ```
 
 ## Train and test phase
-We are creating a simple wrapper for the training and the test phase.
+For the training and testing phases, we're making a simple wrapper:
 ```{python}
 def train(X, Y, hidden_layer_neurons, alpha, epochs):
   n_input = len(X_train[0])
@@ -180,7 +182,7 @@ print("Probability of a correct output: ", np.round((1 - np.sum(np.abs(classifie
 An incredible tool to qualify the result is the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix) from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
 ![https://en.wikipedia.org/wiki/Confusion_matrix](./img/confusion_matrix.png){ width=50% }<br>
 
-For example is `TP` short for True-Positiv which means that the prediction was True=1 and the answer Positiv=1 so the prediction was correct. In our example do we have the following confusion matrix for the classified result of the test phase:
+For instance, 'TP' stands for True-Positiv, which means that the prediction was True=1 and the actual result was Positiv=1, indicating that the prediction was correct. For the classified result of the test phase, we have the following confusion matrix in our example:
 ```{python}
 from sklearn.metrics import confusion_matrix
 confusion_matrix(Y_test, classify(result_test))

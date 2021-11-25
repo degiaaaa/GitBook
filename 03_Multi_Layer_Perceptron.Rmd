@@ -4,12 +4,13 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Multi Layer Perceptrons (MLP)
+# Multilayer Perceptrons (MLP)
 ```{python 2_0, include=FALSE, eval=TRUE}
 import numpy as np
 import matplotlib.pyplot as pyplot
+np.random.seed(0)
 ```
-A multi layer Perceptron contains multiple layers of neurons. Thats why we need to calculate the forward pass multiple times and the same for the backward pass. First of all, do we need to generalize some definitions, to support this behavior. What we want to do is the NN of the following picture:    
+Multiple layers of neurons make up a multilayer Perceptron. As a result, we must calculate the forward pass several times, as well as the backward pass. First and foremost, do we need to broaden some definitions in order to support this behavior? The NN of the following image is what we want to do:   
 ![https://app.diagrams.net/](./img/NN_03_new.png){ width=100% }<br>  
 
 It's my own definition of layers since I believed it would be easier to transition from $n$ to $n+1$ hidden layers if they were displayed as indicated in the image. By evaluating $f(IN^{layer} \cdot W^{layer}) = OUT^{layer}$ and just transferring the result to the next layer like $OUT^{layer} = IN^{layer+1}$, with $f$ as the chosen activation function, you can see that each layer has the identical procedure in the forward pass.
@@ -94,10 +95,10 @@ OUT.append( forward(IN[i], W[i]) )
 # error
 Y-OUT[-1]
 ```
-Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)  
+Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multilayer Perceptron :)  
 
 ## Backward pass
-We will adjust the weights with the backpropagation algorithm that is a special case of the descent gradient algorithm. In the output layer is it done by calculating the sensitives of the outputs according to the activation function multiplied with the error that occurred. On all other layers its calculated by passing backwards the earlier calculated gradient, splitted up on each neuron by the previews weights and multiplied by the sensitivity of the outputs of that layer according to the activation function. The formula is the following: 
+The weights will be adjusted using the backpropagation algorithm, which is a variant of the descent gradient algorithm. Calculating the sensitives of the outputs according to the activation function multiplied by the error that occurred is done in the output layer. On all other layers, it's calculated by reversing the previously calculated gradient, splitting it up on each neuron by the previews weights, and multiplying the sensitivity of that layer's outputs by the activation function's sensitivity. The following is the formula:
 $$
   grad^i= 
 \begin{cases}
@@ -105,8 +106,8 @@ $$
     f^`(OUT^i) \cdot (grad^{i+1} * \widetilde{W}^{i+1\ T}),& \text{else}
 \end{cases}
 $$
-with $\widetilde{W}$ as the weights of the layer $i$ without the connection to the bias neuron, because it has no connection to the previews neurons. In our datastructur its done by removing the last row.  
-With the example from above, it can be done with:
+with $\widetilde{W}$ as the weights of the layer $i$, without the connection to the bias neuron. You can calculate $\widetilde{W}$ in our datastructure by removing the last row.  
+The gradients for the backward pass are calculated using the following code:
 ```{python 2_6}
 grad = [None] * 2
 
@@ -120,25 +121,25 @@ grad[i] = deriv_sigmoid(OUT[i]) *(grad[i+1] @ W[i+1][0:len(W[i+1])-1].T) # witho
 ```
 
 
-Now you can look, for example, at the gradient of the last layer and in which direction it is shown:
+You can now examine the gradient of the last layer and the direction in which it is displayed:
 ```{python 2_7}
 print("Y: \n",Y)
 print("OUT: \n",OUT[1])
 print("grad: \n",grad[1])
 ```
-You can see that the gradient shows in the direction that would drift the output $OUT$ closer to the desired output $Y$. That is exactly what the gradient descent algorithm is doing.  
-In the next step do we need to adjust the weights with the gradients and the learningrate $\alpha$ according to the direction of the gradients with the following formula:
+The gradient appears to be pointing in the direction of drifting the output $OUT$ closer to the desired output $Y$. The gradient descent algorithm accomplishes exactly that.
+The weights with the gradients and the learningrate $\alpha$ must then be adjusted according to the direction of the gradients using the following formula:
 $$
   W^i_{new} = W^i_{old} + \alpha \cdot ( IN^{i\ T} * grad^i) 
 $$
-In the example from above do we have the following results for the adjusted weights after the first epoch:
+After the first epoch, we get the following results for the adjusted weights in the example above:
 ```{python 2_8}
 alpha = 0.03
 
 W[1] = W[1] + alpha * (IN[1].T @ grad[1]) 
 W[0] = W[0] + alpha * (IN[0].T @ grad[0]) 
 ```
-This was the process of the forward pass and backward pass for one epoch in the multi layer Perceptron with 2 input neurons 2 hidden layer neurons and one output neuron. It is simple to use the given code from above to create a more generic NN for dynamic number of hidden layers and with dynamic training datasets for the given amount of epochs like in the appendix below.
+This was the forward and backward pass process in a multilayer Perceptron with two input neurons, two hidden layer neurons, and one output neuron for one epoch. It's simple to use the above code to make a more generic NN with a variable number of hidden layers and variable training datasets for a given number of epochs, as shown in the appendix below.
 
 ## Appendix (complete code)
 ```{python 2_9}

@@ -251,13 +251,13 @@ We’ll choose the sigmoid function as the activation function <span class="math
 <span id="cb18-33"><a href="multi-layer-perceptrons-mlp.html#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;W[0]: </span><span class="ch">\n</span><span class="st">&quot;</span>, W[<span class="dv">0</span>])</span>
 <span id="cb18-34"><a href="multi-layer-perceptrons-mlp.html#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;W[1]: </span><span class="ch">\n</span><span class="st">&quot;</span>, W[<span class="dv">1</span>])</span></code></pre></div>
 <pre><code>## W[0]: 
-##  [[0.4204633  0.49912549]
-##  [0.77637272 0.56733979]
-##  [0.42034145 0.19029649]]
+##  [[0.5488135  0.71518937]
+##  [0.60276338 0.54488318]
+##  [0.4236548  0.64589411]]
 ## W[1]: 
-##  [[0.37720969]
-##  [0.80710098]
-##  [0.5077132 ]]</code></pre>
+##  [[0.43758721]
+##  [0.891773  ]
+##  [0.96366276]]</code></pre>
 <p>The neurons for the hidden layers are generated using the <code>hidden_layer_neurons</code> list, while the input and output layer neurons are calculated from the training dataset. <code>hidden_layer_neurons = [4,2]</code>, for example, can construct two hidden layers with 4 and 2 neurons. I didn’t choose the bias because it is automatically rectified.
 Is it now necessary to construct a helper function to add the biases to the last column of the inputs, like follows:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="multi-layer-perceptrons-mlp.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_ones_to_input(x):</span>
@@ -283,10 +283,10 @@ Is it now necessary to construct a helper function to add the biases to the last
 <span id="cb22-13"><a href="multi-layer-perceptrons-mlp.html#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-14"><a href="multi-layer-perceptrons-mlp.html#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># error</span></span>
 <span id="cb22-15"><a href="multi-layer-perceptrons-mlp.html#cb22-15" aria-hidden="true" tabindex="-1"></a>Y<span class="op">-</span>OUT[<span class="op">-</span><span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## array([[-0.76444685],
-##        [ 0.20637856],
-##        [ 0.21271388],
-##        [-0.8101156 ]])</code></pre>
+<pre><code>## array([[-0.85974823],
+##        [ 0.12242041],
+##        [ 0.12015376],
+##        [-0.89115202]])</code></pre>
 <p>Thats all! We calculated the forward pass in a very generic way for the NN with 2 input neurons, 2 hidden neurons and 1 output neuron for all 4 scenarios at the same time. Sadly is the forward pass the easiest part of the multi layer Perceptron :)</p>
 </div>
 <div id="backward-pass-1" class="section level2" number="4.2">
@@ -320,15 +320,15 @@ With the example from above, it can be done with:</p>
 ##  [1]
 ##  [0]]
 ## OUT: 
-##  [[0.76444685]
-##  [0.79362144]
-##  [0.78728612]
-##  [0.8101156 ]]
+##  [[0.85974823]
+##  [0.87757959]
+##  [0.87984624]
+##  [0.89115202]]
 ## grad: 
-##  [[-0.13765231]
-##  [ 0.03380201]
-##  [ 0.03562249]
-##  [-0.12461872]]</code></pre>
+##  [[-0.10366948]
+##  [ 0.01315207]
+##  [ 0.01270227]
+##  [-0.08644184]]</code></pre>
 <p>You can see that the gradient shows in the direction that would drift the output <span class="math inline">\(OUT\)</span> closer to the desired output <span class="math inline">\(Y\)</span>. That is exactly what the gradient descent algorithm is doing.<br />
 In the next step do we need to adjust the weights with the gradients and the learningrate <span class="math inline">\(\alpha\)</span> according to the direction of the gradients with the following formula:
 <span class="math display">\[

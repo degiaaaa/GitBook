@@ -157,11 +157,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
+<li class="chapter" data-level="4" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multilayer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
-<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="4.1" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
 <ul>
@@ -206,13 +206,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="effect-of-batch-size" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Effect of batch size</h1>
-<p>First of all do we need to differentiate between the following definitions that i found <a href="https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks">here</a>:<br />
+<p>First and foremost, do we need to distinguish between the following definitions that I discovered <a href="https://stackoverflow.com/questions/4752626/epoch-vs-iteration-when-training-neural-networks">here</a>:<br />
 - one epoch := one forward pass and backward pass of all the training examples.
 - batch size := the number of training scenarios in one forward/backward pass. The higher the batch size, the more memory space will be needed.
 - number of iterations := number of passes, each pass using [batch size] number of scenarios. To be clear, one pass = forward pass + backward pass (we do not count the forward pass and backward pass as two different passes).</p>
-<p>In the first chapter i mentioned that the normal approach to define a NN is to iterate over all training data by selecting a random scenario, until all scenarios are used ones, to create one epoch. I changed it to select all scenarios at the same time to make it simpler (full batch size). But what consequences do we get by setting the batch size to the number of rows in the training dataset?</p>
-<p>Sadly there dosent exist a real proof for the differences, but i found a neat post that tries to explain its behavior <a href="https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu">here</a>. The result is that considering the full batch size will lead to sharper minimaz in the optimization and a smaller batch size leads to flatter minimaz. If you want more information about the problem of speed vs accuracy by selecting the batch size can be found <a href="https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e">here</a>. He explains very well where the problems are and that switching to a dynamic growing batch size could be a good solution.</p>
-<p>All the information i found until now, points out that the underlying data determinates the optimal hyperparameters like bias, alpha, batch size, hidden neurons and so on. That means that changing the underlying dataset will change all the optimal hyperparameters as well. Maybe its better to test some hyperparameters for our Credit Default dataset and visualize the difference in the results.</p>
+<p>I noted in the first chapter that the standard method for defining a NN is to cycle over all training data by selecting a random scenario until all possibilities have been used, resulting in one epoch. To make it easier, I changed it to pick all scenarios at once (full batch size). But what happens if the batch size is equal to the number of rows in the training dataset?</p>
+<p>Unfortunately, there is no solid proof for the differences, but I did find a neat post that tries to explain it <a href="https://stats.stackexchange.com/questions/164876/what-is-the-trade-off-between-batch-size-and-number-of-iterations-to-train-a-neu">here</a>. As a result, optimizing with the full batch size yields sharper minimaz, whereas optimizing with a lesser batch size yields to flatter minimaz. More information about the issue of speed vs. accuracy via batch size selection may be found <a href="https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e">here</a>. He clearly outlines the issues and how switching to a dynamically growing batch size could be a smart option.</p>
+<p>The underlying data determines the ideal hyperparameters like as bias, alpha, batch size, hidden neurons, and so on, according to what I’ve found so far. As a result, modifying the underlying dataset affects all of the ideal hyperparameters. Perhaps it would be more useful to test some hyperparameters on our Credit Default dataset and compare the outcomes.</p>
 <div id="impact-of-diffrent-hyperparameters" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Impact of diffrent hyperparameters</h2>
 <p>First of all do we add a <code>batch_size</code> parameter to the preview <code>train()</code> function and generate random batches that all contain distinct random integers in each batch. We will use the following function to generate the random batches:</p>
@@ -357,7 +357,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb53-19"><a href="effect-of-batch-size.html#cb53-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-20"><a href="effect-of-batch-size.html#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb53-21"><a href="effect-of-batch-size.html#cb53-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  10.085981607437134</code></pre>
+<pre><code>## Time to train the NN:  8.446605205535889</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-21-15.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2402.2283244767077
 ## Mean Square error over all classified testdata:  2932.0
@@ -386,7 +386,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb56-19"><a href="effect-of-batch-size.html#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-20"><a href="effect-of-batch-size.html#cb56-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-21"><a href="effect-of-batch-size.html#cb56-21" aria-hidden="true" tabindex="-1"></a>confusion_matrix(Y_test, classify(result_test))</span></code></pre></div>
-<pre><code>## Time to train the NN:  22.425911903381348</code></pre>
+<pre><code>## Time to train the NN:  22.30104112625122</code></pre>
 <p><img src="gitbook-demo_files/figure-html/unnamed-chunk-22-17.png" width="576" /></p>
 <pre><code>## Mean Square error over all testdata:  2210.3693145823286
 ## Mean Square error over all classified testdata:  2559.5
@@ -394,7 +394,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Probability of a right output:  83.26 %
 ## array([[21396,  2910],
 ##        [ 2209,  4066]], dtype=int64)</code></pre>
-<p>We can see that the full batch size is much faster than the smaller one, but the smaller batch size has a smaller error. Maybe the perfect batch size depends on the problem itself. If you have a low dimensional input matrix and need to get a fast solution, its better to go with full batch size. If you have high dimensional input its not possible to use a full batch size, because your ram is jumping off. I think its the best to analyze the underlying data and select a suitable batch size for it. Maybe some situations will need a dynamic batch size, that shrinks over time, to get the best results, like in the blog post i mentioned at the start of the chapter.</p>
+<p>The full batch size is clearly faster than the smaller batch size, yet the smaller batch size has a lower error. Perhaps the ideal batch size is determined by the problem itself. If you have a low-dimensional input matrix and need a quick answer, full batch size is the way to go. If your dimensional input is large, you won’t be able to use a complete batch size since your RAM will jump off. I believe it is important to study the underlying data and choose a batch size that is appropriate for it. For example, in the blog article I cited at the beginning of the chapter, some situations may require a dynamic batch size that lowers over time to provide the best outcomes.</p>
 </div>
 <div id="appendix-complete-code-4" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Appendix (complete code)</h2>

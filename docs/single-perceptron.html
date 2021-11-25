@@ -157,11 +157,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
+<li class="chapter" data-level="4" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multilayer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
-<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="4.1" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
 <ul>
@@ -245,15 +245,15 @@ The provided training dataset contains the <code>X</code> matrix with two inputs
 <p>Now that we have all the needed parameters and settings, i can give you a quick overview of the algorithm.</p>
 <div id="neural-network-basics" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Neural Network Basics</h2>
-<p>In a NN we are having two basic parts, the forward pass and the backward pass. In the forward pass do we calculate the weighted sum of each input neuron with its weights of the layer and evaluating the activation function with it, to calculate the output. In the backward pass do we analyzing the error to adjust the weights accordingly. This is it! This is all a NN will do. I explained everything to you. Have a good life…<br />
-Ahh no no ok we have a deeper look into it :)</p>
-<p>What exactly is the forward pass in a single Perceptron? Its just the evaluation of the acvtivation function with the weighted sum like i said, so you have for one scenario of the training dataset, the following:
+<p>The forward pass and the backward pass are the two primary parts of a NN. To calculate the output, we calculate the weighted sum of each input neuron with the layer’s weights and evaluate the activation function with in the forward pass. We analyze the inaccuracy in the backward pass and modify the weights accordingly. That’s it! That is exactly what a Neuronal Network is doing. Everything was explained to you. Enjoy your life…
+No, no, no, we’ll take a closer look:)</p>
+<p>In a single Perceptron, what is the forward pass? It’s just like I mentioned, evaluating the activation function using the weighted sum, so for one scenario of the training dataset, you have:
 <span class="math display">\[
   step(W \cdot x^T_i) = y_i
 \]</span>
-This is the normal approach to use this formula to iterate over all scenarios in the training dataset…<br />
-But i think its not the right way to describe it, because it gets very confusing to interpret it for all scenarios at the same time.</p>
-<p>My next approach is to consider all scenarios in the training dataset in one formula. If your data isnt that huge, its a much faster approach as well. First of all do we need to interpret the new dimensions of <span class="math inline">\(W\)</span> and <span class="math inline">\(X\)</span>.<br />
+Using this formula to iterate over all scenarios in the training dataset is the standard approach…
+But I don’t think that’s the best way to put it because it’s difficult to interpret it for all scenarios at the same time.</p>
+<p>My next strategy is to use a single formula to account for all scenarios in the training dataset. If your data isn’t too large, this is also a much faster method. First and foremost, we must interpret the new <span class="math inline">\(W\)</span> and <span class="math inline">\(X\)</span> dimensions.
 We have <span class="math inline">\(X\)</span> as:
 <span class="math display">\[
   X = \left[

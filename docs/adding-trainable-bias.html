@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="single-perceptron.html"/>
-<link rel="next" href="multi-layer-perceptrons-mlp.html"/>
+<link rel="next" href="multilayer-perceptrons-mlp.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -157,11 +157,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#generalising-the-bias"><i class="fa fa-check"></i><b>3.1</b> Generalising the Bias</a></li>
 <li class="chapter" data-level="3.2" data-path="adding-trainable-bias.html"><a href="adding-trainable-bias.html#appendix-complete-code-1"><i class="fa fa-check"></i><b>3.2</b> Appendix (complete code)</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multi Layer Perceptrons (MLP)</a>
+<li class="chapter" data-level="4" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html"><i class="fa fa-check"></i><b>4</b> Multilayer Perceptrons (MLP)</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
-<li class="chapter" data-level="4.2" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
-<li class="chapter" data-level="4.3" data-path="multi-layer-perceptrons-mlp.html"><a href="multi-layer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
+<li class="chapter" data-level="4.1" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#forward-pass-1"><i class="fa fa-check"></i><b>4.1</b> Forward pass</a></li>
+<li class="chapter" data-level="4.2" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#backward-pass-1"><i class="fa fa-check"></i><b>4.2</b> Backward pass</a></li>
+<li class="chapter" data-level="4.3" data-path="multilayer-perceptrons-mlp.html"><a href="multilayer-perceptrons-mlp.html#appendix-complete-code-2"><i class="fa fa-check"></i><b>4.3</b> Appendix (complete code)</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="mlp-example-credit-default.html"><a href="mlp-example-credit-default.html"><i class="fa fa-check"></i><b>5</b> MLP example (Credit Default)</a>
 <ul>
@@ -258,69 +258,71 @@ The same step can be made with the following python code:</p>
 <div id="appendix-complete-code-1" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Appendix (complete code)</h2>
 <p>The complete code is the following:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="adding-trainable-bias.html#cb16-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([</span>
-<span id="cb16-2"><a href="adding-trainable-bias.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">0</span>],</span>
-<span id="cb16-3"><a href="adding-trainable-bias.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">1</span>],</span>
-<span id="cb16-4"><a href="adding-trainable-bias.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>],</span>
-<span id="cb16-5"><a href="adding-trainable-bias.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>],</span>
-<span id="cb16-6"><a href="adding-trainable-bias.html#cb16-6" aria-hidden="true" tabindex="-1"></a>]) <span class="op">-</span> <span class="dv">5</span></span>
-<span id="cb16-7"><a href="adding-trainable-bias.html#cb16-7" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.append(X, np.array([np.ones(<span class="bu">len</span>(X))]).T, axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-8"><a href="adding-trainable-bias.html#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="adding-trainable-bias.html#cb16-9" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.array([</span>
-<span id="cb16-10"><a href="adding-trainable-bias.html#cb16-10" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.1</span>], </span>
-<span id="cb16-11"><a href="adding-trainable-bias.html#cb16-11" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.2</span>]</span>
-<span id="cb16-12"><a href="adding-trainable-bias.html#cb16-12" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb16-13"><a href="adding-trainable-bias.html#cb16-13" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.append(W, <span class="op">-</span>np.array([np.random.random(<span class="bu">len</span>(W[<span class="dv">0</span>]))]).T, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb16-14"><a href="adding-trainable-bias.html#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="adding-trainable-bias.html#cb16-15" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.array([</span>
-<span id="cb16-16"><a href="adding-trainable-bias.html#cb16-16" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>],</span>
-<span id="cb16-17"><a href="adding-trainable-bias.html#cb16-17" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
-<span id="cb16-18"><a href="adding-trainable-bias.html#cb16-18" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
-<span id="cb16-19"><a href="adding-trainable-bias.html#cb16-19" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>]</span>
-<span id="cb16-20"><a href="adding-trainable-bias.html#cb16-20" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb16-21"><a href="adding-trainable-bias.html#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-22"><a href="adding-trainable-bias.html#cb16-22" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.01</span></span>
-<span id="cb16-23"><a href="adding-trainable-bias.html#cb16-23" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb16-24"><a href="adding-trainable-bias.html#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="adding-trainable-bias.html#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(s):</span>
-<span id="cb16-26"><a href="adding-trainable-bias.html#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.where(s <span class="op">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>) )</span>
-<span id="cb16-27"><a href="adding-trainable-bias.html#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-28"><a href="adding-trainable-bias.html#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="adding-trainable-bias.html#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(X, W):</span>
-<span id="cb16-30"><a href="adding-trainable-bias.html#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(X <span class="op">@</span> W) )</span>
-<span id="cb16-31"><a href="adding-trainable-bias.html#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-32"><a href="adding-trainable-bias.html#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward(W, X, Y, alpha, Y_approx):</span>
-<span id="cb16-33"><a href="adding-trainable-bias.html#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(W <span class="op">+</span> alpha <span class="op">*</span> X.T <span class="op">@</span> (Y <span class="op">-</span> Y_approx))</span>
-<span id="cb16-34"><a href="adding-trainable-bias.html#cb16-34" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-35"><a href="adding-trainable-bias.html#cb16-35" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-36"><a href="adding-trainable-bias.html#cb16-36" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> []</span>
-<span id="cb16-37"><a href="adding-trainable-bias.html#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb16-38"><a href="adding-trainable-bias.html#cb16-38" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
-<span id="cb16-39"><a href="adding-trainable-bias.html#cb16-39" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
-<span id="cb16-40"><a href="adding-trainable-bias.html#cb16-40" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
-<span id="cb16-41"><a href="adding-trainable-bias.html#cb16-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-42"><a href="adding-trainable-bias.html#cb16-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="adding-trainable-bias.html#cb16-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
+<span id="cb16-2"><a href="adding-trainable-bias.html#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="adding-trainable-bias.html#cb16-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([</span>
+<span id="cb16-4"><a href="adding-trainable-bias.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb16-5"><a href="adding-trainable-bias.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>,<span class="dv">1</span>],</span>
+<span id="cb16-6"><a href="adding-trainable-bias.html#cb16-6" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">0</span>],</span>
+<span id="cb16-7"><a href="adding-trainable-bias.html#cb16-7" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>,<span class="dv">1</span>],</span>
+<span id="cb16-8"><a href="adding-trainable-bias.html#cb16-8" aria-hidden="true" tabindex="-1"></a>]) <span class="op">-</span> <span class="dv">5</span></span>
+<span id="cb16-9"><a href="adding-trainable-bias.html#cb16-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.append(X, np.array([np.ones(<span class="bu">len</span>(X))]).T, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-10"><a href="adding-trainable-bias.html#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="adding-trainable-bias.html#cb16-11" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.array([</span>
+<span id="cb16-12"><a href="adding-trainable-bias.html#cb16-12" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.1</span>], </span>
+<span id="cb16-13"><a href="adding-trainable-bias.html#cb16-13" aria-hidden="true" tabindex="-1"></a>  [<span class="fl">0.2</span>]</span>
+<span id="cb16-14"><a href="adding-trainable-bias.html#cb16-14" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb16-15"><a href="adding-trainable-bias.html#cb16-15" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> np.append(W, <span class="op">-</span>np.array([np.random.random(<span class="bu">len</span>(W[<span class="dv">0</span>]))]).T, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb16-16"><a href="adding-trainable-bias.html#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="adding-trainable-bias.html#cb16-17" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.array([</span>
+<span id="cb16-18"><a href="adding-trainable-bias.html#cb16-18" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">0</span>],</span>
+<span id="cb16-19"><a href="adding-trainable-bias.html#cb16-19" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
+<span id="cb16-20"><a href="adding-trainable-bias.html#cb16-20" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>],</span>
+<span id="cb16-21"><a href="adding-trainable-bias.html#cb16-21" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>]</span>
+<span id="cb16-22"><a href="adding-trainable-bias.html#cb16-22" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb16-23"><a href="adding-trainable-bias.html#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="adding-trainable-bias.html#cb16-24" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb16-25"><a href="adding-trainable-bias.html#cb16-25" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb16-26"><a href="adding-trainable-bias.html#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="adding-trainable-bias.html#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> step(s):</span>
+<span id="cb16-28"><a href="adding-trainable-bias.html#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( np.where(s <span class="op">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>) )</span>
+<span id="cb16-29"><a href="adding-trainable-bias.html#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="adding-trainable-bias.html#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-31"><a href="adding-trainable-bias.html#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(X, W):</span>
+<span id="cb16-32"><a href="adding-trainable-bias.html#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( step(X <span class="op">@</span> W) )</span>
+<span id="cb16-33"><a href="adding-trainable-bias.html#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="adding-trainable-bias.html#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward(W, X, Y, alpha, Y_approx):</span>
+<span id="cb16-35"><a href="adding-trainable-bias.html#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(W <span class="op">+</span> alpha <span class="op">*</span> X.T <span class="op">@</span> (Y <span class="op">-</span> Y_approx))</span>
+<span id="cb16-36"><a href="adding-trainable-bias.html#cb16-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-37"><a href="adding-trainable-bias.html#cb16-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-38"><a href="adding-trainable-bias.html#cb16-38" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> []</span>
+<span id="cb16-39"><a href="adding-trainable-bias.html#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb16-40"><a href="adding-trainable-bias.html#cb16-40" aria-hidden="true" tabindex="-1"></a>  Y_approx <span class="op">=</span> forward(X, W)</span>
+<span id="cb16-41"><a href="adding-trainable-bias.html#cb16-41" aria-hidden="true" tabindex="-1"></a>  errors.append(Y <span class="op">-</span> Y_approx)</span>
+<span id="cb16-42"><a href="adding-trainable-bias.html#cb16-42" aria-hidden="true" tabindex="-1"></a>  W <span class="op">=</span> backward(W, X, Y, alpha, Y_approx)</span>
 <span id="cb16-43"><a href="adding-trainable-bias.html#cb16-43" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-44"><a href="adding-trainable-bias.html#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
-<span id="cb16-45"><a href="adding-trainable-bias.html#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
-<span id="cb16-46"><a href="adding-trainable-bias.html#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-47"><a href="adding-trainable-bias.html#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-48"><a href="adding-trainable-bias.html#cb16-48" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
+<span id="cb16-44"><a href="adding-trainable-bias.html#cb16-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-45"><a href="adding-trainable-bias.html#cb16-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-46"><a href="adding-trainable-bias.html#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_square_error(error):</span>
+<span id="cb16-47"><a href="adding-trainable-bias.html#cb16-47" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span>( <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>(error <span class="op">**</span> <span class="dv">2</span>) )</span>
+<span id="cb16-48"><a href="adding-trainable-bias.html#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-49"><a href="adding-trainable-bias.html#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-50"><a href="adding-trainable-bias.html#cb16-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-51"><a href="adding-trainable-bias.html#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
-<span id="cb16-52"><a href="adding-trainable-bias.html#cb16-52" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
-<span id="cb16-53"><a href="adding-trainable-bias.html#cb16-53" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
-<span id="cb16-54"><a href="adding-trainable-bias.html#cb16-54" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
-<span id="cb16-55"><a href="adding-trainable-bias.html#cb16-55" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-56"><a href="adding-trainable-bias.html#cb16-56" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb16-57"><a href="adding-trainable-bias.html#cb16-57" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
-<span id="cb16-58"><a href="adding-trainable-bias.html#cb16-58" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
-<span id="cb16-59"><a href="adding-trainable-bias.html#cb16-59" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
-<span id="cb16-60"><a href="adding-trainable-bias.html#cb16-60" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
-<span id="cb16-61"><a href="adding-trainable-bias.html#cb16-61" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-62"><a href="adding-trainable-bias.html#cb16-62" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-63"><a href="adding-trainable-bias.html#cb16-63" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Single Perceptron with trainable bias&quot;</span>)</span></code></pre></div>
+<span id="cb16-50"><a href="adding-trainable-bias.html#cb16-50" aria-hidden="true" tabindex="-1"></a>mean_square_errors <span class="op">=</span> np.array(<span class="bu">list</span>(<span class="bu">map</span>(mean_square_error, errors)))</span>
+<span id="cb16-51"><a href="adding-trainable-bias.html#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-52"><a href="adding-trainable-bias.html#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="adding-trainable-bias.html#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_error(errors, title):</span>
+<span id="cb16-54"><a href="adding-trainable-bias.html#cb16-54" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(errors)))</span>
+<span id="cb16-55"><a href="adding-trainable-bias.html#cb16-55" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> np.array(errors)</span>
+<span id="cb16-56"><a href="adding-trainable-bias.html#cb16-56" aria-hidden="true" tabindex="-1"></a>  pyplot.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb16-57"><a href="adding-trainable-bias.html#cb16-57" aria-hidden="true" tabindex="-1"></a>  pyplot.plot(x, y, <span class="st">&quot;g&quot;</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-58"><a href="adding-trainable-bias.html#cb16-58" aria-hidden="true" tabindex="-1"></a>  pyplot.xlabel(<span class="st">&quot;Iterations&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb16-59"><a href="adding-trainable-bias.html#cb16-59" aria-hidden="true" tabindex="-1"></a>  pyplot.ylabel(<span class="st">&quot;Mean Square Error&quot;</span>, fontsize <span class="op">=</span> <span class="dv">16</span>)</span>
+<span id="cb16-60"><a href="adding-trainable-bias.html#cb16-60" aria-hidden="true" tabindex="-1"></a>  pyplot.title(title)</span>
+<span id="cb16-61"><a href="adding-trainable-bias.html#cb16-61" aria-hidden="true" tabindex="-1"></a>  pyplot.ylim(<span class="op">-</span><span class="fl">0.01</span>,<span class="bu">max</span>(errors)<span class="op">*</span><span class="fl">1.2</span>)</span>
+<span id="cb16-62"><a href="adding-trainable-bias.html#cb16-62" aria-hidden="true" tabindex="-1"></a>  pyplot.show()</span>
+<span id="cb16-63"><a href="adding-trainable-bias.html#cb16-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-64"><a href="adding-trainable-bias.html#cb16-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-65"><a href="adding-trainable-bias.html#cb16-65" aria-hidden="true" tabindex="-1"></a>plot_error(mean_square_errors, <span class="st">&quot;Single Perceptron with trainable bias&quot;</span>)</span></code></pre></div>
 <p><img src="gitbook-demo_files/figure-html/1_2-5.png" width="576" /></p>
 
 </div>
@@ -331,7 +333,7 @@ The same step can be made with the following python code:</p>
         </div>
       </div>
 <a href="single-perceptron.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multi-layer-perceptrons-mlp.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="multilayer-perceptrons-mlp.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

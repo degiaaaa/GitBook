@@ -8,6 +8,7 @@ editor_options:
 ```{python 1_0, include=FALSE}
 import numpy as np
 import matplotlib.pyplot as pyplot
+np.random.seed(0)
 ```
 The single Perceptron, you saw in the previews chapter had the following activation function:
 $$ 
@@ -64,6 +65,8 @@ We added $-5$ to the $X$ matrix to simulate the problem of shifted data, added o
 ## Appendix (complete code)
 The complete code is the following:
 ```{python 1_2, eval=TRUE}
+np.random.seed(0)
+
 X = np.array([
   [0,0],
   [0,1],
