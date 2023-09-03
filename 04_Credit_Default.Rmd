@@ -1,14 +1,17 @@
 ---
 output: html_document
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
 # MLP example (Credit Default)
-Now can we use our generic MLP model from the previews chapter to forecast real life credit defaults. The csv can be downloaded from [Kaggle Data Source](https://www.kaggle.com/laotse/credit-risk-dataset) or from my [github repo](https://github.com/AxelCode-R/GitBook) in the example_data folder. 
+
+Now can we use our generic MLP model from the previews chapter to forecast real life credit defaults. The csv can be downloaded from [Kaggle Data Source](https://www.kaggle.com/laotse/credit-risk-dataset) or from my [github repo](https://github.com/AxelCode-R/GitBook) in the example\_data folder.
 
 ## Loading and analysing the data
+
 First all do we need to load the csv via pandas and analyse it:
+
 ```{python}
 import numpy as np
 import pandas as pd
@@ -21,8 +24,9 @@ data = pd.read_csv("example_data/credit_risk_dataset.csv").fillna(0)
 data.shape
 data.head()
 ```
-You can find the more details about the columns on kaggle, additionaly to the next table:  
-![https://www.kaggle.com/laotse/credit-risk-dataset](./img/credit_default_kaggle_data_info.png){ width=100% }<br>
+
+You can find the more details about the columns on kaggle, additionaly to the next table:\
+![https://www.kaggle.com/laotse/credit-risk-dataset](img/credit\_default\_kaggle\_data\_info.png){ width=100% }\
 The important column is `load_status` that determinates the customers credit default and is used as the correct outputs $Y$. All other columns are considered as the input matrix $X$. First of all do we need to analyse the underlying data a little bit more. The columns with numerical data are visualized in the following charts:
 
 ```{python}
@@ -31,9 +35,11 @@ data[l].hist(bins=10,figsize=(8,8))
 pyplot.tight_layout()
 pyplot.show()
 ```
+
 All other input columns are categorical that cant be processed by Neuronal Networks. Luckily there exist some methods to convert the categories to numbers for example with Ordinal Encoding, One hot Encoding or Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). I will choose the Ordinal Encoding for our dataset, because it is the simplest method. Ordinal Encoding just maps numbers to the categories. The best would be to arrange the categories as good as possible and just map numbers to it like in the following code:
 
 All other input columns are categorical, and Neuronal Networks cannot process them. Fortunately, there are some methods for converting categories to numbers, such as Ordinal Encoding, One-hot Encoding, and Embedding (more information can be found [here](https://machinelearningmastery.com/how-to-prepare-categorical-data-for-deep-learning-in-python/)). Because it is the easiest way, I will use Ordinal Encoding for our dataset. Ordinal Encoding simply converts numbers into categories. The best technique would be to organize each column's categories in a meaningful way before assigning numbers to them, as seen in the code below:
+
 ```{python}
 data = data.replace({"Y": 1, "N":0})
 data["person_home_ownership"] = data["person_home_ownership"].replace({'OWN':1, 'RENT':2, 'MORTGAGE':3, 'OTHER':4})
@@ -42,9 +48,11 @@ data["loan_grade"] = data["loan_grade"].replace({'A':1, 'B':2, 'C':3, 'D':4, 'E'
 
 data.head()
 ```
-It's not the most precise method for encoding categorical data, but it's the simplest and doesn't add to the input matrix's size.  
 
-It's also crucial to standardize the data, which improves the learning process's stability and speed (for more [information](https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/)). Because we're using the sigmoid function, we'll normalize the data to the interval $[0,1]$. The following function will work for the entire numpy array you've entered:
+It's not the most precise method for encoding categorical data, but it's the simplest and doesn't add to the input matrix's size.
+
+It's also crucial to standardize the data, which improves the learning process's stability and speed (for more [information](https://machinelearningmastery.com/how-to-improve-neural-network-stability-and-modeling-performance-with-data-scaling/)). Because we're using the sigmoid function, we'll normalize the data to the interval $\[0,1]$. The following function will work for the entire numpy array you've entered:
+
 ```{python}
 def NormalizeData(np_arr):
   for i in range(np_arr.shape[1]):
@@ -53,6 +61,7 @@ def NormalizeData(np_arr):
 ```
 
 Now we must divide the data into a training and a test dataset, convert the pandas dataframe to a numpy array, and normalize it:
+
 ```{python}
 training_n = 2000
 X_train = NormalizeData( data.loc[0:(training_n-1), data.columns != 'loan_status'].to_numpy() )
@@ -63,6 +72,7 @@ Y_test = data.loc[training_n:, data.columns == 'loan_status'].to_numpy()
 ```
 
 It's now time to load the functions that were created in the preview chapters.
+
 ```{python}
 def generate_weights(n_input, n_output, hidden_layer_neurons):
   W = []
@@ -99,7 +109,9 @@ def backward(IN, OUT, W, Y, grad, k):
 ```
 
 ## Train and test phase
+
 For the training and testing phases, we're making a simple wrapper:
+
 ```{python}
 def train(X, Y, hidden_layer_neurons, alpha, epochs):
   n_input = len(X_train[0])
@@ -133,13 +145,15 @@ def test(X_test, W):
   return(X_test)
 ```
 
-The `train()` function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given `X_train` and `Y_train`. The `test()` function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.   
+The `train()` function is just a simple wrapper around the things done in the last chapter and will fit the weights to the given `X_train` and `Y_train`. The `test()` function only contains the forward pass to calculate the output without adjusting the weights of the NN. Its used to evaluate the quality of the results.\
 Its time to train the NN with the first 2000 rows of the given data, 20000 epochs, alpha of 0.01 and two hidden layers with 11 and 4 neurons:
+
 ```{python}
 W_train, errors_train = train(X_train, Y_train, hidden_layer_neurons = [11,4], alpha = 0.01, epochs = 10000)
 ```
 
 The return contains multiple values, that are assigned with the `a, b = fun_that_returns_2_vals()` pattern. We can visualize the learning process by calculating the mean-square-error and plotting it with the familiar line-chart:
+
 ```{python}
 def mean_square_error(error):
   return( 0.5 * np.sum(error ** 2) )
@@ -161,12 +175,14 @@ plot_error(ms_errors_train, "MLP Credit Default")
 ```
 
 In the next step its time to test the NN on the never seen `X_test` and `Y_test` dataset.
+
 ```{python}
 result_test = test(X_test, W_train)
 print("Mean Square error over all testdata: ", mean_square_error(Y_test - result_test))
 ```
 
 Because the Mean Square Error is hard to interpret, we will classify the output of the NN to be 1 or 0 and analyze the given answer for the credit defaults.
+
 ```{python}
 def classify(Y_approx):
   return( np.round(Y_approx,0) )
@@ -178,19 +194,18 @@ print("Probability of a wrong output: ", np.round(np.sum(np.abs(classified_error
 print("Probability of a correct output: ", np.round((1 - np.sum(np.abs(classified_error)) / len(classified_error))*100,2),"%" )
 ```
 
+An incredible tool to qualify the result is the [confusion matrix](https://en.wikipedia.org/wiki/Confusion\_matrix) from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table: ![https://en.wikipedia.org/wiki/Confusion\_matrix](img/confusion\_matrix.png){ width=50% }\
 
-An incredible tool to qualify the result is the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix) from the sklearn package. It splits the results into 4 categories that can be used to qualify the results with the following table:
-![https://en.wikipedia.org/wiki/Confusion_matrix](./img/confusion_matrix.png){ width=50% }<br>
 
 For instance, 'TP' stands for True-Positiv, which means that the prediction was True=1 and the actual result was Positiv=1, indicating that the prediction was correct. For the classified result of the test phase, we have the following confusion matrix in our example:
+
 ```{python}
 from sklearn.metrics import confusion_matrix
 confusion_matrix(Y_test, classify(result_test))
 ```
 
-
-
 ## Appendix (complete code)
+
 ```{python}
 import numpy as np
 import matplotlib.pyplot as pyplot
@@ -326,6 +341,3 @@ print("Probability of a right output: ", np.round((1 - np.sum(np.abs(classified_
 
 confusion_matrix(Y_test, classify(result_test))
 ```
-
-
-
